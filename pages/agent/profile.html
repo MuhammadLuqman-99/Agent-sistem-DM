@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../assets/css/agent-styles.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <h2>Agent Panel</h2>
+        </div>
+        <div class="menu-item">
+            <a href="../agent-dashboard.html">
+                <i class="fas fa-chart-line"></i>
+                <span>Dashboard</span>
+            </a>
+        </div>
+        <div class="menu-item active">
+            <a href="profile.html">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+            </a>
+        </div>
+        <div class="menu-item">
+            <a href="change-password.html">
+                <i class="fas fa-lock"></i>
+                <span>Change Password</span>
+            </a>
+        </div>
+        <div class="menu-item">
+            <a href="sale-form-list.html">
+                <i class="fas fa-file-invoice"></i>
+                <span>Sale Forms</span>
+            </a>
+        </div>
+        <div class="menu-item">
+            <a href="returns.html">
+                <i class="fas fa-undo"></i>
+                <span>Returns</span>
+            </a>
+        </div>
+        <div class="menu-item">
+            <a href="../logout.html?role=agent">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+        <div class="header">
+            <h1>Agent Profile</h1>
+            <div class="user-info" id="profileDropdownToggle">
+                <img src="https://ui-avatars.com/api/?name=Agent+User&background=6c757d&color=fff" alt="Agent User" id="profileImage">
+                <span id="profileName">Agent User</span>
+                <i class="fas fa-chevron-down profile-chevron"></i>
+                
+                <!-- Profile Dropdown -->
+                <div class="profile-dropdown" id="profileDropdown">
+                    <div class="profile-dropdown-header">
+                        <div class="profile-photo-container">
+                            <img src="https://ui-avatars.com/api/?name=Agent+User&background=6c757d&color=fff" alt="Profile Photo" id="dropdownProfileImage">
+                            <div class="photo-upload-overlay" id="photoUploadOverlay">
+                                <i class="fas fa-camera"></i>
+                                <span>Change Photo</span>
+                            </div>
+                            <input type="file" id="photoUploadInput" accept="image/*" style="display: none;">
+                        </div>
+                        <div class="profile-info">
+                            <h3>Agent User</h3>
+                            <p>Sales Agent</p>
+                            <span class="profile-email">agent@agentOS.com</span>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-dropdown-content">
+                        <div class="profile-stats">
+                            <div class="stat-item">
+                                <i class="fas fa-chart-bar"></i>
+                                <div>
+                                    <span class="stat-number">23</span>
+                                    <span class="stat-label">Sales</span>
+                                </div>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-dollar-sign"></i>
+                                <div>
+                                    <span class="stat-number">$12.5K</span>
+                                    <span class="stat-label">Revenue</span>
+                                </div>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-percentage"></i>
+                                <div>
+                                    <span class="stat-number">82%</span>
+                                    <span class="stat-label">Success Rate</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="profile-actions">
+                            <a href="profile.html" class="profile-action">
+                                <i class="fas fa-user"></i>
+                                <span>My Profile</span>
+                            </a>
+                            <a href="change-password.html" class="profile-action">
+                                <i class="fas fa-lock"></i>
+                                <span>Change Password</span>
+                            </a>
+                            <a href="#" class="profile-action" onclick="toggleNotifications()">
+                                <i class="fas fa-bell"></i>
+                                <span>Notifications</span>
+                                <span class="notification-badge">2</span>
+                            </a>
+                            <div class="profile-divider"></div>
+                            <a href="../logout.html?role=agent" class="profile-action logout-action">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>Sign Out</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Personal Information -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Personal Information</h2>
+            </div>
+            <div class="table-container">
+                <form class="form-grid">
+                    <div class="form-group">
+                        <label>First Name *</label>
+                        <input type="text" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Last Name *</label>
+                        <input type="text" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Gender *</label>
+                        <select class="form-control" required>
+                            <option value="">Select Gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="others">Others</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Date of Birth *</label>
+                        <input type="date" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>IC Number *</label>
+                        <input type="text" class="form-control" placeholder="e.g. 010203-10-1234" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Mobile Phone *</label>
+                        <input type="tel" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Country *</label>
+                        <input type="text" class="form-control" placeholder="Enter country" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>State *</label>
+                        <input type="text" class="form-control" placeholder="Enter state" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>City *</label>
+                        <input type="text" class="form-control" placeholder="Enter city" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Postcode *</label>
+                        <input type="text" class="form-control" placeholder="Enter postcode" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Address Line 1 *</label>
+                        <input type="text" class="form-control" placeholder="Enter address line 1" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Address Line 2</label>
+                        <input type="text" class="form-control" placeholder="Enter address line 2">
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Update Profile
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Bank Information -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Bank Information</h2>
+            </div>
+            <div class="table-container">
+                <form class="form-grid">
+                    <div class="form-group">
+                        <label>Bank Name *</label>
+                        <input type="text" class="form-control" placeholder="Enter bank name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Bank Account Number *</label>
+                        <input type="text" class="form-control" placeholder="Enter account number" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Account Holder Name *</label>
+                        <input type="text" class="form-control" placeholder="Enter account holder name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="checkbox-label">
+                            <input type="checkbox" required>
+                            <span>I hereby confirm that all banking information is accurate</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-university"></i> Update Bank Information
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Data Protection Notice -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Confidentiality and Data Protection</h2>
+            </div>
+            <div class="table-container">
+                <p>Desa Muni Batik ensures that your personal data provided for use of this Platform shall comply with the Personal Data Protection Act 2010 (PDPA) that regulates the processing of personal data by the data user in a commercial transaction and protects the interest of the data subject.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../assets/js/agent-script.js"></script>
+    <!-- Firebase Integration -->
+    <script type="module" src="../../assets/js/firebase-agent.js"></script>
+</body>
+</html>

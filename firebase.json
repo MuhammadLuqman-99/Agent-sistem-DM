@@ -1,0 +1,42 @@
+{
+  "hosting": {
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**",
+      "FIREBASE_SETUP.md",
+      "README_FIREBASE.md",
+      "QUICK_START_FIREBASE.md"
+    ],
+    "rewrites": [
+      {
+        "source": "/",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/admin",
+        "destination": "/pages/admin-dashboard.html"
+      },
+      {
+        "source": "/agent",
+        "destination": "/pages/agent-dashboard.html"
+      },
+      {
+        "source": "/login",
+        "destination": "/pages/firebase-login.html"
+      }
+    ],
+    "headers": [
+      {
+        "source": "**/*.@(js|css)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "max-age=31536000"
+          }
+        ]
+      }
+    ]
+  }
+}

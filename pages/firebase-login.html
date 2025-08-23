@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Login - AgentOS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        
+        .login-container {
+            max-width: 400px;
+            width: 100%;
+            padding: 20px;
+        }
+        
+        .login-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .login-header {
+            background: #212529;
+            padding: 24px;
+            text-align: center;
+            color: white;
+        }
+        
+        .login-header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 600;
+        }
+        
+        .login-header p {
+            margin: 8px 0 0;
+            opacity: 0.8;
+            font-size: 14px;
+        }
+        
+        .login-content {
+            padding: 32px 24px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            width: 100%;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5a67d8;
+            transform: translateY(-1px);
+        }
+        
+        .btn-primary:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            margin-top: 12px;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .divider {
+            text-align: center;
+            margin: 24px 0;
+            position: relative;
+        }
+        
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #e9ecef;
+        }
+        
+        .divider span {
+            background: white;
+            color: #6c757d;
+            padding: 0 16px;
+            font-size: 14px;
+        }
+        
+        .demo-accounts {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 20px;
+        }
+        
+        .demo-accounts h4 {
+            color: #495057;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+        
+        .demo-account {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .demo-account:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+        
+        .demo-account .role {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+        }
+        
+        .demo-account .email {
+            font-size: 12px;
+            color: #6c757d;
+        }
+        
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-size: 14px;
+            display: none;
+        }
+        
+        .success-message {
+            background: #d1e7dd;
+            color: #0f5132;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-size: 14px;
+            display: none;
+        }
+        
+        .back-link {
+            text-align: center;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        .back-link a {
+            color: #6c757d;
+            text-decoration: none;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .back-link a:hover {
+            color: #495057;
+        }
+
+        .loading-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ffffff33;
+            border-top: 2px solid #ffffff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h1>AgentOS Login</h1>
+                <p>Firebase Authentication System</p>
+            </div>
+            
+            <div class="login-content">
+                <div id="errorMessage" class="error-message"></div>
+                <div id="successMessage" class="success-message"></div>
+                
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" class="form-control" required>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" id="loginBtn">
+                        <div class="loading-spinner" id="loadingSpinner"></div>
+                        <span id="loginBtnText">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Login to Account
+                        </span>
+                    </button>
+                    
+                    <a href="login.html" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Simple Login
+                    </a>
+                </form>
+                
+                <div class="divider">
+                    <span>Demo Accounts</span>
+                </div>
+                
+                <div class="demo-accounts">
+                    <h4><i class="fas fa-key"></i> Quick Login</h4>
+                    
+                    <div class="demo-account" onclick="fillDemoAccount('admin')">
+                        <div class="role">
+                            <i class="fas fa-shield-alt" style="color: #dc3545; margin-right: 8px;"></i>
+                            Admin Account
+                        </div>
+                        <div class="email">admin@admin-agent-teamsale.com</div>
+                    </div>
+                    
+                    <div class="demo-account" onclick="fillDemoAccount('agent')">
+                        <div class="role">
+                            <i class="fas fa-user-tie" style="color: #28a745; margin-right: 8px;"></i>
+                            Agent Account
+                        </div>
+                        <div class="email">agent@admin-agent-teamsale.com</div>
+                    </div>
+                </div>
+                
+                <div class="back-link">
+                    <a href="../index.html">
+                        <i class="fas fa-home"></i>
+                        Back to Home
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+        import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBto4R2akCNCD8-vT7U039QhSOACUnnwIs",
+            authDomain: "admin-agent-teamsale.firebaseapp.com",
+            projectId: "admin-agent-teamsale",
+            storageBucket: "admin-agent-teamsale.firebasestorage.app",
+            messagingSenderId: "96870198845",
+            appId: "1:96870198845:web:865ce29c0d78ce6e254454",
+            measurementId: "G-E9EV0W1HXQ"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // DOM elements
+        const loginForm = document.getElementById('loginForm');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const loginBtn = document.getElementById('loginBtn');
+        const loginBtnText = document.getElementById('loginBtnText');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
+
+        // Demo account credentials
+        const demoAccounts = {
+            admin: {
+                email: 'admin@admin-agent-teamsale.com',
+                password: 'Admin123!'
+            },
+            agent: {
+                email: 'agent@admin-agent-teamsale.com',
+                password: 'Agent123!'
+            }
+        };
+
+        // Fill demo account credentials
+        window.fillDemoAccount = function(role) {
+            const account = demoAccounts[role];
+            emailInput.value = account.email;
+            passwordInput.value = account.password;
+            
+            // Highlight the selected demo account
+            document.querySelectorAll('.demo-account').forEach(el => {
+                el.style.borderColor = '#e9ecef';
+                el.style.background = 'white';
+            });
+            
+            event.target.closest('.demo-account').style.borderColor = '#667eea';
+            event.target.closest('.demo-account').style.background = '#f8f9ff';
+        };
+
+        // Show loading state
+        function showLoading() {
+            loginBtn.disabled = true;
+            loadingSpinner.style.display = 'block';
+            loginBtnText.style.display = 'none';
+        }
+
+        // Hide loading state
+        function hideLoading() {
+            loginBtn.disabled = false;
+            loadingSpinner.style.display = 'none';
+            loginBtnText.style.display = 'flex';
+        }
+
+        // Show error message
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+            successMessage.style.display = 'none';
+        }
+
+        // Show success message
+        function showSuccess(message) {
+            successMessage.textContent = message;
+            successMessage.style.display = 'block';
+            errorMessage.style.display = 'none';
+        }
+
+        // Handle login form submission
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
+
+            if (!email || !password) {
+                showError('Please fill in all fields');
+                return;
+            }
+
+            showLoading();
+            errorMessage.style.display = 'none';
+
+            try {
+                // Sign in with Firebase Auth
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                // Get user profile from Firestore
+                const userDocRef = doc(db, 'users', user.uid);
+                const userDoc = await getDoc(userDocRef);
+
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    
+                    // Store user data in localStorage
+                    localStorage.setItem('userId', user.uid);
+                    localStorage.setItem('userRole', userData.role);
+                    localStorage.setItem('userName', userData.fullName || userData.firstName + ' ' + userData.lastName);
+                    localStorage.setItem('userEmail', user.email);
+
+                    showSuccess('Login successful! Redirecting...');
+
+                    // Redirect based on user role
+                    setTimeout(() => {
+                        if (userData.role === 'admin') {
+                            window.location.href = 'admin-dashboard.html';
+                        } else if (userData.role === 'agent') {
+                            window.location.href = 'agent-dashboard.html';
+                        } else {
+                            window.location.href = 'login.html';
+                        }
+                    }, 1500);
+
+                } else {
+                    throw new Error('User profile not found');
+                }
+
+            } catch (error) {
+                console.error('Login error:', error);
+                
+                let errorMsg = 'Login failed. Please try again.';
+                
+                if (error.code === 'auth/user-not-found') {
+                    errorMsg = 'No account found with this email address.';
+                } else if (error.code === 'auth/wrong-password') {
+                    errorMsg = 'Incorrect password. Please try again.';
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMsg = 'Invalid email address format.';
+                } else if (error.code === 'auth/too-many-requests') {
+                    errorMsg = 'Too many failed attempts. Please try again later.';
+                }
+                
+                showError(errorMsg);
+            } finally {
+                hideLoading();
+            }
+        });
+
+        // Check if user is already logged in
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // User is signed in, redirect to appropriate dashboard
+                const userRole = localStorage.getItem('userRole');
+                if (userRole === 'admin') {
+                    window.location.href = 'admin-dashboard.html';
+                } else if (userRole === 'agent') {
+                    window.location.href = 'agent-dashboard.html';
+                }
+            }
+        });
+
+        // Check for logout success message
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('logout') === 'success') {
+            showSuccess('You have been successfully logged out');
+        }
+    </script>
+</body>
+</html>

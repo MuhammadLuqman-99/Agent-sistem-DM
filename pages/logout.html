@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logout - AgentOS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/logout-styles.css">
+</head>
+<body>
+    <div class="logout-container">
+        <div class="logout-card">
+            <div class="logout-header">
+                <div class="logo">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <h1>AgentOS</h1>
+                </div>
+            </div>
+            
+            <div class="logout-content">
+                <div class="logout-icon">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                
+                <h2>Confirm Logout</h2>
+                <p>Are you sure you want to logout from your session?</p>
+                
+                <div class="user-info">
+                    <span class="user-name" id="userName">Current User</span>
+                    <span class="user-role" id="userRole">Agent</span>
+                </div>
+                
+                <div class="logout-actions">
+                    <button class="btn btn-cancel" onclick="cancelLogout()">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                    <button class="btn btn-logout" onclick="confirmLogout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+                
+                <div class="logout-info">
+                    <p><i class="fas fa-info-circle"></i> You will be redirected to the login page after logout.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Loading overlay -->
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="loading-content">
+                <div class="spinner"></div>
+                <p>Logging out...</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Use Firebase logout for enhanced security -->
+    <script type="module" src="../assets/js/firebase-logout.js"></script>
+    <!-- Fallback to regular logout if Firebase not available -->
+    <script src="../assets/js/logout-script.js"></script>
+</body>
+</html>

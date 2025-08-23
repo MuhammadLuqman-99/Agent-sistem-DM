@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../assets/css/agent-styles.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <h2>Agent Panel</h2>
+        </div>
+        <div class="menu-item">
+            <a href="../agent-dashboard.html">
+                <i class="fas fa-chart-line"></i>
+                <span>Dashboard</span>
+            </a>
+        </div>
+        <div class="menu-item">
+            <a href="profile.html">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+            </a>
+        </div>
+        <div class="menu-item">
+            <a href="change-password.html">
+                <i class="fas fa-lock"></i>
+                <span>Change Password</span>
+            </a>
+        </div>
+        <div class="menu-item active">
+            <a href="sale-form-list.html">
+                <i class="fas fa-file-invoice"></i>
+                <span>Sale Forms</span>
+            </a>
+        </div>
+        <div class="menu-item">
+            <a href="returns.html">
+                <i class="fas fa-undo"></i>
+                <span>Returns</span>
+            </a>
+        </div>
+        <div class="menu-item">
+            <a href="../logout.html?role=agent">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+        <div class="header">
+            <h1>Invoice Management</h1>
+            <div class="user-info" id="profileDropdownToggle">
+                <img src="https://ui-avatars.com/api/?name=Agent+User&background=6c757d&color=fff" alt="Agent User" id="profileImage">
+                <span id="profileName">Agent User</span>
+                <i class="fas fa-chevron-down profile-chevron"></i>
+                
+                <!-- Profile Dropdown -->
+                <div class="profile-dropdown" id="profileDropdown">
+                    <div class="profile-dropdown-header">
+                        <div class="profile-photo-container">
+                            <img src="https://ui-avatars.com/api/?name=Agent+User&background=6c757d&color=fff" alt="Profile Photo" id="dropdownProfileImage">
+                            <div class="photo-upload-overlay" id="photoUploadOverlay">
+                                <i class="fas fa-camera"></i>
+                                <span>Change Photo</span>
+                            </div>
+                            <input type="file" id="photoUploadInput" accept="image/*" style="display: none;">
+                        </div>
+                        <div class="profile-info">
+                            <h3>Agent User</h3>
+                            <p>Sales Agent</p>
+                            <span class="profile-email">agent@agentOS.com</span>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-dropdown-content">
+                        <div class="profile-stats">
+                            <div class="stat-item">
+                                <i class="fas fa-chart-bar"></i>
+                                <div>
+                                    <span class="stat-number">23</span>
+                                    <span class="stat-label">Sales</span>
+                                </div>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-dollar-sign"></i>
+                                <div>
+                                    <span class="stat-number">$12.5K</span>
+                                    <span class="stat-label">Revenue</span>
+                                </div>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-percentage"></i>
+                                <div>
+                                    <span class="stat-number">82%</span>
+                                    <span class="stat-label">Success Rate</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="profile-actions">
+                            <a href="profile.html" class="profile-action">
+                                <i class="fas fa-user"></i>
+                                <span>My Profile</span>
+                            </a>
+                            <a href="change-password.html" class="profile-action">
+                                <i class="fas fa-lock"></i>
+                                <span>Change Password</span>
+                            </a>
+                            <a href="#" class="profile-action" onclick="toggleNotifications()">
+                                <i class="fas fa-bell"></i>
+                                <span>Notifications</span>
+                                <span class="notification-badge">2</span>
+                            </a>
+                            <div class="profile-divider"></div>
+                            <a href="../logout.html?role=agent" class="profile-action logout-action">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>Sign Out</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search and Filters -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Search & Filters</h2>
+            </div>
+            <div class="table-container">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Search Invoices</label>
+                        <input type="text" id="searchInput" class="form-control" placeholder="Search by invoice number, customer, etc...">
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-secondary" id="searchBtn">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                        <button class="btn btn-export" id="clearSearchBtn" style="margin-left: 8px;">
+                            <i class="fas fa-times"></i> Clear
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Invoice List -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Invoice List</h2>
+                <button class="btn btn-export">
+                    <i class="fas fa-download"></i> Export
+                </button>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Invoice</th>
+                            <th>Hash Code</th>
+                            <th>Order Date</th>
+                            <th>Payment Status</th>
+                            <th>Payment Method</th>
+                            <th>Payment Date</th>
+                            <th>Shipping Method</th>
+                            <th>Finance Review</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Inv-1020IS-200825</td>
+                            <td>38990hV4cb</td>
+                            <td>20/08/2025</td>
+                            <td><span class="status-badge success">Paid</span></td>
+                            <td>BANK</td>
+                            <td>20/08/2025</td>
+                            <td>ABX EXPRESS (PENINSULAR)</td>
+                            <td><span class="status-badge success">Approved</span></td>
+                            <td>
+                                <div class="action-buttons">
+                                    <a href="#" class="action-btn btn-view"><i class="fas fa-eye"></i> View</a>
+                                    <a href="#" class="action-btn btn-edit"><i class="fas fa-download"></i> Download</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Inv-1020IS-200825</td>
+                            <td>38989R2NC</td>
+                            <td>20/08/2025</td>
+                            <td><span class="status-badge success">Paid</span></td>
+                            <td>BANK</td>
+                            <td>20/08/2025</td>
+                            <td>ABX EXPRESS (PENINSULAR)</td>
+                            <td><span class="status-badge success">Approved</span></td>
+                            <td>
+                                <div class="action-buttons">
+                                    <a href="#" class="action-btn btn-view"><i class="fas fa-eye"></i> View</a>
+                                    <a href="#" class="action-btn btn-edit"><i class="fas fa-download"></i> Download</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Inv-102010-200825</td>
+                            <td>38987Moz4b</td>
+                            <td>20/08/2025</td>
+                            <td><span class="status-badge success">Paid</span></td>
+                            <td>BANK</td>
+                            <td>20/08/2025</td>
+                            <td>ABX EXPRESS (PENINSULAR)</td>
+                            <td><span class="status-badge success">Approved</span></td>
+                            <td>
+                                <div class="action-buttons">
+                                    <a href="#" class="action-btn btn-view"><i class="fas fa-eye"></i> View</a>
+                                    <a href="#" class="action-btn btn-edit"><i class="fas fa-download"></i> Download</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Inv-101939-180825</td>
+                            <td>38965fpaMO</td>
+                            <td>18/08/2025</td>
+                            <td><span class="status-badge success">Paid</span></td>
+                            <td>BANK</td>
+                            <td>19/08/2025</td>
+                            <td>ABX EXPRESS (PENINSULAR)</td>
+                            <td><span class="status-badge success">Approved</span></td>
+                            <td>
+                                <div class="action-buttons">
+                                    <a href="#" class="action-btn btn-view"><i class="fas fa-eye"></i> View</a>
+                                    <a href="#" class="action-btn btn-edit"><i class="fas fa-download"></i> Download</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Inv-101931-180825</td>
+                            <td>389620KyYE</td>
+                            <td>18/08/2025</td>
+                            <td><span class="status-badge success">Paid</span></td>
+                            <td>BANK</td>
+                            <td>18/08/2025</td>
+                            <td>ABX EXPRESS (PENINSULAR)</td>
+                            <td><span class="status-badge success">Approved</span></td>
+                            <td>
+                                <div class="action-buttons">
+                                    <a href="#" class="action-btn btn-view"><i class="fas fa-eye"></i> View</a>
+                                    <a href="#" class="action-btn btn-edit"><i class="fas fa-download"></i> Download</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Inv-101930-180825</td>
+                            <td>38961vnIVC</td>
+                            <td>18/08/2025</td>
+                            <td><span class="status-badge pending">Deposit Paid</span></td>
+                            <td>BANK</td>
+                            <td>18/08/2025</td>
+                            <td>ABX EXPRESS (PENINSULAR)</td>
+                            <td><span class="status-badge success">Approved</span></td>
+                            <td>
+                                <div class="action-buttons">
+                                    <a href="#" class="action-btn btn-view"><i class="fas fa-eye"></i> View</a>
+                                    <a href="#" class="action-btn btn-edit"><i class="fas fa-download"></i> Download</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="card">
+            <div class="table-container">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="color: #6c757d; font-size: 14px;">Showing 1 to 6 of 6 entries</span>
+                    <div>
+                        <button class="btn btn-secondary" style="padding: 8px 12px; margin: 0 2px;">1</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../assets/js/agent-script.js"></script>
+    <!-- Firebase Integration -->
+    <script type="module" src="../../assets/js/firebase-agent.js"></script>
+</body>
+</html>

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports & Analytics</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../assets/css/admin-styles.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <h2>Admin Panel</h2>
+        </div>
+        <div class="menu-item">
+            <a href="dashboard.html">
+                <i class="fas fa-chart-line"></i>
+                <span>Dashboard</span>
+            </a>
+        </div>
+        <div class="menu-item">
+            <a href="agents.html">
+                <i class="fas fa-users"></i>
+                <span>Agent Management</span>
+            </a>
+        </div>
+        <div class="menu-item">
+            <a href="products.html">
+                <i class="fas fa-product-hunt"></i>
+                <span>Products</span>
+            </a>
+        </div>
+        <div class="menu-item">
+            <a href="commissions.html">
+                <i class="fas fa-percentage"></i>
+                <span>Commissions</span>
+            </a>
+        </div>
+        <div class="menu-item active">
+            <a href="reports.html">
+                <i class="fas fa-file-export"></i>
+                <span>Reports</span>
+            </a>
+        </div>
+        <div class="menu-item">
+            <a href="settings.html">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </a>
+        </div>
+        <div class="menu-item">
+            <a href="../login.html">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+        <div class="header">
+            <h1>Reports & Analytics</h1>
+            <div class="user-info">
+                <img src="https://ui-avatars.com/api/?name=Admin+User&background=3498db&color=fff" alt="Admin User">
+                <span>Admin User</span>
+            </div>
+        </div>
+
+        <!-- Report Filters -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Generate Reports</h2>
+            </div>
+            <form id="report-filter-form">
+                <div class="form-group">
+                    <label for="report-type">Report Type</label>
+                    <select class="form-control" id="report-type">
+                        <option value="sales">Sales Report</option>
+                        <option value="agent-performance">Agent Performance</option>
+                        <option value="commission">Commission Report</option>
+                        <option value="product-analysis">Product Analysis</option>
+                        <option value="financial">Financial Summary</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="date-from">Date From</label>
+                    <input type="date" class="form-control" id="date-from">
+                </div>
+                <div class="form-group">
+                    <label for="date-to">Date To</label>
+                    <input type="date" class="form-control" id="date-to">
+                </div>
+                <div class="form-group">
+                    <label for="agent-filter">Filter by Agent</label>
+                    <select class="form-control" id="agent-filter">
+                        <option value="">All Agents</option>
+                        <option value="john-smith">John Smith</option>
+                        <option value="emma-johnson">Emma Johnson</option>
+                        <option value="michael-brown">Michael Brown</option>
+                    </select>
+                </div>
+                <div class="action-buttons">
+                    <button type="submit" class="btn btn-primary">Generate Report</button>
+                    <button type="button" class="btn btn-export"><i class="fas fa-download"></i> Export PDF</button>
+                    <button type="button" class="btn btn-export"><i class="fas fa-file-excel"></i> Export Excel</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-chart-bar"></i>
+                </div>
+                <div class="stat-text">
+                    <h3>RM 158,426</h3>
+                    <p>This Month Revenue</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-trending-up"></i>
+                </div>
+                <div class="stat-text">
+                    <h3>+23.5%</h3>
+                    <p>Growth Rate</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-text">
+                    <h3>45</h3>
+                    <p>Active Agents</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <div class="stat-text">
+                    <h3>2,847</h3>
+                    <p>Total Orders</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sales Performance Chart -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Sales Performance Overview</h2>
+            </div>
+            <div class="chart-placeholder">
+                <div style="text-align: center;">
+                    <i class="fas fa-chart-line" style="font-size: 48px; color: #6c757d; margin-bottom: 16px;"></i>
+                    <p style="margin: 0; color: #6c757d; font-weight: 500;">Sales Performance Chart<br><small>Chart.js integration coming soon</small></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Performing Agents -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Top Performing Agents</h2>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Agent</th>
+                            <th>Sales (RM)</th>
+                            <th>Orders</th>
+                            <th>Commission (RM)</th>
+                            <th>Performance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="rank-badge gold">1</span></td>
+                            <td>John Smith</td>
+                            <td>RM 45,200.00</td>
+                            <td>187</td>
+                            <td>RM 4,520.00</td>
+                            <td>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 95%"></div>
+                                </div>
+                                <span>95%</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span class="rank-badge silver">2</span></td>
+                            <td>Emma Johnson</td>
+                            <td>RM 32,800.00</td>
+                            <td>134</td>
+                            <td>RM 3,280.00</td>
+                            <td>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 78%"></div>
+                                </div>
+                                <span>78%</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span class="rank-badge bronze">3</span></td>
+                            <td>Sarah Wilson</td>
+                            <td>RM 28,500.00</td>
+                            <td>98</td>
+                            <td>RM 2,850.00</td>
+                            <td>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 68%"></div>
+                                </div>
+                                <span>68%</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Recent Reports -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Recent Reports</h2>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Report Name</th>
+                            <th>Type</th>
+                            <th>Generated By</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Monthly Sales Report - January 2024</td>
+                            <td>Sales Report</td>
+                            <td>Admin User</td>
+                            <td>Feb 1, 2024</td>
+                            <td class="action-buttons">
+                                <button class="action-btn btn-view"><i class="fas fa-eye"></i> View</button>
+                                <button class="action-btn btn-download"><i class="fas fa-download"></i> Download</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Agent Performance Q4 2023</td>
+                            <td>Performance</td>
+                            <td>Admin User</td>
+                            <td>Jan 15, 2024</td>
+                            <td class="action-buttons">
+                                <button class="action-btn btn-view"><i class="fas fa-eye"></i> View</button>
+                                <button class="action-btn btn-download"><i class="fas fa-download"></i> Download</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Commission Summary December</td>
+                            <td>Commission</td>
+                            <td>Admin User</td>
+                            <td>Jan 1, 2024</td>
+                            <td class="action-buttons">
+                                <button class="action-btn btn-view"><i class="fas fa-eye"></i> View</button>
+                                <button class="action-btn btn-download"><i class="fas fa-download"></i> Download</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../assets/js/admin-script.js"></script>
+</body>
+</html>

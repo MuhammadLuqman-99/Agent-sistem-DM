@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgentOS - Quick Access</title>
+    <link rel="stylesheet" href="../assets/css/login-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="login-body">
+    <div class="login-container" style="max-width: 600px;">
+        <div class="login-header">
+            <h1>AgentOS</h1>
+            <p>Quick Access Dashboard</p>
+        </div>
+        
+        <div class="quick-access-grid">
+            <div class="access-card admin-card">
+                <div class="card-icon">
+                    <i class="fas fa-crown"></i>
+                </div>
+                <h3>Admin Dashboard</h3>
+                <p>Full system management and control</p>
+                <a href="admin-dashboard.html" class="access-btn admin-btn">
+                    <i class="fas fa-tachometer-alt"></i> Open Admin Panel
+                </a>
+            </div>
+
+            <div class="access-card agent-card">
+                <div class="card-icon">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <h3>Agent Dashboard</h3>
+                <p>Sales tracking and performance</p>
+                <a href="../agent-dashboard.html" class="access-btn agent-btn">
+                    <i class="fas fa-chart-line"></i> Open Agent Panel
+                </a>
+            </div>
+
+            <div class="access-card login-card">
+                <div class="card-icon">
+                    <i class="fas fa-sign-in-alt"></i>
+                </div>
+                <h3>Login System</h3>
+                <p>Secure authentication portal</p>
+                <a href="login.html" class="access-btn login-btn">
+                    <i class="fas fa-lock"></i> Login to System
+                </a>
+            </div>
+        </div>
+
+        <div class="other-pages">
+            <h4><i class="fas fa-sitemap"></i> Other Pages</h4>
+            <div class="page-links">
+                <a href="profile.html" class="page-link">
+                    <i class="fas fa-user-circle"></i> Profile Management
+                </a>
+                <a href="change-password.html" class="page-link">
+                    <i class="fas fa-key"></i> Change Password
+                </a>
+                <a href="sale-form-list.html" class="page-link">
+                    <i class="fas fa-file-invoice"></i> Sales & Invoice List
+                </a>
+                <a href="returns.html" class="page-link">
+                    <i class="fas fa-undo"></i> Returns Management
+                </a>
+            </div>
+        </div>
+
+        <div class="back-to-main">
+            <a href="../index.html" class="back-btn">
+                <i class="fas fa-home"></i> Back to Main
+            </a>
+        </div>
+    </div>
+
+    <style>
+        .login-container {
+            max-width: 700px !important;
+        }
+
+        .quick-access-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .access-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .access-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .access-card:hover::before {
+            left: 100%;
+        }
+
+        .access-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .admin-card {
+            border-color: #dc3545;
+        }
+
+        .agent-card {
+            border-color: #28a745;
+        }
+
+        .login-card {
+            border-color: #007bff;
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 24px;
+            color: white;
+        }
+
+        .admin-card .card-icon {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+        }
+
+        .agent-card .card-icon {
+            background: linear-gradient(135deg, #28a745, #20c997);
+        }
+
+        .login-card .card-icon {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+        }
+
+        .access-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .access-card p {
+            color: #6c757d;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .access-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            color: white;
+            position: relative;
+            z-index: 1;
+        }
+
+        .admin-btn {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+        }
+
+        .admin-btn:hover {
+            background: linear-gradient(135deg, #c82333, #a71e2a);
+        }
+
+        .agent-btn {
+            background: linear-gradient(135deg, #28a745, #20c997);
+        }
+
+        .agent-btn:hover {
+            background: linear-gradient(135deg, #20c997, #17a2b8);
+        }
+
+        .login-btn {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+        }
+
+        .login-btn:hover {
+            background: linear-gradient(135deg, #0056b3, #004085);
+        }
+
+        .other-pages {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .other-pages h4 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .page-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .page-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            background: white;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--primary-color);
+            transition: all 0.3s ease;
+            border: 1px solid #e9ecef;
+            font-weight: 500;
+        }
+
+        .page-link:hover {
+            background: var(--secondary-color);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .back-to-main {
+            text-align: center;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: #6c757d;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .quick-access-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .page-links {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</body>
+</html>

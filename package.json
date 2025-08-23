@@ -1,0 +1,23 @@
+{
+  "name": "admin-agent-teamsale",
+  "version": "1.0.0",
+  "description": "Admin Agent Team Sale Management System with Firebase Integration",
+  "main": "index.html",
+  "scripts": {
+    "start": "firebase serve",
+    "build": "echo 'No build step required for static site'",
+    "deploy": "firebase deploy",
+    "deploy:hosting": "firebase deploy --only hosting"
+  },
+  "keywords": [
+    "agent-management",
+    "admin-dashboard", 
+    "firebase",
+    "sales-management"
+  ],
+  "author": "AgentOS Team",
+  "license": "MIT",
+  "devDependencies": {
+    "firebase-tools": "^13.0.0"
+  }
+}

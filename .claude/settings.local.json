@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(del:*)",
+      "Bash(rm:*)",
+      "Bash(node -e \"console.log(require(''crypto'').randomBytes(32).toString(''hex''))\")",
+      "Bash(npm install)",
+      "Bash(npm run dev:*)",
+      "Bash(curl:*)",
+      "Bash(taskkill:*)",
+      "Bash(cmd.exe:*)",
+      "Bash(node:*)",
+      "Bash(where ngrok)",
+      "Bash(npm install:*)",
+      "Bash(copy:*)",
+      "Read(/C:\\Users\\PC CUSTOM\\Downloads/**)",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
+    ],
+    "deny": [],
+    "ask": [],
+    "additionalDirectories": [
+      "c:\\Users\\PC CUSTOM\\Downloads"
+    ]
+  }
+}
