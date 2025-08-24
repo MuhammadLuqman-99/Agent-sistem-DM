@@ -1,0 +1,74 @@
+/**
+ * Icon Fallback System
+ * Provides fallback icons if FontAwesome fails to load
+ */
+
+/* Fallback icons using Unicode symbols */
+.icon-fallback {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    display: inline-block;
+    width: 1em;
+    text-align: center;
+}
+
+/* Common icon fallbacks */
+.fas.fa-check-circle::before { content: '✓'; }
+.fas.fa-crown::before { content: '♛'; }
+.fas.fa-user-tie::before { content: '👤'; }
+.fas.fa-chart-line::before { content: '📊'; }
+.fas.fa-chart-bar::before { content: '📈'; }
+.fas.fa-users::before { content: '👥'; }
+.fas.fa-shopping-bag::before { content: '🛍️'; }
+.fas.fa-percentage::before { content: '%'; }
+.fas.fa-dollar-sign::before { content: '$'; }
+.fas.fa-plus::before { content: '+'; }
+.fas.fa-sync::before { content: '↻'; }
+.fas.fa-download::before { content: '↓'; }
+.fas.fa-eye::before { content: '👁'; }
+.fas.fa-edit::before { content: '✏'; }
+.fas.fa-phone::before { content: '📞'; }
+.fas.fa-bell::before { content: '🔔'; }
+.fas.fa-moon::before { content: '🌙'; }
+.fas.fa-sun::before { content: '☀'; }
+.fas.fa-bars::before { content: '☰'; }
+.fas.fa-times::before { content: '✕'; }
+.fas.fa-arrow-right::before { content: '→'; }
+.fas.fa-arrow-up::before { content: '↑'; }
+.fas.fa-chevron-down::before { content: '▼'; }
+.fas.fa-sign-out-alt::before { content: '⏻'; }
+.fas.fa-cog::before { content: '⚙'; }
+.fas.fa-home::before { content: '🏠'; }
+.fas.fa-store::before { content: '🏪'; }
+
+/* Ensure fallback only shows when FontAwesome fails */
+.fontawesome-loaded .icon-fallback::before {
+    content: '';
+}
+
+/* Loading indicator for icons */
+.icon-loading {
+    position: relative;
+    display: inline-block;
+}
+
+.icon-loading::after {
+    content: '';
+    position: absolute;
+    width: 1em;
+    height: 1em;
+    border: 2px solid #ddd;
+    border-top-color: #666;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Hide loading when icons are loaded */
+.fontawesome-loaded .icon-loading::after {
+    display: none;
+}

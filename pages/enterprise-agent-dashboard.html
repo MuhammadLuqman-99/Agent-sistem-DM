@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Enterprise Agent Dashboard - Kilang Desa Murni Batik Sales System">
+    <title>Enterprise Agent Dashboard - Kilang Desa Murni Batik</title>
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" as="style">
+    <link rel="preload" href="../assets/css/enterprise-core.css" as="style">
+    
+    <!-- External Stylesheets with fallbacks -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome with fallback -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" onerror="this.remove(); document.body.classList.add('no-icons');">
+    
+    <!-- Internal Stylesheets with fallback -->
+    <link rel="stylesheet" href="../assets/css/enterprise-core.css" onerror="this.remove(); document.body.classList.add('no-css');">
+    <link rel="stylesheet" href="../assets/css/accessibility.css">
+    
+    <!-- Inline Fallback CSS -->
+    <style>
+        /* Basic fallback styles for agent dashboard */
+        .no-css body, .no-css * {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif !important;
+        }
+        
+        .no-css .app-container {
+            display: flex;
+            min-height: 100vh;
+            background: #f0f8f0;
+        }
+        
+        .no-css .app-sidebar {
+            width: 280px;
+            background: white;
+            border-right: 1px solid #ddd;
+            padding: 1rem;
+        }
+        
+        .no-css .app-main {
+            flex: 1;
+            padding: 2rem;
+            margin-left: 280px;
+        }
+        
+        .no-css .card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .no-css .btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .no-css .btn-primary {
+            background: #007bff;
+        }
+        
+        .no-css .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .no-css .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            text-align: center;
+            border-left: 4px solid #28a745;
+        }
+        
+        .no-css .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #28a745;
+            margin-bottom: 0.5rem;
+        }
+        
+        .no-css .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+        
+        .no-css .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .no-css .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .no-css .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        /* Icon fallbacks for agent */
+        .no-icons .fas::before {
+            font-family: Arial, sans-serif;
+            font-style: normal;
+        }
+        .no-icons .fa-bullseye::before { content: '🎯'; }
+        .no-icons .fa-chart-bar::before { content: '📊'; }
+        .no-icons .fa-percentage::before { content: '%'; }
+        .no-icons .fa-trophy::before { content: '🏆'; }
+        .no-icons .fa-plus-circle::before { content: '➕'; }
+        .no-icons .fa-calculator::before { content: '🧮'; }
+        .no-icons .fa-user-tie::before { content: '👤'; }
+        .no-icons .fa-store::before { content: '🏪'; }
+        .no-icons .fa-save::before { content: '💾'; }
+        
+        /* Responsive fallback */
+        @media (max-width: 768px) {
+            .no-css .app-main {
+                margin-left: 0;
+            }
+            .no-css .app-sidebar {
+                display: none;
+            }
+            .no-css .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .no-css .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .no-css .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="../assets/images/favicon.ico">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Enterprise Sidebar -->
+        <aside class="app-sidebar" role="navigation" aria-label="Main navigation">
+            <div class="sidebar-header">
+                <a href="#" class="sidebar-logo">
+                    <div class="sidebar-logo-icon">
+                        <i class="fas fa-store"></i>
+                    </div>
+                    <span>Kilang Desa Murni</span>
+                </a>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="sidebar-nav-section">
+                    <h3 class="sidebar-nav-section-title">Dashboard</h3>
+                    <div class="sidebar-nav-item">
+                        <a href="#overview" class="sidebar-nav-link active">
+                            <div class="sidebar-nav-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <span class="sidebar-nav-text">Overview</span>
+                        </a>
+                    </div>
+                    <div class="sidebar-nav-item">
+                        <a href="#performance" class="sidebar-nav-link">
+                            <div class="sidebar-nav-icon">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <span class="sidebar-nav-text">Performance</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="sidebar-nav-section">
+                    <h3 class="sidebar-nav-section-title">Sales</h3>
+                    <div class="sidebar-nav-item">
+                        <a href="#new-sale" class="sidebar-nav-link">
+                            <div class="sidebar-nav-icon">
+                                <i class="fas fa-plus-circle"></i>
+                            </div>
+                            <span class="sidebar-nav-text">New Sale</span>
+                        </a>
+                    </div>
+                    <div class="sidebar-nav-item">
+                        <a href="#my-orders" class="sidebar-nav-link">
+                            <div class="sidebar-nav-icon">
+                                <i class="fas fa-shopping-bag"></i>
+                            </div>
+                            <span class="sidebar-nav-text">My Orders</span>
+                            <span class="sidebar-nav-badge">12</span>
+                        </a>
+                    </div>
+                    <div class="sidebar-nav-item">
+                        <a href="#customers" class="sidebar-nav-link">
+                            <div class="sidebar-nav-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <span class="sidebar-nav-text">My Customers</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="sidebar-nav-section">
+                    <h3 class="sidebar-nav-section-title">Tools</h3>
+                    <div class="sidebar-nav-item">
+                        <a href="#calculator" class="sidebar-nav-link">
+                            <div class="sidebar-nav-icon">
+                                <i class="fas fa-calculator"></i>
+                            </div>
+                            <span class="sidebar-nav-text">Commission Calc</span>
+                        </a>
+                    </div>
+                    <div class="sidebar-nav-item">
+                        <a href="#catalog" class="sidebar-nav-link">
+                            <div class="sidebar-nav-icon">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <span class="sidebar-nav-text">Product Catalog</span>
+                        </a>
+                    </div>
+                    <div class="sidebar-nav-item">
+                        <a href="#reports" class="sidebar-nav-link">
+                            <div class="sidebar-nav-icon">
+                                <i class="fas fa-file-chart-line"></i>
+                            </div>
+                            <span class="sidebar-nav-text">My Reports</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="sidebar-nav-section">
+                    <h3 class="sidebar-nav-section-title">Account</h3>
+                    <div class="sidebar-nav-item">
+                        <a href="#profile" class="sidebar-nav-link">
+                            <div class="sidebar-nav-icon">
+                                <i class="fas fa-user-circle"></i>
+                            </div>
+                            <span class="sidebar-nav-text">My Profile</span>
+                        </a>
+                    </div>
+                    <div class="sidebar-nav-item">
+                        <a href="#settings" class="sidebar-nav-link">
+                            <div class="sidebar-nav-icon">
+                                <i class="fas fa-cog"></i>
+                            </div>
+                            <span class="sidebar-nav-text">Settings</span>
+                        </a>
+                    </div>
+                    <div class="sidebar-nav-item">
+                        <a href="logout.html?role=agent" class="sidebar-nav-link">
+                            <div class="sidebar-nav-icon">
+                                <i class="fas fa-sign-out-alt"></i>
+                            </div>
+                            <span class="sidebar-nav-text">Sign Out</span>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+        </aside>
+        
+        <!-- Main Content Area -->
+        <main class="app-main">
+            <!-- Enterprise Header -->
+            <header class="app-header">
+                <div class="app-header-left">
+                    <h1 class="app-header-title">Sales Dashboard</h1>
+                    <span class="app-header-subtitle">Welcome back, Agent</span>
+                </div>
+                <div class="app-header-right">
+                    <!-- Quick Actions -->
+                    <button class="btn btn-primary btn-sm" title="Create New Sale">
+                        <i class="fas fa-plus"></i>
+                        New Sale
+                    </button>
+                    
+                    <button class="btn btn-ghost" title="Notifications" aria-label="View notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="sidebar-nav-badge" style="position: absolute; top: 8px; right: 8px;">2</span>
+                    </button>
+                    
+                    <button class="btn btn-ghost theme-toggle" title="Toggle Theme" aria-label="Toggle dark mode">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    
+                    <!-- User Profile -->
+                    <div class="profile-dropdown-trigger" style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+                        <img src="https://ui-avatars.com/api/?name=Sales+Agent&background=10b981&color=fff&size=36" 
+                             alt="Sales Agent" 
+                             style="width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--neutral-200);">
+                        <div style="text-align: left;">
+                            <div style="font-weight: 600; color: var(--neutral-800); font-size: 14px;">John Doe</div>
+                            <div style="font-size: 12px; color: var(--neutral-500);">Sales Agent • KL Territory</div>
+                        </div>
+                        <i class="fas fa-chevron-down" style="font-size: 12px; color: var(--neutral-400);"></i>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Dashboard Content -->
+            <div style="padding: var(--space-3xl);">
+                <!-- Performance Overview -->
+                <section class="stats-grid" aria-labelledby="performance-heading">
+                    <h2 id="performance-heading" class="sr-only">Performance Overview</h2>
+                    
+                    <div class="stat-card" onclick="window.location.href='#monthly-target'">
+                        <div class="stat-icon" style="background: var(--primary-50); color: var(--primary-600);">
+                            <i class="fas fa-bullseye"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value">82%</div>
+                            <div class="stat-label">Monthly Target</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>RM 8,200 / RM 10,000</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card" onclick="window.location.href='#total-sales'">
+                        <div class="stat-icon" style="background: var(--success-50); color: var(--success-600);">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value">45</div>
+                            <div class="stat-label">Sales This Month</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>+12 from last month</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card" onclick="window.location.href='#commissions'">
+                        <div class="stat-icon" style="background: var(--warning-50); color: var(--warning-600);">
+                            <i class="fas fa-percentage"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value">RM 820</div>
+                            <div class="stat-label">Commission Earned</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>+15.3% this month</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card" onclick="window.location.href='#success-rate'">
+                        <div class="stat-icon" style="background: var(--error-50); color: var(--error-600);">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value">92%</div>
+                            <div class="stat-label">Success Rate</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>Above average</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Main Dashboard Grid -->
+                <div style="display: grid; grid-template-columns: 1fr 400px; gap: var(--space-3xl); margin-bottom: var(--space-4xl);">
+                    <!-- New Sale Form -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h2 class="card-title">Quick Sale Entry</h2>
+                                <p class="card-subtitle">Record a new sale quickly</p>
+                            </div>
+                            <button class="btn btn-ghost" title="Full sale form">
+                                <i class="fas fa-expand-alt"></i>
+                            </button>
+                        </div>
+                        <div class="card-content">
+                            <form id="quick-sale-form" class="form-grid" style="grid-template-columns: 1fr 1fr;">
+                                <div class="form-group">
+                                    <label class="form-label required">Customer Name</label>
+                                    <input type="text" class="form-control" placeholder="Enter customer name" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label required">Phone Number</label>
+                                    <input type="tel" class="form-control" placeholder="+60123456789" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label required">Product</label>
+                                    <select class="form-control" required>
+                                        <option value="">Select product...</option>
+                                        <option value="batik-traditional">Batik Traditional Set - RM 289</option>
+                                        <option value="batik-modern">Batik Modern Design - RM 189</option>
+                                        <option value="batik-premium">Batik Premium Collection - RM 425</option>
+                                        <option value="batik-casual">Batik Casual Wear - RM 129</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label required">Quantity</label>
+                                    <input type="number" class="form-control" min="1" value="1" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Customer Email</label>
+                                    <input type="email" class="form-control" placeholder="customer@email.com">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Special Notes</label>
+                                    <input type="text" class="form-control" placeholder="Any special requests...">
+                                </div>
+                                
+                                <div style="grid-column: 1 / -1; display: flex; gap: var(--space-md); margin-top: var(--space-lg);">
+                                    <button type="submit" class="btn btn-primary" style="flex: 1;">
+                                        <i class="fas fa-save"></i>
+                                        Save Sale
+                                    </button>
+                                    <button type="button" class="btn btn-secondary" onclick="calculateCommission()">
+                                        <i class="fas fa-calculator"></i>
+                                        Calculate Commission
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <!-- Agent Performance Widget -->
+                    <div style="display: flex; flex-direction: column; gap: var(--space-3xl);">
+                        <!-- Monthly Progress -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Monthly Progress</h3>
+                                <span class="badge badge-success">On Track</span>
+                            </div>
+                            <div class="card-content">
+                                <div style="text-align: center; margin-bottom: var(--space-xl);">
+                                    <div style="width: 120px; height: 120px; margin: 0 auto; position: relative; display: flex; align-items: center; justify-content: center;">
+                                        <svg width="120" height="120" style="transform: rotate(-90deg);">
+                                            <circle cx="60" cy="60" r="50" stroke="var(--neutral-200)" stroke-width="8" fill="transparent"></circle>
+                                            <circle cx="60" cy="60" r="50" stroke="var(--primary-500)" stroke-width="8" fill="transparent" 
+                                                    stroke-dasharray="314" stroke-dashoffset="56" style="transition: stroke-dashoffset 0.5s ease;"></circle>
+                                        </svg>
+                                        <div style="position: absolute; text-align: center;">
+                                            <div style="font-size: var(--text-2xl); font-weight: 700; color: var(--neutral-800);">82%</div>
+                                            <div style="font-size: var(--text-xs); color: var(--neutral-500);">Complete</div>
+                                        </div>
+                                    </div>
+                                    <div style="margin-top: var(--space-lg);">
+                                        <div style="font-size: var(--text-lg); font-weight: 600; color: var(--neutral-800);">RM 8,200</div>
+                                        <div style="font-size: var(--text-sm); color: var(--neutral-500);">of RM 10,000 target</div>
+                                    </div>
+                                </div>
+                                
+                                <div style="background: var(--neutral-50); padding: var(--space-lg); border-radius: var(--radius-lg);">
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-sm);">
+                                        <span style="font-size: var(--text-sm); color: var(--neutral-600);">Days Remaining</span>
+                                        <span style="font-weight: 600;">8 days</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between;">
+                                        <span style="font-size: var(--text-sm); color: var(--neutral-600);">Needed per Day</span>
+                                        <span style="font-weight: 600; color: var(--success-600);">RM 225</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Quick Stats -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Today's Activity</h3>
+                            </div>
+                            <div class="card-content" style="display: flex; flex-direction: column; gap: var(--space-lg);">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="display: flex; align-items: center; gap: var(--space-md);">
+                                        <div style="width: 40px; height: 40px; border-radius: var(--radius-lg); background: var(--success-50); display: flex; align-items: center; justify-content: center; color: var(--success-600);">
+                                            <i class="fas fa-check"></i>
+                                        </div>
+                                        <div>
+                                            <div style="font-weight: 500;">Sales Made</div>
+                                            <div style="font-size: var(--text-sm); color: var(--neutral-500);">Today</div>
+                                        </div>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <div style="font-size: var(--text-xl); font-weight: 700;">3</div>
+                                    </div>
+                                </div>
+                                
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="display: flex; align-items: center; gap: var(--space-md);">
+                                        <div style="width: 40px; height: 40px; border-radius: var(--radius-lg); background: var(--primary-50); display: flex; align-items: center; justify-content: center; color: var(--primary-600);">
+                                            <i class="fas fa-phone"></i>
+                                        </div>
+                                        <div>
+                                            <div style="font-weight: 500;">Follow-ups</div>
+                                            <div style="font-size: var(--text-sm); color: var(--neutral-500);">Pending</div>
+                                        </div>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <div style="font-size: var(--text-xl); font-weight: 700;">5</div>
+                                    </div>
+                                </div>
+                                
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="display: flex; align-items: center; gap: var(--space-md);">
+                                        <div style="width: 40px; height: 40px; border-radius: var(--radius-lg); background: var(--warning-50); display: flex; align-items: center; justify-content: center; color: var(--warning-600);">
+                                            <i class="fas fa-dollar-sign"></i>
+                                        </div>
+                                        <div>
+                                            <div style="font-weight: 500;">Revenue</div>
+                                            <div style="font-size: var(--text-sm); color: var(--neutral-500);">Today</div>
+                                        </div>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <div style="font-size: var(--text-xl); font-weight: 700;">RM 867</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recent Orders -->
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <h2 class="card-title">My Recent Orders</h2>
+                            <p class="card-subtitle">Your latest sales and their status</p>
+                        </div>
+                        <div style="display: flex; gap: var(--space-sm);">
+                            <button class="btn btn-sm btn-secondary">
+                                <i class="fas fa-sync"></i>
+                                Refresh
+                            </button>
+                            <button class="btn btn-sm btn-primary">
+                                <i class="fas fa-download"></i>
+                                Export
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th data-sortable>Date</th>
+                                    <th data-sortable>Customer</th>
+                                    <th data-sortable>Product</th>
+                                    <th data-sortable data-type="number">Amount</th>
+                                    <th data-sortable data-type="number">Commission</th>
+                                    <th data-sortable>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="font-weight: 500;">Today</td>
+                                    <td>
+                                        <div>
+                                            <div style="font-weight: 500;">Sarah Ahmad</div>
+                                            <div style="font-size: var(--text-xs); color: var(--neutral-500);">+601234567890</div>
+                                        </div>
+                                    </td>
+                                    <td>Batik Traditional Set</td>
+                                    <td style="font-weight: 600; color: var(--success-600);">RM 289</td>
+                                    <td style="font-weight: 600; color: var(--primary-600);">RM 28.90</td>
+                                    <td><span class="badge badge-success">Completed</span></td>
+                                    <td>
+                                        <div style="display: flex; gap: var(--space-xs);">
+                                            <button class="btn btn-sm btn-ghost" title="View details">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-ghost" title="Contact customer">
+                                                <i class="fas fa-phone"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: 500;">Yesterday</td>
+                                    <td>
+                                        <div>
+                                            <div style="font-weight: 500;">Ali Rahman</div>
+                                            <div style="font-size: var(--text-xs); color: var(--neutral-500);">+601234567891</div>
+                                        </div>
+                                    </td>
+                                    <td>Batik Modern Design</td>
+                                    <td style="font-weight: 600; color: var(--success-600);">RM 189</td>
+                                    <td style="font-weight: 600; color: var(--primary-600);">RM 18.90</td>
+                                    <td><span class="badge badge-warning">Processing</span></td>
+                                    <td>
+                                        <div style="display: flex; gap: var(--space-xs);">
+                                            <button class="btn btn-sm btn-ghost" title="View details">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-ghost" title="Contact customer">
+                                                <i class="fas fa-phone"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: 500;">2 days ago</td>
+                                    <td>
+                                        <div>
+                                            <div style="font-weight: 500;">Fatimah Lee</div>
+                                            <div style="font-size: var(--text-xs); color: var(--neutral-500);">+601234567892</div>
+                                        </div>
+                                    </td>
+                                    <td>Batik Premium Collection</td>
+                                    <td style="font-weight: 600; color: var(--success-600);">RM 425</td>
+                                    <td style="font-weight: 600; color: var(--primary-600);">RM 42.50</td>
+                                    <td><span class="badge badge-info">Pending Payment</span></td>
+                                    <td>
+                                        <div style="display: flex; gap: var(--space-xs);">
+                                            <button class="btn btn-sm btn-ghost" title="View details">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-ghost" title="Follow up">
+                                                <i class="fas fa-phone"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-footer" style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size: var(--text-sm); color: var(--neutral-500);">
+                            Showing 3 of 45 orders this month
+                        </span>
+                        <div style="display: flex; gap: var(--space-sm);">
+                            <button class="btn btn-sm btn-secondary">Previous</button>
+                            <button class="btn btn-sm btn-primary">Next</button>
+                            <a href="agent/sale-form-list.html" class="btn btn-sm btn-ghost">View All</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Commission Calculator & Tools -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3xl); margin-top: var(--space-4xl);">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Commission Calculator</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="form-group">
+                                <label class="form-label">Sale Amount (RM)</label>
+                                <input type="number" id="calc-amount" class="form-control" placeholder="Enter sale amount" 
+                                       oninput="calculateInstantCommission()">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Commission Rate</label>
+                                <select id="calc-rate" class="form-control" onchange="calculateInstantCommission()">
+                                    <option value="10">Standard (10%)</option>
+                                    <option value="12">Premium (12%)</option>
+                                    <option value="15">VIP Customer (15%)</option>
+                                </select>
+                            </div>
+                            <div id="commission-result" style="padding: var(--space-lg); background: var(--neutral-50); border-radius: var(--radius-lg); margin-top: var(--space-lg);">
+                                <div style="text-align: center;">
+                                    <div style="font-size: var(--text-sm); color: var(--neutral-500);">Your Commission</div>
+                                    <div style="font-size: var(--text-2xl); font-weight: 700; color: var(--success-600);">RM 0.00</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Quick Tools</h3>
+                        </div>
+                        <div class="card-content" style="display: flex; flex-direction: column; gap: var(--space-md);">
+                            <button class="btn btn-secondary btn-lg">
+                                <i class="fas fa-book"></i>
+                                View Product Catalog
+                            </button>
+                            <button class="btn btn-secondary btn-lg">
+                                <i class="fas fa-users"></i>
+                                Customer Directory
+                            </button>
+                            <button class="btn btn-secondary btn-lg">
+                                <i class="fas fa-chart-line"></i>
+                                Performance Report
+                            </button>
+                            <button class="btn btn-secondary btn-lg">
+                                <i class="fas fa-phone"></i>
+                                Contact Support
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="../assets/js/enterprise-ui.js"></script>
+    <script src="../assets/js/firebase-agent.js" type="module"></script>
+    <script src="../assets/js/shopify-integration.js"></script>
+    
+    <script>
+        // Commission Calculator
+        function calculateInstantCommission() {
+            const amount = parseFloat(document.getElementById('calc-amount').value) || 0;
+            const rate = parseFloat(document.getElementById('calc-rate').value) || 10;
+            const commission = (amount * rate) / 100;
+            
+            document.querySelector('#commission-result .text-2xl').textContent = `RM ${commission.toFixed(2)}`;
+        }
+        
+        // Form submission
+        document.getElementById('quick-sale-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Show success notification
+            if (window.enterpriseUI && window.enterpriseUI.notifications) {
+                window.enterpriseUI.notifications.success(
+                    'Sale Recorded Successfully!', 
+                    'The sale has been saved and commission calculated.'
+                );
+            }
+            
+            // Reset form
+            this.reset();
+        });
+        
+        // Calculate commission for form
+        function calculateCommission() {
+            const productSelect = document.querySelector('select[required]');
+            const quantityInput = document.querySelector('input[type="number"]');
+            
+            if (productSelect.value && quantityInput.value) {
+                const prices = {
+                    'batik-traditional': 289,
+                    'batik-modern': 189,
+                    'batik-premium': 425,
+                    'batik-casual': 129
+                };
+                
+                const price = prices[productSelect.value] || 0;
+                const quantity = parseInt(quantityInput.value) || 1;
+                const total = price * quantity;
+                const commission = total * 0.10; // 10% commission
+                
+                if (window.enterpriseUI && window.enterpriseUI.notifications) {
+                    window.enterpriseUI.notifications.info(
+                        'Commission Calculated', 
+                        `Sale Total: RM ${total} | Your Commission: RM ${commission.toFixed(2)}`
+                    );
+                }
+            }
+        }
+    </script>
+    
+    <!-- Screen Reader Support -->
+    <div id="sr-status" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+</body>
+</html>

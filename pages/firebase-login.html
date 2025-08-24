@@ -441,9 +441,9 @@
                     // Redirect based on user role
                     setTimeout(() => {
                         if (userData.role === 'admin') {
-                            window.location.href = 'admin-dashboard.html';
+                            window.location.href = 'enterprise-admin-dashboard.html';
                         } else if (userData.role === 'agent') {
-                            window.location.href = 'agent-dashboard.html';
+                            window.location.href = 'enterprise-agent-dashboard.html';
                         } else {
                             window.location.href = 'login.html';
                         }
@@ -480,9 +480,9 @@
                 // User is signed in, redirect to appropriate dashboard
                 const userRole = localStorage.getItem('userRole');
                 if (userRole === 'admin') {
-                    window.location.href = 'admin-dashboard.html';
+                    window.location.href = 'enterprise-admin-dashboard.html';
                 } else if (userRole === 'agent') {
-                    window.location.href = 'agent-dashboard.html';
+                    window.location.href = 'enterprise-agent-dashboard.html';
                 }
             }
         });

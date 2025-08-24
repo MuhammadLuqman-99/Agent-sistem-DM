@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics - AgentOS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: #f8f9fa;
+            color: #212529;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: #212529;
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .nav-btn {
+            background: #495057;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-btn:hover {
+            background: #6c757d;
+            transform: translateY(-1px);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #212529;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .stat-title {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #6c757d;
+            text-transform: uppercase;
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+            opacity: 0.7;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-change {
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .positive { color: #28a745; }
+        .negative { color: #dc3545; }
+        .neutral { color: #6c757d; }
+
+        /* Charts Container */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border: 1px solid #e9ecef;
+        }
+
+        .chart-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* Mock Chart */
+        .chart-placeholder {
+            height: 300px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .pie-chart-placeholder {
+            height: 300px;
+            width: 300px;
+            border-radius: 50%;
+            background: conic-gradient(#667eea 0deg 120deg, #764ba2 120deg 240deg, #28a745 240deg 360deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .pie-chart-center {
+            width: 150px;
+            height: 150px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: #212529;
+        }
+
+        /* Data Tables */
+        .data-section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border: 1px solid #e9ecef;
+            margin-bottom: 2rem;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .table th,
+        .table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            color: #495057;
+        }
+
+        .table tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                padding: 1rem;
+            }
+            
+            .page-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Icon fallbacks */
+        .no-css .fas::before {
+            font-family: inherit;
+        }
+        .no-css .fa-chart-line::before { content: '📊'; }
+        .no-css .fa-dollar-sign::before { content: '💰'; }
+        .no-css .fa-shopping-cart::before { content: '🛒'; }
+        .no-css .fa-users::before { content: '👥'; }
+        .no-css .fa-percentage::before { content: '📈'; }
+        .no-css .fa-home::before { content: '🏠'; }
+        .no-css .fa-sign-out-alt::before { content: '🚪'; }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-chart-line"></i> Analytics Dashboard
+            </div>
+            <div class="nav-buttons">
+                <a href="enterprise-admin-dashboard.html" class="nav-btn">
+                    <i class="fas fa-home"></i> Dashboard
+                </a>
+                <a href="logout.html" class="nav-btn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1 class="page-title">
+            <i class="fas fa-chart-line"></i>
+            Business Analytics
+        </h1>
+
+        <!-- Key Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-title">Total Revenue</span>
+                    <i class="fas fa-dollar-sign stat-icon" style="color: #28a745;"></i>
+                </div>
+                <div class="stat-value" style="color: #28a745;">RM 45,280</div>
+                <div class="stat-change positive">
+                    <i class="fas fa-arrow-up"></i> +15.2% this month
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-title">Total Orders</span>
+                    <i class="fas fa-shopping-cart stat-icon" style="color: #007bff;"></i>
+                </div>
+                <div class="stat-value" style="color: #007bff;">1,249</div>
+                <div class="stat-change positive">
+                    <i class="fas fa-arrow-up"></i> +8.7% this month
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-title">Active Agents</span>
+                    <i class="fas fa-users stat-icon" style="color: #6f42c1;"></i>
+                </div>
+                <div class="stat-value" style="color: #6f42c1;">42</div>
+                <div class="stat-change positive">
+                    <i class="fas fa-arrow-up"></i> +3 new agents
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-title">Commission Rate</span>
+                    <i class="fas fa-percentage stat-icon" style="color: #fd7e14;"></i>
+                </div>
+                <div class="stat-value" style="color: #fd7e14;">12.5%</div>
+                <div class="stat-change neutral">
+                    <i class="fas fa-minus"></i> No change
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="charts-grid">
+            <div class="chart-card">
+                <div class="chart-title">
+                    Revenue Trend (Last 12 Months)
+                    <button class="nav-btn" onclick="showNotification('Chart view updated!', 'success')">
+                        <i class="fas fa-refresh"></i> Refresh
+                    </button>
+                </div>
+                <div class="chart-placeholder">
+                    📈 Interactive Revenue Chart<br>
+                    <small style="opacity: 0.8; font-size: 0.9rem;">Click refresh to update data</small>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <div class="chart-title">Sales by Category</div>
+                <div class="pie-chart-placeholder">
+                    <div class="pie-chart-center">
+                        Sales<br>Distribution
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Performing Agents -->
+        <div class="data-section">
+            <h3>🏆 Top Performing Agents (This Month)</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Agent Name</th>
+                        <th>Sales</th>
+                        <th>Revenue</th>
+                        <th>Commission</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Ahmad Rahman</strong></td>
+                        <td>156 orders</td>
+                        <td>RM 12,450</td>
+                        <td>RM 1,556</td>
+                        <td><span style="background: #d4edda; color: #155724; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">Active</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Siti Aminah</strong></td>
+                        <td>134 orders</td>
+                        <td>RM 10,280</td>
+                        <td>RM 1,285</td>
+                        <td><span style="background: #d4edda; color: #155724; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">Active</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Muhammad Ali</strong></td>
+                        <td>128 orders</td>
+                        <td>RM 9,840</td>
+                        <td>RM 1,230</td>
+                        <td><span style="background: #d4edda; color: #155724; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">Active</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Fatimah Zahra</strong></td>
+                        <td>112 orders</td>
+                        <td>RM 8,960</td>
+                        <td>RM 1,120</td>
+                        <td><span style="background: #d4edda; color: #155724; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">Active</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Omar Hassan</strong></td>
+                        <td>98 orders</td>
+                        <td>RM 7,650</td>
+                        <td>RM 956</td>
+                        <td><span style="background: #fff3cd; color: #856404; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">Review</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Product Performance -->
+        <div class="data-section">
+            <h3>📦 Best Selling Products</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Category</th>
+                        <th>Units Sold</th>
+                        <th>Revenue</th>
+                        <th>Growth</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Batik Sarong Traditional</strong></td>
+                        <td>Traditional Wear</td>
+                        <td>245 units</td>
+                        <td>RM 12,250</td>
+                        <td style="color: #28a745;">+18%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Batik Shirt Modern</strong></td>
+                        <td>Modern Wear</td>
+                        <td>189 units</td>
+                        <td>RM 9,450</td>
+                        <td style="color: #28a745;">+12%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Batik Dress Casual</strong></td>
+                        <td>Women's Wear</td>
+                        <td>167 units</td>
+                        <td>RM 8,350</td>
+                        <td style="color: #28a745;">+8%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Batik Accessories Set</strong></td>
+                        <td>Accessories</td>
+                        <td>134 units</td>
+                        <td>RM 4,020</td>
+                        <td style="color: #dc3545;">-5%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Show notification function
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 16px 24px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                z-index: 1000;
+                font-weight: 500;
+                font-size: 14px;
+                max-width: 350px;
+                opacity: 0;
+                transform: translateX(100%);
+                transition: all 0.3s ease;
+                background: ${type === 'success' ? '#d4edda' : '#f8d7da'};
+                color: ${type === 'success' ? '#155724' : '#721c24'};
+                border: 1px solid ${type === 'success' ? '#c3e6cb' : '#f5c6cb'};
+            `;
+            
+            notification.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-weight: bold; font-size: 16px;">${type === 'success' ? '✓' : '✗'}</span>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.opacity = '1';
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.remove();
+                    }
+                }, 300);
+            }, 4000);
+        }
+
+        // Load page with animation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate stat cards on load
+            const statCards = document.querySelectorAll('.stat-card');
+            statCards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(20px)';
+                    card.style.transition = 'all 0.5s ease';
+                    
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, 100);
+                }, index * 100);
+            });
+
+            showNotification('Analytics dashboard loaded successfully!', 'success');
+        });
+    </script>
+</body>
+</html>

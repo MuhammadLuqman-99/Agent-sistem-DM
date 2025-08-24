@@ -150,20 +150,29 @@
                 </div>
                 
                 <div class="quick-access">
-                    <a href="admin-dashboard.html" class="access-btn">
-                        <i class="fas fa-shield-alt" style="color: #dc3545;"></i>
+                    <a href="enterprise-admin-dashboard.html" class="access-btn" onclick="showLoadingNotification('Loading Admin Dashboard...')">
+                        <i class="fas fa-crown" style="color: #dc3545;"></i>
                         <div class="btn-text">
-                            <div class="btn-title">Admin Access</div>
-                            <div class="btn-desc">Full system administration</div>
+                            <div class="btn-title">Enterprise Admin</div>
+                            <div class="btn-desc">Complete business management</div>
                         </div>
                         <i class="fas fa-arrow-right"></i>
                     </a>
                     
-                    <a href="agent-dashboard.html" class="access-btn">
+                    <a href="enterprise-agent-dashboard.html" class="access-btn" onclick="showLoadingNotification('Loading Agent Dashboard...')">
                         <i class="fas fa-user-tie" style="color: #28a745;"></i>
                         <div class="btn-text">
-                            <div class="btn-title">Agent Access</div>
-                            <div class="btn-desc">Sales agent dashboard</div>
+                            <div class="btn-title">Sales Agent</div>
+                            <div class="btn-desc">Mobile-first sales interface</div>
+                        </div>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                    
+                    <a href="firebase-login.html" class="access-btn">
+                        <i class="fas fa-database" style="color: #f39c12;"></i>
+                        <div class="btn-text">
+                            <div class="btn-title">Firebase Login</div>
+                            <div class="btn-desc">Secure authentication</div>
                         </div>
                         <i class="fas fa-arrow-right"></i>
                     </a>
@@ -187,6 +196,11 @@
                 showNotification('You have been successfully logged out', 'success');
             }
         });
+        
+        // Loading notification function
+        function showLoadingNotification(message) {
+            showNotification(message, 'info');
+        }
         
         // Simple notification system
         function showNotification(message, type = 'info') {

@@ -5,7 +5,192 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Logout - AgentOS</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../assets/css/logout-styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logout-container {
+            max-width: 400px;
+            width: 100%;
+            padding: 20px;
+        }
+        
+        .logout-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .logout-header {
+            background: #212529;
+            padding: 24px;
+            text-align: center;
+            color: white;
+        }
+        
+        .logo h1 {
+            margin: 8px 0 0;
+            font-size: 24px;
+            font-weight: 600;
+        }
+        
+        .logout-content {
+            padding: 32px 24px;
+            text-align: center;
+        }
+        
+        .logout-icon {
+            font-size: 48px;
+            color: #6c757d;
+            margin-bottom: 16px;
+        }
+        
+        .logout-content h2 {
+            color: #212529;
+            margin-bottom: 8px;
+            font-size: 20px;
+        }
+        
+        .logout-content p {
+            color: #6c757d;
+            margin-bottom: 24px;
+        }
+        
+        .user-info {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .user-name {
+            display: block;
+            font-weight: 600;
+            color: #212529;
+            margin-bottom: 4px;
+        }
+        
+        .user-role {
+            display: block;
+            font-size: 14px;
+            color: #6c757d;
+            text-transform: capitalize;
+        }
+        
+        .logout-actions {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 12px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-cancel {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-cancel:hover {
+            background: #5a6268;
+        }
+        
+        .btn-logout {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-logout:hover {
+            background: #c82333;
+        }
+        
+        .logout-info {
+            background: #e7f3ff;
+            border-radius: 8px;
+            padding: 16px;
+            color: #0c5aa6;
+            font-size: 14px;
+        }
+        
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .loading-content {
+            background: white;
+            padding: 32px;
+            border-radius: 12px;
+            text-align: center;
+            max-width: 300px;
+            width: 90%;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Icon fallbacks */
+        .no-css .fas::before {
+            font-family: inherit;
+        }
+        .no-css .fa-sign-out-alt::before {
+            content: '🚪';
+        }
+        .no-css .fa-user-circle::before {
+            content: '👤';
+        }
+        .no-css .fa-times::before {
+            content: '❌';
+        }
+        .no-css .fa-info-circle::before {
+            content: 'ℹ️';
+        }
+    </style>
 </head>
 <body>
     <div class="logout-container">
@@ -54,9 +239,100 @@
         </div>
     </div>
     
-    <!-- Use Firebase logout for enhanced security -->
-    <script type="module" src="../assets/js/firebase-logout.js"></script>
-    <!-- Fallback to regular logout if Firebase not available -->
-    <script src="../assets/js/logout-script.js"></script>
+    <script>
+        // Load user info from localStorage
+        document.addEventListener('DOMContentLoaded', function() {
+            const userName = localStorage.getItem('userName') || 'Current User';
+            const userRole = localStorage.getItem('userRole') || 'User';
+            
+            document.getElementById('userName').textContent = userName;
+            document.getElementById('userRole').textContent = userRole;
+        });
+        
+        function cancelLogout() {
+            // Go back to previous page or dashboard
+            const userRole = localStorage.getItem('userRole');
+            if (userRole === 'admin') {
+                window.location.href = 'enterprise-admin-dashboard.html';
+            } else if (userRole === 'agent') {
+                window.location.href = 'enterprise-agent-dashboard.html';
+            } else {
+                window.location.href = '../index.html';
+            }
+        }
+        
+        function confirmLogout() {
+            // Show loading overlay
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            loadingOverlay.style.display = 'flex';
+            
+            // Clear user data from localStorage
+            setTimeout(() => {
+                localStorage.removeItem('userId');
+                localStorage.removeItem('userRole'); 
+                localStorage.removeItem('userName');
+                localStorage.removeItem('userEmail');
+                
+                // Try Firebase logout if available
+                if (typeof firebase !== 'undefined' && firebase.auth) {
+                    firebase.auth().signOut().then(() => {
+                        window.location.href = 'login.html?logout=success';
+                    }).catch(() => {
+                        window.location.href = 'login.html?logout=success';
+                    });
+                } else {
+                    // Regular logout
+                    window.location.href = 'login.html?logout=success';
+                }
+            }, 1500);
+        }
+        
+        // Show notification function
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 16px 24px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                z-index: 1000;
+                font-weight: 500;
+                font-size: 14px;
+                max-width: 350px;
+                opacity: 0;
+                transform: translateX(100%);
+                transition: all 0.3s ease;
+                background: #d4edda;
+                color: #155724;
+                border: 1px solid #c3e6cb;
+            `;
+            
+            notification.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-weight: bold; font-size: 16px;">✓</span>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.opacity = '1';
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.remove();
+                    }
+                }, 300);
+            }, 4000);
+        }
+    </script>
 </body>
 </html>

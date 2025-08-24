@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Enterprise Admin Dashboard - Kilang Desa Murni Batik Management System">
+    <title>Enterprise Admin Dashboard - Kilang Desa Murni Batik</title>
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" as="style">
+    <link rel="preload" href="../assets/css/enterprise-core.css" as="style">
+    
+    <!-- External Stylesheets with fallbacks -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome with fallback -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" onerror="this.remove(); document.body.classList.add('no-icons');">
+    
+    <!-- Internal Stylesheets with fallback -->
+    <link rel="stylesheet" href="../assets/css/enterprise-core.css" onerror="this.remove(); document.body.classList.add('no-css');">
+    <link rel="stylesheet" href="../assets/css/accessibility.css">
+    
+    <!-- Inline Fallback CSS -->
+    <style>
+        /* Basic fallback styles */
+        .no-css body, .no-css * {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif !important;
+        }
+        
+        .no-css .app-container {
+            display: flex;
+            min-height: 100vh;
+            background: #f8f9fa;
+        }
+        
+        .no-css .app-sidebar {
+            width: 280px;
+            background: white;
+            border-right: 1px solid #ddd;
+            padding: 1rem;
+        }
+        
+        .no-css .app-main {
+            flex: 1;
+            padding: 2rem;
+            margin-left: 280px;
+        }
+        
+        .no-css .card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .no-css .btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .no-css .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .no-css .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        
+        .no-css .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Icon fallbacks */
+        .no-icons .fas::before {
+            font-family: Arial, sans-serif;
+            font-style: normal;
+        }
+        .no-icons .fa-crown::before { content: '👑'; }
+        .no-icons .fa-chart-line::before { content: '📊'; }
+        .no-icons .fa-users::before { content: '👥'; }
+        .no-icons .fa-shopping-bag::before { content: '🛍️'; }
+        .no-icons .fa-percentage::before { content: '%'; }
+        .no-icons .fa-plus::before { content: '+'; }
+        .no-icons .fa-sync::before { content: '🔄'; }
+        .no-icons .fa-download::before { content: '⬇'; }
+        .no-icons .fa-eye::before { content: '👁'; }
+        .no-icons .fa-edit::before { content: '✏'; }
+        .no-icons .fa-bell::before { content: '🔔'; }
+        .no-icons .fa-moon::before { content: '🌙'; }
+        .no-icons .fa-chevron-down::before { content: '▼'; }
+        
+        /* Responsive fallback */
+        @media (max-width: 768px) {
+            .no-css .app-main {
+                margin-left: 0;
+            }
+            .no-css .app-sidebar {
+                display: none;
+            }
+            .no-css .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="../assets/images/favicon.ico">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Enterprise Sidebar -->
+        <aside class="app-sidebar" role="navigation" aria-label="Main navigation">
+            <div class="sidebar-header">
+                <a href="#" class="sidebar-logo">
+                    <div class="sidebar-logo-icon">
+                        <i class="fas fa-store"></i>
+                    </div>
+                    <span>Kilang Desa Murni</span>
+                </a>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="sidebar-nav-section">
+                    <h3 class="sidebar-nav-section-title">Dashboard</h3>
+                    <div class="sidebar-nav-item">
+                        <a href="#overview" class="sidebar-nav-link active">
+                            <div class="sidebar-nav-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <span class="sidebar-nav-text">Overview</span>
+                        </a>
+                    </div>
+                    <div class="sidebar-nav-item">
+                        <a href="#analytics" class="sidebar-nav-link">
+                            <div class="sidebar-nav-icon">
+                                <i class="fas fa-chart-bar"></i>
+                            </div>
+                            <span class="sidebar-nav-text">Analytics</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="sidebar-nav-section">
+                    <h3 class="sidebar-nav-section-title">Management</h3>
+                    <div class="sidebar-nav-item">
+                        <a href="#agents" class="sidebar-nav-link">
+                            <div class="sidebar-nav-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <span class="sidebar-nav-text">Agents</span>
+                            <span class="sidebar-nav-badge">42</span>
+                        </a>
+                    </div>
+                    <div class="sidebar-nav-item">
+                        <a href="#orders" class="sidebar-nav-link">
+                            <div class="sidebar-nav-icon">
+                                <i class="fas fa-shopping-bag"></i>
+                            </div>
+                            <span class="sidebar-nav-text">Orders</span>
+                            <span class="sidebar-nav-badge">8</span>
+                        </a>
+                    </div>
+                    <div class="sidebar-nav-item">
+                        <a href="#products" class="sidebar-nav-link">
+                            <div class="sidebar-nav-icon">
+                                <i class="fas fa-tshirt"></i>
+                            </div>
+                            <span class="sidebar-nav-text">Products</span>
+                        </a>
+                    </div>
+                    <div class="sidebar-nav-item">
+                        <a href="#commissions" class="sidebar-nav-link">
+                            <div class="sidebar-nav-icon">
+                                <i class="fas fa-percentage"></i>
+                            </div>
+                            <span class="sidebar-nav-text">Commissions</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="sidebar-nav-section">
+                    <h3 class="sidebar-nav-section-title">Operations</h3>
+                    <div class="sidebar-nav-item">
+                        <a href="#reports" class="sidebar-nav-link">
+                            <div class="sidebar-nav-icon">
+                                <i class="fas fa-file-chart-line"></i>
+                            </div>
+                            <span class="sidebar-nav-text">Reports</span>
+                        </a>
+                    </div>
+                    <div class="sidebar-nav-item">
+                        <a href="#settings" class="sidebar-nav-link">
+                            <div class="sidebar-nav-icon">
+                                <i class="fas fa-cog"></i>
+                            </div>
+                            <span class="sidebar-nav-text">Settings</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="sidebar-nav-section">
+                    <h3 class="sidebar-nav-section-title">Account</h3>
+                    <div class="sidebar-nav-item">
+                        <a href="#profile" class="sidebar-nav-link">
+                            <div class="sidebar-nav-icon">
+                                <i class="fas fa-user-circle"></i>
+                            </div>
+                            <span class="sidebar-nav-text">Profile</span>
+                        </a>
+                    </div>
+                    <div class="sidebar-nav-item">
+                        <a href="logout.html?role=admin" class="sidebar-nav-link">
+                            <div class="sidebar-nav-icon">
+                                <i class="fas fa-sign-out-alt"></i>
+                            </div>
+                            <span class="sidebar-nav-text">Sign Out</span>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+        </aside>
+        
+        <!-- Main Content Area -->
+        <main class="app-main">
+            <!-- Enterprise Header -->
+            <header class="app-header">
+                <div class="app-header-left">
+                    <h1 class="app-header-title">Dashboard</h1>
+                    <span class="app-header-subtitle">Welcome back, Admin</span>
+                </div>
+                <div class="app-header-right">
+                    <!-- Quick Actions -->
+                    <button class="btn btn-ghost" title="Notifications" aria-label="View notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="sidebar-nav-badge" style="position: absolute; top: 8px; right: 8px;">3</span>
+                    </button>
+                    
+                    <button class="btn btn-ghost theme-toggle" title="Toggle Theme" aria-label="Toggle dark mode">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    
+                    <!-- User Profile -->
+                    <div class="profile-dropdown-trigger" style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+                        <img src="https://ui-avatars.com/api/?name=Admin+User&background=0ea5e9&color=fff&size=36" 
+                             alt="Admin User" 
+                             style="width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--neutral-200);">
+                        <div style="text-align: left;">
+                            <div style="font-weight: 600; color: var(--neutral-800); font-size: 14px;">Admin User</div>
+                            <div style="font-size: 12px; color: var(--neutral-500);">System Administrator</div>
+                        </div>
+                        <i class="fas fa-chevron-down" style="font-size: 12px; color: var(--neutral-400);"></i>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Dashboard Content -->
+            <div style="padding: var(--space-3xl);">
+                <!-- Key Performance Indicators -->
+                <section class="stats-grid" aria-labelledby="kpi-heading">
+                    <h2 id="kpi-heading" class="sr-only">Key Performance Indicators</h2>
+                    
+                    <div class="stat-card" onclick="window.location.href='#revenue'">
+                        <div class="stat-icon" style="background: var(--success-50); color: var(--success-600);">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value">RM 45,280</div>
+                            <div class="stat-label">Total Revenue</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>+12.5% from last month</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card" onclick="window.location.href='#orders'">
+                        <div class="stat-icon" style="background: var(--primary-50); color: var(--primary-600);">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value">1,249</div>
+                            <div class="stat-label">Total Orders</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>+8.2% from last month</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card" onclick="window.location.href='#agents'">
+                        <div class="stat-icon" style="background: var(--warning-50); color: var(--warning-600);">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value">42</div>
+                            <div class="stat-label">Active Agents</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>+3 new agents</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card" onclick="window.location.href='#commissions'">
+                        <div class="stat-icon" style="background: var(--error-50); color: var(--error-600);">
+                            <i class="fas fa-percentage"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value">RM 3,420</div>
+                            <div class="stat-label">Commissions Paid</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>+15.3% from last month</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Dashboard Grid -->
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: var(--space-3xl); margin-bottom: var(--space-4xl);">
+                    <!-- Sales Chart -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h2 class="card-title">Sales Performance</h2>
+                                <p class="card-subtitle">Revenue trends over the last 6 months</p>
+                            </div>
+                            <div style="display: flex; gap: var(--space-sm);">
+                                <button class="btn btn-sm btn-secondary">
+                                    <i class="fas fa-download"></i>
+                                    Export
+                                </button>
+                                <button class="btn btn-sm btn-ghost">
+                                    <i class="fas fa-ellipsis-h"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <div style="height: 300px; display: flex; align-items: center; justify-content: center; background: var(--neutral-50); border-radius: var(--radius-lg);">
+                                <canvas id="sales-chart" width="400" height="300"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Stats -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Quick Stats</h2>
+                            <button class="btn btn-sm btn-ghost">
+                                <i class="fas fa-refresh"></i>
+                            </button>
+                        </div>
+                        <div class="card-content" style="display: flex; flex-direction: column; gap: var(--space-lg);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: var(--space-lg); background: var(--neutral-50); border-radius: var(--radius-lg);">
+                                <div>
+                                    <div style="font-size: var(--text-sm); color: var(--neutral-500);">Today's Orders</div>
+                                    <div style="font-size: var(--text-2xl); font-weight: 700; color: var(--neutral-800);">23</div>
+                                </div>
+                                <div style="color: var(--primary-600); font-size: var(--text-2xl);">
+                                    <i class="fas fa-shopping-bag"></i>
+                                </div>
+                            </div>
+                            
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: var(--space-lg); background: var(--neutral-50); border-radius: var(--radius-lg);">
+                                <div>
+                                    <div style="font-size: var(--text-sm); color: var(--neutral-500);">Pending Approvals</div>
+                                    <div style="font-size: var(--text-2xl); font-weight: 700; color: var(--neutral-800);">8</div>
+                                </div>
+                                <div style="color: var(--warning-600); font-size: var(--text-2xl);">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                            </div>
+                            
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: var(--space-lg); background: var(--neutral-50); border-radius: var(--radius-lg);">
+                                <div>
+                                    <div style="font-size: var(--text-sm); color: var(--neutral-500);">Online Agents</div>
+                                    <div style="font-size: var(--text-2xl); font-weight: 700; color: var(--neutral-800);">28</div>
+                                </div>
+                                <div style="color: var(--success-600); font-size: var(--text-2xl);">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recent Orders Table -->
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <h2 class="card-title">Recent Orders</h2>
+                            <p class="card-subtitle">Latest customer orders from Shopify</p>
+                        </div>
+                        <div style="display: flex; gap: var(--space-sm);">
+                            <button class="btn btn-sm btn-secondary">
+                                <i class="fas fa-sync"></i>
+                                Sync Shopify
+                            </button>
+                            <button class="btn btn-sm btn-primary">
+                                <i class="fas fa-plus"></i>
+                                New Order
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th data-sortable data-type="text">Order ID</th>
+                                    <th data-sortable data-type="text">Customer</th>
+                                    <th data-sortable data-type="text">Product</th>
+                                    <th data-sortable data-type="number">Amount</th>
+                                    <th data-sortable data-type="text">Agent</th>
+                                    <th data-sortable data-type="text">Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="font-weight: 500; color: var(--primary-600);">#SO-001</td>
+                                    <td>
+                                        <div style="display: flex; align-items: center; gap: var(--space-sm);">
+                                            <img src="https://ui-avatars.com/api/?name=Sarah+Ahmad&size=32" 
+                                                 style="width: 32px; height: 32px; border-radius: 50%;" alt="">
+                                            <div>
+                                                <div style="font-weight: 500;">Sarah Ahmad</div>
+                                                <div style="font-size: var(--text-xs); color: var(--neutral-500);">sarah@email.com</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>Batik Traditional Set</td>
+                                    <td style="font-weight: 600;">RM 289</td>
+                                    <td>
+                                        <div style="display: flex; align-items: center; gap: var(--space-sm);">
+                                            <img src="https://ui-avatars.com/api/?name=John+Doe&size=24" 
+                                                 style="width: 24px; height: 24px; border-radius: 50%;" alt="">
+                                            <span>John Doe</span>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge badge-success">Completed</span></td>
+                                    <td>
+                                        <div style="display: flex; gap: var(--space-xs);">
+                                            <button class="btn btn-sm btn-ghost" title="View details">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-ghost" title="Edit order">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: 500; color: var(--primary-600);">#SO-002</td>
+                                    <td>
+                                        <div style="display: flex; align-items: center; gap: var(--space-sm);">
+                                            <img src="https://ui-avatars.com/api/?name=Ali+Rahman&size=32" 
+                                                 style="width: 32px; height: 32px; border-radius: 50%;" alt="">
+                                            <div>
+                                                <div style="font-weight: 500;">Ali Rahman</div>
+                                                <div style="font-size: var(--text-xs); color: var(--neutral-500);">ali@email.com</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>Batik Modern Design</td>
+                                    <td style="font-weight: 600;">RM 156</td>
+                                    <td>
+                                        <div style="display: flex; align-items: center; gap: var(--space-sm);">
+                                            <img src="https://ui-avatars.com/api/?name=Jane+Smith&size=24" 
+                                                 style="width: 24px; height: 24px; border-radius: 50%;" alt="">
+                                            <span>Jane Smith</span>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge badge-warning">Processing</span></td>
+                                    <td>
+                                        <div style="display: flex; gap: var(--space-xs);">
+                                            <button class="btn btn-sm btn-ghost" title="View details">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-ghost" title="Edit order">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: 500; color: var(--primary-600);">#SO-003</td>
+                                    <td>
+                                        <div style="display: flex; align-items: center; gap: var(--space-sm);">
+                                            <img src="https://ui-avatars.com/api/?name=Fatimah+Lee&size=32" 
+                                                 style="width: 32px; height: 32px; border-radius: 50%;" alt="">
+                                            <div>
+                                                <div style="font-weight: 500;">Fatimah Lee</div>
+                                                <div style="font-size: var(--text-xs); color: var(--neutral-500);">fatimah@email.com</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>Batik Premium Collection</td>
+                                    <td style="font-weight: 600;">RM 425</td>
+                                    <td>
+                                        <div style="display: flex; align-items: center; gap: var(--space-sm);">
+                                            <img src="https://ui-avatars.com/api/?name=Mike+Wilson&size=24" 
+                                                 style="width: 24px; height: 24px; border-radius: 50%;" alt="">
+                                            <span>Mike Wilson</span>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge badge-info">Pending</span></td>
+                                    <td>
+                                        <div style="display: flex; gap: var(--space-xs);">
+                                            <button class="btn btn-sm btn-ghost" title="View details">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-ghost" title="Edit order">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-footer" style="display: flex; justify-content: between; align-items: center;">
+                        <span style="font-size: var(--text-sm); color: var(--neutral-500);">
+                            Showing 3 of 1,249 orders
+                        </span>
+                        <div style="display: flex; gap: var(--space-sm);">
+                            <button class="btn btn-sm btn-secondary">Previous</button>
+                            <button class="btn btn-sm btn-primary">Next</button>
+                            <a href="admin/orders.html" class="btn btn-sm btn-ghost">View All</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Action Cards -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--space-3xl); margin-top: var(--space-4xl);">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Quick Actions</h3>
+                        </div>
+                        <div class="card-content" style="display: flex; flex-direction: column; gap: var(--space-lg);">
+                            <button class="btn btn-primary btn-lg" onclick="window.location.href='admin/agents.html'">
+                                <i class="fas fa-user-plus"></i>
+                                Add New Agent
+                            </button>
+                            <button class="btn btn-secondary btn-lg" onclick="window.location.href='admin/products.html'">
+                                <i class="fas fa-plus"></i>
+                                Add New Product
+                            </button>
+                            <button class="btn btn-secondary btn-lg" onclick="window.location.href='admin/reports.html'">
+                                <i class="fas fa-chart-bar"></i>
+                                Generate Report
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">System Status</h3>
+                        </div>
+                        <div class="card-content">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-lg);">
+                                <span>Shopify Integration</span>
+                                <span class="badge badge-success">
+                                    <i class="fas fa-check-circle"></i>
+                                    Connected
+                                </span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-lg);">
+                                <span>Firebase Database</span>
+                                <span class="badge badge-success">
+                                    <i class="fas fa-check-circle"></i>
+                                    Online
+                                </span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-lg);">
+                                <span>Payment Gateway</span>
+                                <span class="badge badge-success">
+                                    <i class="fas fa-check-circle"></i>
+                                    Active
+                                </span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>Email Service</span>
+                                <span class="badge badge-warning">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    Limited
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../assets/js/enterprise-ui.js"></script>
+    <script src="../assets/js/firebase-admin.js" type="module"></script>
+    <script src="../assets/js/shopify-admin-integration.js"></script>
+    
+    <!-- Screen Reader Support -->
+    <div id="sr-status" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+</body>
+</html>

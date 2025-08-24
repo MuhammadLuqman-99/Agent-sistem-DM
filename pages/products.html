@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products Management - AgentOS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: #f8f9fa;
+            color: #212529;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: #212529;
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .nav-btn {
+            background: #495057;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .nav-btn:hover {
+            background: #6c757d;
+            transform: translateY(-1px);
+        }
+
+        .nav-btn.primary {
+            background: #28a745;
+        }
+
+        .nav-btn.primary:hover {
+            background: #218838;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #212529;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Stats Cards */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border: 1px solid #e9ecef;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        /* Filters */
+        .filters {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border: 1px solid #e9ecef;
+            margin-bottom: 2rem;
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 0.75rem;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .filter-select {
+            padding: 0.75rem;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            min-width: 150px;
+        }
+
+        /* Products Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .product-image {
+            height: 200px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            position: relative;
+        }
+
+        .stock-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .stock-high {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .stock-low {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .stock-out {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .product-content {
+            padding: 1.5rem;
+        }
+
+        .product-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #212529;
+        }
+
+        .product-category {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .product-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-item .value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #212529;
+        }
+
+        .stat-item .label {
+            font-size: 0.8rem;
+            color: #6c757d;
+            margin-top: 0.25rem;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 0.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.25rem;
+        }
+
+        .btn-view {
+            background: #007bff;
+            color: white;
+        }
+
+        .btn-edit {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-delete {
+            background: #dc3545;
+            color: white;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-1px);
+            opacity: 0.9;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #6c757d;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #212529;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .filter-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-input {
+                min-width: auto;
+            }
+            
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Icon fallbacks */
+        .no-css .fas::before {
+            font-family: inherit;
+        }
+        .no-css .fa-box::before { content: '📦'; }
+        .no-css .fa-plus::before { content: '➕'; }
+        .no-css .fa-home::before { content: '🏠'; }
+        .no-css .fa-sign-out-alt::before { content: '🚪'; }
+        .no-css .fa-search::before { content: '🔍'; }
+        .no-css .fa-eye::before { content: '👁️'; }
+        .no-css .fa-edit::before { content: '✏️'; }
+        .no-css .fa-trash::before { content: '🗑️'; }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-box"></i> Products Management
+            </div>
+            <div class="nav-buttons">
+                <button class="nav-btn primary" onclick="openAddProductModal()">
+                    <i class="fas fa-plus"></i> Add Product
+                </button>
+                <a href="enterprise-admin-dashboard.html" class="nav-btn">
+                    <i class="fas fa-home"></i> Dashboard
+                </a>
+                <a href="logout.html" class="nav-btn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1 class="page-title">
+            <i class="fas fa-box"></i>
+            Products Catalog
+        </h1>
+
+        <!-- Stats -->
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-value" style="color: #007bff;" id="totalProducts">50</div>
+                <div class="stat-label">Total Products</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" style="color: #28a745;" id="inStock">42</div>
+                <div class="stat-label">In Stock</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" style="color: #ffc107;" id="lowStock">5</div>
+                <div class="stat-label">Low Stock</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" style="color: #dc3545;" id="outOfStock">3</div>
+                <div class="stat-label">Out of Stock</div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="filters">
+            <div class="filter-row">
+                <input type="text" class="search-input" placeholder="🔍 Search products..." id="searchInput">
+                <select class="filter-select" id="categoryFilter">
+                    <option value="">All Categories</option>
+                    <option value="traditional">Traditional Wear</option>
+                    <option value="modern">Modern Wear</option>
+                    <option value="accessories">Accessories</option>
+                    <option value="womens">Women's Wear</option>
+                </select>
+                <select class="filter-select" id="stockFilter">
+                    <option value="">All Stock Status</option>
+                    <option value="high">In Stock</option>
+                    <option value="low">Low Stock</option>
+                    <option value="out">Out of Stock</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Products Grid -->
+        <div class="products-grid" id="productsGrid">
+            <!-- Products will be dynamically loaded here -->
+        </div>
+    </div>
+
+    <!-- Add/Edit Product Modal -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">Add New Product</h2>
+                <button class="close" onclick="closeModal()">&times;</button>
+            </div>
+            <form id="productForm">
+                <div class="form-group">
+                    <label class="form-label">Product Name</label>
+                    <input type="text" class="form-control" id="productName" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Category</label>
+                    <select class="form-control" id="productCategory" required>
+                        <option value="">Select Category</option>
+                        <option value="traditional">Traditional Wear</option>
+                        <option value="modern">Modern Wear</option>
+                        <option value="accessories">Accessories</option>
+                        <option value="womens">Women's Wear</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Price (RM)</label>
+                    <input type="number" class="form-control" id="productPrice" min="0" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Stock Quantity</label>
+                    <input type="number" class="form-control" id="productStock" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-control" id="productDescription" rows="3"></textarea>
+                </div>
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button type="button" class="nav-btn" onclick="closeModal()" style="flex: 1;">Cancel</button>
+                    <button type="submit" class="nav-btn primary" style="flex: 1;">Save Product</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Sample products data
+        let products = [
+            {
+                id: 1,
+                name: "Batik Sarong Traditional",
+                category: "traditional",
+                price: 50.00,
+                stock: 25,
+                sold: 245,
+                description: "Traditional Malaysian batik sarong with authentic patterns",
+                emoji: "👗"
+            },
+            {
+                id: 2,
+                name: "Batik Shirt Modern",
+                category: "modern",
+                price: 60.00,
+                stock: 18,
+                sold: 189,
+                description: "Modern batik shirt perfect for casual and formal occasions",
+                emoji: "👔"
+            },
+            {
+                id: 3,
+                name: "Batik Dress Casual",
+                category: "womens",
+                price: 75.00,
+                stock: 12,
+                sold: 167,
+                description: "Comfortable casual batik dress for everyday wear",
+                emoji: "👗"
+            },
+            {
+                id: 4,
+                name: "Batik Accessories Set",
+                category: "accessories",
+                price: 30.00,
+                stock: 5,
+                sold: 134,
+                description: "Complete set of batik accessories including scarf and bag",
+                emoji: "👜"
+            },
+            {
+                id: 5,
+                name: "Batik Premium Collection",
+                category: "traditional",
+                price: 120.00,
+                stock: 0,
+                sold: 89,
+                description: "Premium batik collection with hand-drawn patterns",
+                emoji: "👘"
+            },
+            {
+                id: 6,
+                name: "Batik Casual Shirt",
+                category: "modern",
+                price: 45.00,
+                stock: 2,
+                sold: 156,
+                description: "Casual batik shirt for everyday comfort",
+                emoji: "👔"
+            }
+        ];
+
+        // Render products grid
+        function renderProducts(productsToRender = products) {
+            const grid = document.getElementById('productsGrid');
+            
+            if (productsToRender.length === 0) {
+                grid.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: #6c757d;">
+                        <i class="fas fa-box" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                        <h3>No products found</h3>
+                        <p>Try adjusting your search or filter criteria</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            grid.innerHTML = productsToRender.map(product => {
+                const stockStatus = product.stock === 0 ? 'out' : product.stock <= 5 ? 'low' : 'high';
+                const stockBadge = stockStatus === 'high' ? 'stock-high' : stockStatus === 'low' ? 'stock-low' : 'stock-out';
+                const stockText = stockStatus === 'high' ? 'In Stock' : stockStatus === 'low' ? 'Low Stock' : 'Out of Stock';
+                
+                return `
+                    <div class="product-card">
+                        <div class="product-image">
+                            ${product.emoji}
+                            <span class="stock-badge ${stockBadge}">${stockText}</span>
+                        </div>
+                        <div class="product-content">
+                            <h3 class="product-title">${product.name}</h3>
+                            <div class="product-category">${product.category.charAt(0).toUpperCase() + product.category.slice(1)} Wear</div>
+                            
+                            <div class="product-stats">
+                                <div class="stat-item">
+                                    <div class="value">RM ${product.price.toFixed(2)}</div>
+                                    <div class="label">Price</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="value">${product.stock}</div>
+                                    <div class="label">In Stock</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="value">${product.sold}</div>
+                                    <div class="label">Sold</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="value">RM ${(product.price * product.sold).toLocaleString()}</div>
+                                    <div class="label">Revenue</div>
+                                </div>
+                            </div>
+                            
+                            <div class="product-actions">
+                                <button class="action-btn btn-view" onclick="viewProduct(${product.id})">
+                                    <i class="fas fa-eye"></i> View
+                                </button>
+                                <button class="action-btn btn-edit" onclick="editProduct(${product.id})">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <button class="action-btn btn-delete" onclick="deleteProduct(${product.id})">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Search and filter functionality
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const categoryFilter = document.getElementById('categoryFilter').value;
+            const stockFilter = document.getElementById('stockFilter').value;
+            
+            const filtered = products.filter(product => {
+                const matchesSearch = product.name.toLowerCase().includes(searchTerm) || 
+                                    product.description.toLowerCase().includes(searchTerm);
+                const matchesCategory = !categoryFilter || product.category === categoryFilter;
+                const stockStatus = product.stock === 0 ? 'out' : product.stock <= 5 ? 'low' : 'high';
+                const matchesStock = !stockFilter || stockStatus === stockFilter;
+                
+                return matchesSearch && matchesCategory && matchesStock;
+            });
+            
+            renderProducts(filtered);
+        });
+
+        document.getElementById('categoryFilter').addEventListener('change', function() {
+            document.getElementById('searchInput').dispatchEvent(new Event('input'));
+        });
+
+        document.getElementById('stockFilter').addEventListener('change', function() {
+            document.getElementById('searchInput').dispatchEvent(new Event('input'));
+        });
+
+        // Modal functions
+        function openAddProductModal() {
+            document.getElementById('modalTitle').textContent = 'Add New Product';
+            document.getElementById('productForm').reset();
+            document.getElementById('productModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('productModal').style.display = 'none';
+        }
+
+        function editProduct(id) {
+            const product = products.find(p => p.id === id);
+            if (product) {
+                document.getElementById('modalTitle').textContent = 'Edit Product';
+                document.getElementById('productName').value = product.name;
+                document.getElementById('productCategory').value = product.category;
+                document.getElementById('productPrice').value = product.price;
+                document.getElementById('productStock').value = product.stock;
+                document.getElementById('productDescription').value = product.description;
+                document.getElementById('productModal').style.display = 'block';
+            }
+        }
+
+        function viewProduct(id) {
+            const product = products.find(p => p.id === id);
+            if (product) {
+                showNotification(`Viewing details for ${product.name}`, 'success');
+            }
+        }
+
+        function deleteProduct(id) {
+            const product = products.find(p => p.id === id);
+            if (product && confirm(`Delete ${product.name}?`)) {
+                const index = products.findIndex(p => p.id === id);
+                products.splice(index, 1);
+                renderProducts();
+                updateStats();
+                showNotification('Product deleted successfully', 'success');
+            }
+        }
+
+        // Form submission
+        document.getElementById('productForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('productName').value;
+            const category = document.getElementById('productCategory').value;
+            const price = parseFloat(document.getElementById('productPrice').value);
+            const stock = parseInt(document.getElementById('productStock').value);
+            const description = document.getElementById('productDescription').value;
+            
+            const newProduct = {
+                id: products.length + 1,
+                name,
+                category,
+                price,
+                stock,
+                sold: 0,
+                description,
+                emoji: category === 'accessories' ? '👜' : category === 'traditional' ? '👘' : '👔'
+            };
+            
+            products.push(newProduct);
+            renderProducts();
+            updateStats();
+            closeModal();
+            showNotification('Product added successfully!', 'success');
+        });
+
+        // Update stats
+        function updateStats() {
+            const total = products.length;
+            const inStock = products.filter(p => p.stock > 5).length;
+            const lowStock = products.filter(p => p.stock > 0 && p.stock <= 5).length;
+            const outOfStock = products.filter(p => p.stock === 0).length;
+            
+            document.getElementById('totalProducts').textContent = total;
+            document.getElementById('inStock').textContent = inStock;
+            document.getElementById('lowStock').textContent = lowStock;
+            document.getElementById('outOfStock').textContent = outOfStock;
+        }
+
+        // Show notification function
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 16px 24px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                z-index: 1001;
+                font-weight: 500;
+                font-size: 14px;
+                max-width: 350px;
+                opacity: 0;
+                transform: translateX(100%);
+                transition: all 0.3s ease;
+                background: ${type === 'success' ? '#d4edda' : '#f8d7da'};
+                color: ${type === 'success' ? '#155724' : '#721c24'};
+                border: 1px solid ${type === 'success' ? '#c3e6cb' : '#f5c6cb'};
+            `;
+            
+            notification.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-weight: bold; font-size: 16px;">${type === 'success' ? '✓' : '✗'}</span>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.opacity = '1';
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.remove();
+                    }
+                }, 300);
+            }, 4000);
+        }
+
+        // Close modal on outside click
+        window.onclick = function(event) {
+            const modal = document.getElementById('productModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            renderProducts();
+            updateStats();
+            showNotification('Products catalog loaded successfully!', 'success');
+        });
+    </script>
+</body>
+</html>

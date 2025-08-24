@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Page - Kilang Desa Murni Batik</title>
+    
+    <!-- Test external resources -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Test internal resources -->
+    <link rel="stylesheet" href="assets/css/enterprise-core.css">
+    <link rel="stylesheet" href="assets/css/accessibility.css">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            padding: 2rem;
+            background: #f8f9fa;
+        }
+        
+        .debug-section {
+            background: white;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .test-button {
+            background: #0ea5e9;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 0.5rem;
+            font-family: inherit;
+        }
+        
+        .test-button:hover {
+            background: #0284c7;
+        }
+        
+        .status-indicator {
+            padding: 0.5rem;
+            border-radius: 4px;
+            margin: 0.5rem 0;
+        }
+        
+        .status-success {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+        
+        .status-error {
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+        }
+    </style>
+</head>
+<body>
+    <h1><i class="fas fa-bug"></i> Debug Page - System Diagnostic</h1>
+    
+    <!-- FontAwesome Icon Test -->
+    <div class="debug-section">
+        <h2>📍 Icon Loading Test</h2>
+        <p>FontAwesome icons:</p>
+        <div>
+            <i class="fas fa-check-circle" style="color: green; font-size: 1.5rem;"></i> Check Circle
+            <i class="fas fa-user" style="color: blue; font-size: 1.5rem; margin-left: 1rem;"></i> User
+            <i class="fas fa-chart-line" style="color: purple; font-size: 1.5rem; margin-left: 1rem;"></i> Chart
+            <i class="fas fa-crown" style="color: gold; font-size: 1.5rem; margin-left: 1rem;"></i> Crown
+        </div>
+        <div id="icon-status" class="status-indicator">Testing...</div>
+    </div>
+
+    <!-- Font Loading Test -->
+    <div class="debug-section">
+        <h2>🔤 Font Loading Test</h2>
+        <p style="font-family: 'Inter', sans-serif; font-weight: 300;">Inter Light (300)</p>
+        <p style="font-family: 'Inter', sans-serif; font-weight: 400;">Inter Regular (400)</p>
+        <p style="font-family: 'Inter', sans-serif; font-weight: 600;">Inter SemiBold (600)</p>
+        <p style="font-family: 'Inter', sans-serif; font-weight: 700;">Inter Bold (700)</p>
+        <div id="font-status" class="status-indicator">Testing...</div>
+    </div>
+
+    <!-- CSS Variables Test -->
+    <div class="debug-section">
+        <h2>🎨 CSS Variables Test</h2>
+        <div style="background: var(--primary-50, #f0f9ff); padding: 1rem; border: 1px solid var(--primary-200, #bae6fd);">
+            Primary colors should work
+        </div>
+        <div style="background: var(--neutral-100, #f3f4f6); padding: 1rem; margin-top: 0.5rem;">
+            Neutral colors should work
+        </div>
+        <div id="css-status" class="status-indicator">Testing...</div>
+    </div>
+
+    <!-- JavaScript Test -->
+    <div class="debug-section">
+        <h2>⚡ JavaScript Test</h2>
+        <button class="test-button" onclick="testJS()">
+            <i class="fas fa-play"></i> Test JavaScript
+        </button>
+        <button class="test-button" onclick="testNavigation()">
+            <i class="fas fa-link"></i> Test Navigation
+        </button>
+        <div id="js-status" class="status-indicator">Click buttons to test</div>
+    </div>
+
+    <!-- File Loading Test -->
+    <div class="debug-section">
+        <h2>📁 File Access Test</h2>
+        <div id="file-test-results"></div>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="debug-section">
+        <h2>🔗 Quick Test Links</h2>
+        <a href="/" class="test-button" style="text-decoration: none; display: inline-block;">Home Page</a>
+        <a href="/admin" class="test-button" style="text-decoration: none; display: inline-block;">Admin Dashboard</a>
+        <a href="/agent" class="test-button" style="text-decoration: none; display: inline-block;">Agent Dashboard</a>
+        <a href="/login" class="test-button" style="text-decoration: none; display: inline-block;">Login Page</a>
+    </div>
+
+    <!-- System Info -->
+    <div class="debug-section">
+        <h2>🔍 System Information</h2>
+        <p><strong>User Agent:</strong> <span id="user-agent"></span></p>
+        <p><strong>Current URL:</strong> <span id="current-url"></span></p>
+        <p><strong>Screen Size:</strong> <span id="screen-size"></span></p>
+        <p><strong>Timestamp:</strong> <span id="timestamp"></span></p>
+    </div>
+
+    <script src="assets/js/enterprise-ui.js"></script>
+    
+    <script>
+        // Test JavaScript functionality
+        function testJS() {
+            const statusEl = document.getElementById('js-status');
+            try {
+                statusEl.innerHTML = '<span style="color: green;">✅ JavaScript working perfectly!</span>';
+                statusEl.className = 'status-indicator status-success';
+            } catch (error) {
+                statusEl.innerHTML = '<span style="color: red;">❌ JavaScript error: ' + error.message + '</span>';
+                statusEl.className = 'status-indicator status-error';
+            }
+        }
+
+        function testNavigation() {
+            const statusEl = document.getElementById('js-status');
+            try {
+                // Test if we can navigate
+                if (typeof window !== 'undefined' && window.location) {
+                    statusEl.innerHTML = '<span style="color: green;">✅ Navigation functions working!</span>';
+                    statusEl.className = 'status-indicator status-success';
+                } else {
+                    throw new Error('Navigation not available');
+                }
+            } catch (error) {
+                statusEl.innerHTML = '<span style="color: red;">❌ Navigation error: ' + error.message + '</span>';
+                statusEl.className = 'status-indicator status-error';
+            }
+        }
+
+        // Auto-run diagnostics when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Test icon loading
+            setTimeout(() => {
+                const iconStatus = document.getElementById('icon-status');
+                const hasIcons = window.getComputedStyle(document.querySelector('.fas.fa-check-circle'))
+                    .getPropertyValue('font-family').includes('Font Awesome');
+                
+                if (hasIcons) {
+                    iconStatus.innerHTML = '✅ FontAwesome icons loaded successfully';
+                    iconStatus.className = 'status-indicator status-success';
+                } else {
+                    iconStatus.innerHTML = '❌ FontAwesome icons failed to load';
+                    iconStatus.className = 'status-indicator status-error';
+                }
+            }, 1000);
+
+            // Test font loading
+            setTimeout(() => {
+                const fontStatus = document.getElementById('font-status');
+                const hasInter = window.getComputedStyle(document.body)
+                    .getPropertyValue('font-family').includes('Inter');
+                
+                if (hasInter) {
+                    fontStatus.innerHTML = '✅ Inter font loaded successfully';
+                    fontStatus.className = 'status-indicator status-success';
+                } else {
+                    fontStatus.innerHTML = '❌ Inter font failed to load';
+                    fontStatus.className = 'status-indicator status-error';
+                }
+            }, 1000);
+
+            // Test CSS variables
+            setTimeout(() => {
+                const cssStatus = document.getElementById('css-status');
+                const testEl = document.createElement('div');
+                testEl.style.background = 'var(--primary-50)';
+                document.body.appendChild(testEl);
+                
+                const bgColor = window.getComputedStyle(testEl).backgroundColor;
+                document.body.removeChild(testEl);
+                
+                if (bgColor && bgColor !== 'rgba(0, 0, 0, 0)' && bgColor !== 'transparent') {
+                    cssStatus.innerHTML = '✅ CSS variables working';
+                    cssStatus.className = 'status-indicator status-success';
+                } else {
+                    cssStatus.innerHTML = '❌ CSS variables not working';
+                    cssStatus.className = 'status-indicator status-error';
+                }
+            }, 1500);
+
+            // Test file loading
+            const fileTestResults = document.getElementById('file-test-results');
+            const filesToTest = [
+                'assets/css/enterprise-core.css',
+                'assets/css/accessibility.css',
+                'assets/js/enterprise-ui.js'
+            ];
+
+            filesToTest.forEach(file => {
+                fetch(file)
+                    .then(response => {
+                        const resultDiv = document.createElement('div');
+                        if (response.ok) {
+                            resultDiv.innerHTML = `✅ ${file} - OK`;
+                            resultDiv.className = 'status-indicator status-success';
+                        } else {
+                            resultDiv.innerHTML = `❌ ${file} - Error ${response.status}`;
+                            resultDiv.className = 'status-indicator status-error';
+                        }
+                        fileTestResults.appendChild(resultDiv);
+                    })
+                    .catch(error => {
+                        const resultDiv = document.createElement('div');
+                        resultDiv.innerHTML = `❌ ${file} - ${error.message}`;
+                        resultDiv.className = 'status-indicator status-error';
+                        fileTestResults.appendChild(resultDiv);
+                    });
+            });
+
+            // Fill system info
+            document.getElementById('user-agent').textContent = navigator.userAgent;
+            document.getElementById('current-url').textContent = window.location.href;
+            document.getElementById('screen-size').textContent = `${window.screen.width}x${window.screen.height}`;
+            document.getElementById('timestamp').textContent = new Date().toLocaleString();
+        });
+    </script>
+</body>
+</html>
