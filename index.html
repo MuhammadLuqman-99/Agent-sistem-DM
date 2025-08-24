@@ -1,401 +1,189 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kilang Desa Murni Batik - Enterprise System</title>
+    <meta name="description" content="AgentOS - Enterprise Agent Management System">
+    <title>AgentOS - Enterprise Agent Management System</title>
     
-    <!-- Simple, reliable CSS -->
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" as="style">
+    <link rel="preload" href="assets/css/enterprise-core.css" as="style">
+    
+    <!-- External Stylesheets -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Internal Stylesheets -->
+    <link rel="stylesheet" href="assets/css/enterprise-core.css">
+    <link rel="stylesheet" href="assets/css/accessibility.css">
+    
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+        .hero-section {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #333;
-            line-height: 1.6;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .container {
-            max-width: 1200px;
-            padding: 2rem;
+            color: white;
+            padding: 4rem 2rem;
             text-align: center;
         }
         
-        .header {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 2rem;
-            border-radius: 20px;
-            margin-bottom: 2rem;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            backdrop-filter: blur(10px);
-        }
-        
-        .title {
-            font-size: 2.5rem;
+        .hero-title {
+            font-size: 3rem;
             font-weight: 700;
-            color: #2c3e50;
-            margin-bottom: 0.5rem;
-        }
-        
-        .subtitle {
-            font-size: 1.2rem;
-            color: #7f8c8d;
             margin-bottom: 1rem;
         }
         
-        .status {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: #d4edda;
-            color: #155724;
-            padding: 0.5rem 1rem;
-            border-radius: 25px;
-            font-weight: 500;
-            font-size: 0.9rem;
+        .hero-subtitle {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
         }
         
-        .dashboard-grid {
+        .navigation-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
-            margin-bottom: 3rem;
+            padding: 3rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
         }
         
-        .dashboard-card {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
+        .nav-card {
+            background: white;
+            border-radius: 12px;
             padding: 2rem;
-            text-align: left;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            backdrop-filter: blur(10px);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+            color: inherit;
         }
         
-        .dashboard-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 16px 40px rgba(0,0,0,0.15);
-            border-color: #3498db;
+        .nav-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
         }
         
-        .card-icon {
+        .nav-icon {
             font-size: 3rem;
             margin-bottom: 1rem;
-            display: block;
+            color: #667eea;
         }
         
-        .admin-card .card-icon { color: #e74c3c; }
-        .agent-card .card-icon { color: #27ae60; }
-        
-        .card-title {
+        .nav-title {
             font-size: 1.5rem;
-            font-weight: 700;
-            color: #2c3e50;
-            margin-bottom: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
         }
         
-        .card-description {
-            color: #7f8c8d;
-            margin-bottom: 1.5rem;
+        .nav-description {
+            color: #666;
             line-height: 1.6;
         }
         
-        .card-features {
-            list-style: none;
-            margin-bottom: 1.5rem;
-        }
-        
-        .card-features li {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 0.5rem;
-            color: #2c3e50;
-            font-size: 0.9rem;
-        }
-        
-        .card-features li::before {
-            content: '✓';
-            color: #27ae60;
-            font-weight: bold;
-        }
-        
-        .card-button {
-            width: 100%;
-            background: #3498db;
-            color: white;
-            border: none;
-            padding: 1rem 1.5rem;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        
-        .admin-card .card-button { background: #e74c3c; }
-        .agent-card .card-button { background: #27ae60; }
-        
-        .card-button:hover {
-            transform: scale(1.02);
-        }
-        
-        .admin-card .card-button:hover { background: #c0392b; }
-        .agent-card .card-button:hover { background: #229954; }
-        
-        .quick-links {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-            margin-bottom: 3rem;
-        }
-        
-        .quick-link {
-            background: rgba(255, 255, 255, 0.9);
-            color: #2c3e50;
-            text-decoration: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 25px;
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
             font-weight: 500;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            margin-top: 1rem;
         }
         
-        .quick-link:hover {
-            background: white;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        .status-ready {
+            background: #d4edda;
+            color: #155724;
         }
         
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 3rem;
-        }
-        
-        .stat-item {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 1.5rem;
-            border-radius: 15px;
-            text-align: center;
-            backdrop-filter: blur(10px);
-        }
-        
-        .stat-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #2c3e50;
-            display: block;
-        }
-        
-        .stat-label {
-            font-size: 0.9rem;
-            color: #7f8c8d;
-            margin-top: 0.5rem;
+        .status-dev {
+            background: #fff3cd;
+            color: #856404;
         }
         
         .footer {
-            background: rgba(255, 255, 255, 0.9);
+            background: #f8f9fa;
             padding: 2rem;
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-        }
-        
-        .footer h3 {
-            color: #2c3e50;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-        }
-        
-        .footer p {
-            color: #7f8c8d;
-            margin-bottom: 0.5rem;
-        }
-        
-        @media (max-width: 768px) {
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-            
-            .title {
-                font-size: 2rem;
-            }
-            
-            .subtitle {
-                font-size: 1rem;
-            }
-            
-            .container {
-                padding: 1rem;
-            }
-            
-            .header {
-                padding: 1.5rem;
-            }
+            text-align: center;
+            color: #666;
+            margin-top: 3rem;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <h1 class="title">🏪 Kilang Desa Murni Batik</h1>
-            <p class="subtitle">Enterprise Management System - User-Friendly for Everyone</p>
-            <div class="status">
-                <span>✅</span>
-                <span>System Status: All Services Online & Ready</span>
-            </div>
-        </div>
-        
-        <!-- Dashboard Selection -->
-        <div class="dashboard-grid">
-            <!-- Admin Dashboard -->
-            <div class="dashboard-card admin-card" onclick="goToAdmin()">
-                <span class="card-icon">👑</span>
-                <h2 class="card-title">Admin Dashboard</h2>
-                <p class="card-description">
-                    Comprehensive business management with full control over agents, orders, products, and system operations.
-                </p>
-                <ul class="card-features">
-                    <li>Manage 42+ Active Agents</li>
-                    <li>Track 1,249 Orders & Revenue</li>
-                    <li>Shopify Integration (50 Products)</li>
-                    <li>Commission Management (RM 3,420)</li>
-                    <li>Advanced Analytics & Reports</li>
-                    <li>System Configuration & Settings</li>
-                </ul>
-                <button class="card-button">
-                    <span>Enter Admin Dashboard</span>
-                    <span>→</span>
-                </button>
-            </div>
-            
-            <!-- Agent Dashboard -->
-            <div class="dashboard-card agent-card" onclick="goToAgent()">
-                <span class="card-icon">👤</span>
-                <h2 class="card-title">Agent Dashboard</h2>
-                <p class="card-description">
-                    Streamlined sales interface designed for agents to manage customers, record sales, and track performance effortlessly.
-                </p>
-                <ul class="card-features">
-                    <li>Quick Sale Entry Form</li>
-                    <li>Real-time Commission Calculator</li>
-                    <li>Customer Management Tools</li>
-                    <li>Monthly Target Tracking (82%)</li>
-                    <li>Performance Analytics</li>
-                    <li>Product Catalog Access</li>
-                </ul>
-                <button class="card-button">
-                    <span>Enter Agent Dashboard</span>
-                    <span>→</span>
-                </button>
-            </div>
-        </div>
-        
-        <!-- Quick Links -->
-        <div class="quick-links">
-            <a href="pages/login.html" class="quick-link">🔑 Simple Login</a>
-            <a href="pages/firebase-login.html" class="quick-link">🔥 Firebase Login</a>
-            <a href="debug.html" class="quick-link">🔧 Debug Page</a>
-        </div>
-        
-        <!-- System Stats -->
-        <div class="stats">
-            <div class="stat-item">
-                <span class="stat-value">RM 45,280</span>
-                <div class="stat-label">Total Revenue</div>
-            </div>
-            <div class="stat-item">
-                <span class="stat-value">1,249</span>
-                <div class="stat-label">Total Orders</div>
-            </div>
-            <div class="stat-item">
-                <span class="stat-value">42</span>
-                <div class="stat-label">Active Agents</div>
-            </div>
-            <div class="stat-item">
-                <span class="stat-value">50</span>
-                <div class="stat-label">Products</div>
-            </div>
-        </div>
-        
-        <!-- Footer -->
-        <div class="footer">
-            <h3>🎉 Your System is Ready!</h3>
-            <p><strong>Enterprise-Level Features:</strong> Modern design, mobile-first, fully accessible</p>
-            <p><strong>User-Friendly:</strong> No training needed - works like familiar apps</p>
-            <p><strong>Live System:</strong> https://admin-agent-teamsale.web.app</p>
-            <p style="margin-top: 1rem; font-size: 0.9rem; color: #95a5a6;">
-                © 2024 Kilang Desa Murni Batik • Enterprise Management System v2.0
-            </p>
-        </div>
+    <div class="hero-section">
+        <h1 class="hero-title">AgentOS</h1>
+        <p class="hero-subtitle">Enterprise Agent Management System</p>
+        <p>Professional platform untuk menguruskan 50+ sales agents</p>
     </div>
 
+    <div class="navigation-grid">
+        <a href="pages/enterprise-admin-dashboard.html" class="nav-card">
+            <div class="nav-icon">
+                <i class="fas fa-crown"></i>
+            </div>
+            <h3 class="nav-title">Admin Dashboard</h3>
+            <p class="nav-description">Pusat kawalan untuk admin menguruskan sistem, agents, dan laporan</p>
+            <span class="status-badge status-ready">Ready</span>
+        </a>
+
+        <a href="pages/enterprise-agent-dashboard.html" class="nav-card">
+            <div class="nav-icon">
+                <i class="fas fa-user-tie"></i>
+            </div>
+            <h3 class="nav-title">Agent Dashboard</h3>
+            <p class="nav-description">Interface untuk agent melihat performance, orders, dan commission</p>
+            <span class="status-badge status-ready">Ready</span>
+        </a>
+
+        <a href="pages/enterprise-agents.html" class="nav-card">
+            <div class="nav-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <h3 class="nav-title">Agent Management</h3>
+            <p class="nav-description">Uruskan semua agents, territory, dan commission rates</p>
+            <span class="status-badge status-ready">Ready</span>
+        </a>
+
+        <a href="pages/enterprise-orders.html" class="nav-card">
+            <div class="nav-icon">
+                <i class="fas fa-shopping-bag"></i>
+            </div>
+            <h3 class="nav-title">Order Management</h3>
+            <p class="nav-description">Uruskan orders, assign kepada agents, dan track status</p>
+            <span class="status-badge status-ready">Ready</span>
+        </a>
+
+        <a href="pages/enterprise-products.html" class="nav-card">
+            <div class="nav-icon">
+                <i class="fas fa-box"></i>
+            </div>
+            <h3 class="nav-title">Product Management</h3>
+            <p class="nav-description">Uruskan produk, pricing, dan commission structure</p>
+            <span class="status-badge status-ready">Ready</span>
+        </a>
+
+        <a href="pages/enterprise-reports.html" class="nav-card">
+            <div class="nav-icon">
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <h3 class="nav-title">Analytics & Reports</h3>
+            <p class="nav-description">Laporan performance, commission, dan business insights</p>
+            <span class="status-badge status-ready">Ready</span>
+        </a>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2024 AgentOS - Enterprise Agent Management System</p>
+        <p>Powered by Firebase & Shopify Integration</p>
+    </div>
+
+    <script src="assets/js/enterprise-ui.js"></script>
     <script>
-        // Simple, reliable JavaScript
-        function goToAdmin() {
-            console.log('Navigating to Admin Dashboard...');
-            // Try multiple URLs to ensure it works
-            window.location.href = '/admin';
-        }
-        
-        function goToAgent() {
-            console.log('Navigating to Agent Dashboard...');
-            // Try multiple URLs to ensure it works
-            window.location.href = '/agent';
-        }
-        
-        // Add keyboard support
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                const focusedCard = document.activeElement.closest('.dashboard-card');
-                if (focusedCard) {
-                    focusedCard.click();
-                }
+        // Initialize enterprise UI
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof EnterpriseUI !== 'undefined') {
+                new EnterpriseUI();
             }
         });
-        
-        // Make cards keyboard accessible
-        document.querySelectorAll('.dashboard-card').forEach(card => {
-            card.setAttribute('tabindex', '0');
-            card.setAttribute('role', 'button');
-            
-            // Add visual feedback on focus
-            card.addEventListener('focus', function() {
-                this.style.transform = 'translateY(-4px)';
-                this.style.outline = '3px solid #3498db';
-            });
-            
-            card.addEventListener('blur', function() {
-                this.style.transform = '';
-                this.style.outline = '';
-            });
-        });
-        
-        console.log('✅ Landing page loaded successfully!');
-        console.log('🌐 Live at: https://admin-agent-teamsale.web.app');
     </script>
 </body>
 </html>

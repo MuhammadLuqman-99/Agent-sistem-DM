@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Enterprise Products Management - Kilang Desa Murni Batik">
+    <title>Enterprise Products - Kilang Desa Murni Batik</title>
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" as="style">
+    <link rel="preload" href="../assets/css/enterprise-core.css" as="style">
+    
+    <!-- External Stylesheets -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Internal Stylesheets -->
+    <link rel="stylesheet" href="../assets/css/enterprise-core.css">
+    <link rel="stylesheet" href="../assets/css/accessibility.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="../assets/images/favicon.ico">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Enterprise Sidebar -->
+        <aside class="app-sidebar" role="navigation" aria-label="Main navigation">
+            <div class="sidebar-header">
+                <a href="enterprise-admin-dashboard.html" class="sidebar-logo">
+                    <div class="sidebar-logo-icon">
+                        <i class="fas fa-store"></i>
+                    </div>
+                    <span>Kilang Desa Murni</span>
+                </a>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="sidebar-nav-section">
+                    <h3 class="sidebar-nav-section-title">Dashboard</h3>
+                    <div class="sidebar-nav-item">
+                        <a href="enterprise-admin-dashboard.html" class="sidebar-nav-link">
+                            <div class="sidebar-nav-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <span class="sidebar-nav-text">Overview</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="sidebar-nav-section">
+                    <h3 class="sidebar-nav-section-title">Management</h3>
+                    <div class="sidebar-nav-item">
+                        <a href="enterprise-agents.html" class="sidebar-nav-link">
+                            <div class="sidebar-nav-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <span class="sidebar-nav-text">Agents</span>
+                        </a>
+                    </div>
+                    <div class="sidebar-nav-item">
+                        <a href="enterprise-orders.html" class="sidebar-nav-link">
+                            <div class="sidebar-nav-icon">
+                                <i class="fas fa-shopping-bag"></i>
+                            </div>
+                            <span class="sidebar-nav-text">Orders</span>
+                        </a>
+                    </div>
+                    <div class="sidebar-nav-item">
+                        <a href="enterprise-products.html" class="sidebar-nav-link active">
+                            <div class="sidebar-nav-icon">
+                                <i class="fas fa-tshirt"></i>
+                            </div>
+                            <span class="sidebar-nav-text">Products</span>
+                        </a>
+                    </div>
+                    <div class="sidebar-nav-item">
+                        <a href="enterprise-reports.html" class="sidebar-nav-link">
+                            <div class="sidebar-nav-icon">
+                                <i class="fas fa-chart-bar"></i>
+                            </div>
+                            <span class="sidebar-nav-text">Reports</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="sidebar-nav-section">
+                    <h3 class="sidebar-nav-section-title">Account</h3>
+                    <div class="sidebar-nav-item">
+                        <a href="logout.html?role=admin" class="sidebar-nav-link">
+                            <div class="sidebar-nav-icon">
+                                <i class="fas fa-sign-out-alt"></i>
+                            </div>
+                            <span class="sidebar-nav-text">Sign Out</span>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+        </aside>
+        
+        <!-- Main Content Area -->
+        <main class="app-main">
+            <!-- Enterprise Header -->
+            <header class="app-header">
+                <div class="app-header-left">
+                    <h1 class="app-header-title">Product Management</h1>
+                    <span class="app-header-subtitle">Manage your batik product catalog and inventory</span>
+                </div>
+                <div class="app-header-right">
+                    <button class="btn btn-primary" onclick="openAddProductModal()">
+                        <i class="fas fa-plus"></i>
+                        Add New Product
+                    </button>
+                </div>
+            </header>
+            
+            <!-- Products Content -->
+            <div style="padding: var(--space-3xl);">
+                <!-- Product Stats -->
+                <section class="stats-grid" aria-labelledby="product-stats-heading">
+                    <h2 id="product-stats-heading" class="sr-only">Product Statistics</h2>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: var(--success-50); color: var(--success-600);">
+                            <i class="fas fa-tshirt"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value">156</div>
+                            <div class="stat-label">Total Products</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: var(--primary-50); color: var(--primary-600);">
+                            <i class="fas fa-box"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value">89</div>
+                            <div class="stat-label">In Stock</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: var(--warning-50); color: var(--warning-600);">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value">23</div>
+                            <div class="stat-label">Low Stock</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: var(--error-50); color: var(--error-600);">
+                            <i class="fas fa-times-circle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value">44</div>
+                            <div class="stat-label">Out of Stock</div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Products Grid -->
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <h2 class="card-title">Product Catalog</h2>
+                            <p class="card-subtitle">Manage your batik product inventory and pricing</p>
+                        </div>
+                        <div style="display: flex; gap: var(--space-sm);">
+                            <div class="search-box">
+                                <input type="text" id="product-search" placeholder="Search products..." class="search-input">
+                                <i class="fas fa-search search-icon"></i>
+                            </div>
+                            <select id="category-filter" class="select-input">
+                                <option value="">All Categories</option>
+                                <option value="traditional">Traditional</option>
+                                <option value="modern">Modern</option>
+                                <option value="premium">Premium</option>
+                                <option value="casual">Casual</option>
+                            </select>
+                            <button class="btn btn-sm btn-secondary">
+                                <i class="fas fa-download"></i>
+                                Export
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="products-grid" id="products-grid">
+                        <!-- Product cards will be populated by JavaScript -->
+                    </div>
+                    
+                    <div class="card-footer">
+                        <div class="pagination-info">
+                            <span>Showing <span id="showing-start">1</span> to <span id="showing-end">12</span> of <span id="total-products">156</span> products</span>
+                        </div>
+                        <div class="pagination-controls">
+                            <button class="btn btn-sm btn-secondary" id="prev-page" disabled>Previous</button>
+                            <span class="pagination-page">Page <span id="current-page">1</span></span>
+                            <button class="btn btn-sm btn-secondary" id="next-page">Next</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Add Product Modal -->
+    <div id="add-product-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New Product</h2>
+                <button class="modal-close" onclick="closeAddProductModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="add-product-form" class="modal-form">
+                <div class="form-group">
+                    <label for="product-name">Product Name</label>
+                    <input type="text" id="product-name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="product-category">Category</label>
+                    <select id="product-category" name="category" required>
+                        <option value="">Select Category</option>
+                        <option value="traditional">Traditional</option>
+                        <option value="modern">Modern</option>
+                        <option value="premium">Premium</option>
+                        <option value="casual">Casual</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="product-price">Price (RM)</label>
+                    <input type="number" id="product-price" name="price" min="0" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="product-stock">Initial Stock</label>
+                    <input type="number" id="product-stock" name="stock" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="product-description">Description</label>
+                    <textarea id="product-description" name="description" rows="3"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeAddProductModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Product</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="../assets/js/enterprise-ui.js"></script>
+    <script src="../assets/js/enterprise-products.js"></script>
+    
+    <!-- Screen Reader Support -->
+    <div id="sr-status" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+</body>
+</html>

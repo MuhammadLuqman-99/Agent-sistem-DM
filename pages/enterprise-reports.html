@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Enterprise Reports & Analytics - Kilang Desa Murni Batik">
+    <title>Enterprise Reports - Kilang Desa Murni Batik</title>
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" as="style">
+    <link rel="preload" href="../assets/css/enterprise-core.css" as="style">
+    
+    <!-- External Stylesheets -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Internal Stylesheets -->
+    <link rel="stylesheet" href="../assets/css/enterprise-core.css">
+    <link rel="stylesheet" href="../assets/css/accessibility.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="../assets/images/favicon.ico">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Enterprise Sidebar -->
+        <aside class="app-sidebar" role="navigation" aria-label="Main navigation">
+            <div class="sidebar-header">
+                <a href="enterprise-admin-dashboard.html" class="sidebar-logo">
+                    <div class="sidebar-logo-icon">
+                        <i class="fas fa-store"></i>
+                    </div>
+                    <span>Kilang Desa Murni</span>
+                </a>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="sidebar-nav-section">
+                    <h3 class="sidebar-nav-section-title">Dashboard</h3>
+                    <div class="sidebar-nav-item">
+                        <a href="enterprise-admin-dashboard.html" class="sidebar-nav-link">
+                            <div class="sidebar-nav-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <span class="sidebar-nav-text">Overview</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="sidebar-nav-section">
+                    <h3 class="sidebar-nav-section-title">Management</h3>
+                    <div class="sidebar-nav-item">
+                        <a href="enterprise-agents.html" class="sidebar-nav-link">
+                            <div class="sidebar-nav-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <span class="sidebar-nav-text">Agents</span>
+                        </a>
+                    </div>
+                    <div class="sidebar-nav-item">
+                        <a href="enterprise-orders.html" class="sidebar-nav-link">
+                            <div class="sidebar-nav-icon">
+                                <i class="fas fa-shopping-bag"></i>
+                            </div>
+                            <span class="sidebar-nav-text">Orders</span>
+                        </a>
+                    </div>
+                    <div class="sidebar-nav-item">
+                        <a href="enterprise-products.html" class="sidebar-nav-link">
+                            <div class="sidebar-nav-icon">
+                                <i class="fas fa-tshirt"></i>
+                            </div>
+                            <span class="sidebar-nav-text">Products</span>
+                        </a>
+                    </div>
+                    <div class="sidebar-nav-item">
+                        <a href="enterprise-reports.html" class="sidebar-nav-link active">
+                            <div class="sidebar-nav-icon">
+                                <i class="fas fa-chart-bar"></i>
+                            </div>
+                            <span class="sidebar-nav-text">Reports</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="sidebar-nav-section">
+                    <h3 class="sidebar-nav-section-title">Account</h3>
+                    <div class="sidebar-nav-item">
+                        <a href="logout.html?role=admin" class="sidebar-nav-link">
+                            <div class="sidebar-nav-icon">
+                                <i class="fas fa-sign-out-alt"></i>
+                            </div>
+                            <span class="sidebar-nav-text">Sign Out</span>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+        </aside>
+        
+        <!-- Main Content Area -->
+        <main class="app-main">
+            <!-- Enterprise Header -->
+            <header class="app-header">
+                <div class="app-header-left">
+                    <h1 class="app-header-title">Reports & Analytics</h1>
+                    <span class="app-header-subtitle">Comprehensive business insights and performance metrics</span>
+                </div>
+                <div class="app-header-right">
+                    <button class="btn btn-secondary" onclick="generateReport()">
+                        <i class="fas fa-file-pdf"></i>
+                        Generate PDF
+                    </button>
+                    <button class="btn btn-primary" onclick="exportData()">
+                        <i class="fas fa-download"></i>
+                        Export Data
+                    </button>
+                </div>
+            </header>
+            
+            <!-- Reports Content -->
+            <div style="padding: var(--space-3xl);">
+                <!-- Report Filters -->
+                <div class="card" style="margin-bottom: var(--space-3xl);">
+                    <div class="card-header">
+                        <h2 class="card-title">Report Filters</h2>
+                        <p class="card-subtitle">Customize your report parameters</p>
+                    </div>
+                    <div class="card-content">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-lg);">
+                            <div class="form-group">
+                                <label for="date-range">Date Range</label>
+                                <select id="date-range" class="select-input">
+                                    <option value="7">Last 7 Days</option>
+                                    <option value="30" selected>Last 30 Days</option>
+                                    <option value="90">Last 3 Months</option>
+                                    <option value="365">Last Year</option>
+                                    <option value="custom">Custom Range</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="report-type">Report Type</label>
+                                <select id="report-type" class="select-input">
+                                    <option value="sales">Sales Report</option>
+                                    <option value="agents">Agent Performance</option>
+                                    <option value="products">Product Analysis</option>
+                                    <option value="customers">Customer Insights</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="agent-filter">Agent Filter</label>
+                                <select id="agent-filter" class="select-input">
+                                    <option value="">All Agents</option>
+                                    <option value="1">John Doe</option>
+                                    <option value="2">Jane Smith</option>
+                                    <option value="3">Mike Wilson</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="category-filter">Category Filter</label>
+                                <select id="category-filter" class="select-input">
+                                    <option value="">All Categories</option>
+                                    <option value="traditional">Traditional</option>
+                                    <option value="modern">Modern</option>
+                                    <option value="premium">Premium</option>
+                                    <option value="casual">Casual</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: var(--space-sm); margin-top: var(--space-lg);">
+                            <button class="btn btn-primary" onclick="applyFilters()">
+                                <i class="fas fa-filter"></i>
+                                Apply Filters
+                            </button>
+                            <button class="btn btn-secondary" onclick="resetFilters()">
+                                <i class="fas fa-undo"></i>
+                                Reset
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Key Metrics -->
+                <section class="stats-grid" aria-labelledby="key-metrics-heading">
+                    <h2 id="key-metrics-heading" class="sr-only">Key Performance Metrics</h2>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: var(--success-50); color: var(--success-600);">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value">RM 45,280</div>
+                            <div class="stat-label">Total Revenue</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>+12.5% from last period</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: var(--primary-50); color: var(--primary-600);">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value">1,249</div>
+                            <div class="stat-label">Total Orders</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>+8.2% from last period</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: var(--warning-50); color: var(--warning-600);">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value">42</div>
+                            <div class="stat-label">Active Agents</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>+3 new agents</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: var(--error-50); color: var(--error-600);">
+                            <i class="fas fa-percentage"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value">RM 3,420</div>
+                            <div class="stat-label">Commissions Paid</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>+15.3% from last period</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Charts Grid -->
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: var(--space-3xl); margin-bottom: var(--space-4xl);">
+                    <!-- Sales Trend Chart -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h2 class="card-title">Sales Trend</h2>
+                                <p class="card-subtitle">Revenue performance over time</p>
+                            </div>
+                            <div style="display: flex; gap: var(--space-sm);">
+                                <button class="btn btn-sm btn-secondary" onclick="toggleChartView('sales')">
+                                    <i class="fas fa-chart-line"></i>
+                                    Line
+                                </button>
+                                <button class="btn btn-sm btn-secondary" onclick="toggleChartView('sales')">
+                                    <i class="fas fa-chart-bar"></i>
+                                    Bar
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <div style="height: 300px; display: flex; align-items: center; justify-content: center; background: var(--neutral-50); border-radius: var(--radius-lg);">
+                                <canvas id="sales-trend-chart" width="400" height="300"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Top Products -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Top Products</h2>
+                            <button class="btn btn-sm btn-ghost">
+                                <i class="fas fa-refresh"></i>
+                            </button>
+                        </div>
+                        <div class="card-content">
+                            <div id="top-products-list">
+                                <!-- Top products will be populated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Agent Performance Table -->
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <h2 class="card-title">Agent Performance</h2>
+                            <p class="card-subtitle">Sales performance by agent</p>
+                        </div>
+                        <div style="display: flex; gap: var(--space-sm);">
+                            <button class="btn btn-sm btn-secondary" onclick="sortAgentsBy('revenue')">
+                                <i class="fas fa-sort-amount-down"></i>
+                                Sort by Revenue
+                            </button>
+                            <button class="btn btn-sm btn-secondary" onclick="sortAgentsBy('orders')">
+                                <i class="fas fa-sort-amount-down"></i>
+                                Sort by Orders
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table class="table" id="agent-performance-table">
+                            <thead>
+                                <tr>
+                                    <th>Agent</th>
+                                    <th>Orders</th>
+                                    <th>Revenue</th>
+                                    <th>Commission</th>
+                                    <th>Performance</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="agent-performance-tbody">
+                                <!-- Agent performance rows will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Customer Insights -->
+                <div class="card" style="margin-top: var(--space-4xl);">
+                    <div class="card-header">
+                        <h2 class="card-title">Customer Insights</h2>
+                        <p class="card-subtitle">Customer behavior and preferences analysis</p>
+                    </div>
+                    <div class="card-content">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--space-3xl);">
+                            <div>
+                                <h3>Customer Segments</h3>
+                                <div style="height: 200px; display: flex; align-items: center; justify-content: center; background: var(--neutral-50); border-radius: var(--radius-lg);">
+                                    <canvas id="customer-segments-chart" width="300" height="200"></canvas>
+                                </div>
+                            </div>
+                            <div>
+                                <h3>Geographic Distribution</h3>
+                                <div style="height: 200px; display: flex; align-items: center; justify-content: center; background: var(--neutral-50); border-radius: var(--radius-lg);">
+                                    <canvas id="geographic-chart" width="300" height="200"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../assets/js/enterprise-ui.js"></script>
+    <script src="../assets/js/enterprise-reports.js"></script>
+    
+    <!-- Screen Reader Support -->
+    <div id="sr-status" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+</body>
+</html>

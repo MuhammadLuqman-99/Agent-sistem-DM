@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgentOS - Enterprise Settings</title>
+    <meta name="description" content="Enterprise settings and configuration for AgentOS">
+    
+    <!-- Preload Critical Resources -->
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style">
+    <link rel="preload" href="../assets/css/enterprise-core.css" as="style">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/enterprise-core.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
+</head>
+<body>
+    <!-- Screen Reader Status -->
+    <div id="sr-status" class="sr-only" aria-live="polite"></div>
+    
+    <!-- Main Container -->
+    <div class="enterprise-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>AgentOS</span>
+                </div>
+                <button class="sidebar-toggle" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="enterprise-admin-dashboard.html" class="sidebar-nav-link">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="enterprise-agents.html" class="sidebar-nav-link">
+                    <i class="fas fa-users"></i>
+                    <span>Agents</span>
+                </a>
+                <a href="enterprise-orders.html" class="sidebar-nav-link">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>Orders</span>
+                </a>
+                <a href="enterprise-products.html" class="sidebar-nav-link">
+                    <i class="fas fa-box"></i>
+                    <span>Products</span>
+                </a>
+                <a href="enterprise-reports.html" class="sidebar-nav-link">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Reports</span>
+                </a>
+                <a href="enterprise-settings.html" class="sidebar-nav-link active">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <a href="logout.html" class="sidebar-nav-link">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <h1 class="page-title">Enterprise Settings</h1>
+                    <p class="page-subtitle">Configure your AgentOS system</p>
+                </div>
+                
+                <div class="header-right">
+                    <button class="btn btn-primary" onclick="saveAllSettings()">
+                        <i class="fas fa-save"></i>
+                        Save All Changes
+                    </button>
+                </div>
+            </header>
+            
+            <!-- Settings Content -->
+            <div class="settings-container">
+                <!-- Settings Navigation -->
+                <div class="settings-nav">
+                    <button class="settings-nav-item active" data-tab="general">
+                        <i class="fas fa-cog"></i>
+                        General
+                    </button>
+                    <button class="settings-nav-item" data-tab="security">
+                        <i class="fas fa-shield-alt"></i>
+                        Security
+                    </button>
+                    <button class="settings-nav-item" data-tab="integrations">
+                        <i class="fas fa-plug"></i>
+                        Integrations
+                    </button>
+                    <button class="settings-nav-item" data-tab="notifications">
+                        <i class="fas fa-bell"></i>
+                        Notifications
+                    </button>
+                    <button class="settings-nav-item" data-tab="backup">
+                        <i class="fas fa-database"></i>
+                        Backup & Restore
+                    </button>
+                    <button class="settings-nav-item" data-tab="advanced">
+                        <i class="fas fa-tools"></i>
+                        Advanced
+                    </button>
+                </div>
+                
+                <!-- Settings Content -->
+                <div class="settings-content">
+                    <!-- General Settings -->
+                    <div class="settings-tab active" id="general">
+                        <div class="settings-section">
+                            <h3>Company Information</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="company-name">Company Name</label>
+                                    <input type="text" id="company-name" name="company-name" class="form-input" value="AgentOS Enterprise">
+                                </div>
+                                <div class="form-group">
+                                    <label for="company-email">Company Email</label>
+                                    <input type="email" id="company-email" name="company-email" class="form-input" value="admin@agentos.com">
+                                </div>
+                                <div class="form-group">
+                                    <label for="company-phone">Company Phone</label>
+                                    <input type="tel" id="company-phone" name="company-phone" class="form-input" value="+60 12-345 6789">
+                                </div>
+                                <div class="form-group">
+                                    <label for="company-address">Company Address</label>
+                                    <textarea id="company-address" name="company-address" class="form-input" rows="3">Kuala Lumpur, Malaysia</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-section">
+                            <h3>System Preferences</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="timezone">Timezone</label>
+                                    <select id="timezone" name="timezone" class="form-input">
+                                        <option value="Asia/Kuala_Lumpur" selected>Asia/Kuala_Lumpur (GMT+8)</option>
+                                        <option value="UTC">UTC (GMT+0)</option>
+                                        <option value="America/New_York">America/New_York (GMT-5)</option>
+                                        <option value="Europe/London">Europe/London (GMT+0)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="currency">Currency</label>
+                                    <select id="currency" name="currency" class="form-input">
+                                        <option value="MYR" selected>Malaysian Ringgit (MYR)</option>
+                                        <option value="USD">US Dollar (USD)</option>
+                                        <option value="EUR">Euro (EUR)</option>
+                                        <option value="SGD">Singapore Dollar (SGD)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="date-format">Date Format</label>
+                                    <select id="date-format" name="date-format" class="form-input">
+                                        <option value="DD/MM/YYYY" selected>DD/MM/YYYY</option>
+                                        <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+                                        <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="language">Language</label>
+                                    <select id="language" name="language" class="form-input">
+                                        <option value="en" selected>English</option>
+                                        <option value="ms">Bahasa Melayu</option>
+                                        <option value="zh">中文</option>
+                                        <option value="ta">தமிழ்</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Security Settings -->
+                    <div class="settings-tab" id="security">
+                        <div class="settings-section">
+                            <h3>Authentication Settings</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="session-timeout">Session Timeout (minutes)</label>
+                                    <input type="number" id="session-timeout" name="session-timeout" class="form-input" value="480" min="15" max="1440">
+                                </div>
+                                <div class="form-group">
+                                    <label for="max-login-attempts">Max Login Attempts</label>
+                                    <input type="number" id="max-login-attempts" name="max-login-attempts" class="form-input" value="5" min="3" max="10">
+                                </div>
+                                <div class="form-group">
+                                    <label for="lockout-duration">Lockout Duration (minutes)</label>
+                                    <input type="number" id="lockout-duration" name="lockout-duration" class="form-input" value="30" min="5" max="1440">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-section">
+                            <h3>Two-Factor Authentication</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="require-2fa" name="require-2fa">
+                                        <span>Require 2FA for all users</span>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="require-2fa-admin" name="require-2fa-admin" checked>
+                                        <span>Require 2FA for admin users</span>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label for="2fa-method">2FA Method</label>
+                                    <select id="2fa-method" name="2fa-method" class="form-input">
+                                        <option value="totp" selected>Time-based One-Time Password (TOTP)</option>
+                                        <option value="sms">SMS</option>
+                                        <option value="email">Email</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-section">
+                            <h3>Password Policy</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="min-password-length">Minimum Password Length</label>
+                                    <input type="number" id="min-password-length" name="min-password-length" class="form-input" value="8" min="6" max="20">
+                                </div>
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="require-uppercase" name="require-uppercase" checked>
+                                        <span>Require uppercase letters</span>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="require-lowercase" name="require-lowercase" checked>
+                                        <span>Require lowercase letters</span>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="require-numbers" name="require-numbers" checked>
+                                        <span>Require numbers</span>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="require-symbols" name="require-symbols">
+                                        <span>Require special characters</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Integrations Settings -->
+                    <div class="settings-tab" id="integrations">
+                        <div class="settings-section">
+                            <h3>Shopify Integration</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="shopify-shop-name">Shop Name</label>
+                                    <input type="text" id="shopify-shop-name" name="shopify-shop-name" class="form-input" placeholder="your-shop.myshopify.com">
+                                </div>
+                                <div class="form-group">
+                                    <label for="shopify-access-token">Access Token</label>
+                                    <input type="password" id="shopify-access-token" name="shopify-access-token" class="form-input" placeholder="Enter your Shopify access token">
+                                </div>
+                                <div class="form-group">
+                                    <label for="shopify-webhook-secret">Webhook Secret</label>
+                                    <input type="password" id="shopify-webhook-secret" name="shopify-webhook-secret" class="form-input" placeholder="Enter your webhook secret">
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-secondary" onclick="testShopifyConnection()">
+                                        <i class="fas fa-test-tube"></i>
+                                        Test Connection
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-section">
+                            <h3>Firebase Configuration</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="firebase-project-id">Project ID</label>
+                                    <input type="text" id="firebase-project-id" name="firebase-project-id" class="form-input" value="admin-agent-teamsale">
+                                </div>
+                                <div class="form-group">
+                                    <label for="firebase-database-url">Database URL</label>
+                                    <input type="url" id="firebase-database-url" name="firebase-database-url" class="form-input" value="https://admin-agent-teamsale-default-rtdb.firebaseio.com">
+                                </div>
+                                <div class="form-group">
+                                    <label for="firebase-service-account">Service Account File</label>
+                                    <input type="file" id="firebase-service-account" name="firebase-service-account" class="form-input" accept=".json">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Notifications Settings -->
+                    <div class="settings-tab" id="notifications">
+                        <div class="settings-section">
+                            <h3>Email Notifications</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="smtp-host">SMTP Host</label>
+                                    <input type="text" id="smtp-host" name="smtp-host" class="form-input" placeholder="smtp.gmail.com">
+                                </div>
+                                <div class="form-group">
+                                    <label for="smtp-port">SMTP Port</label>
+                                    <input type="number" id="smtp-port" name="smtp-port" class="form-input" value="587" min="1" max="65535">
+                                </div>
+                                <div class="form-group">
+                                    <label for="smtp-username">SMTP Username</label>
+                                    <input type="email" id="smtp-username" name="smtp-username" class="form-input" placeholder="your-email@gmail.com">
+                                </div>
+                                <div class="form-group">
+                                    <label for="smtp-password">SMTP Password</label>
+                                    <input type="password" id="smtp-password" name="smtp-password" class="form-input" placeholder="Enter your SMTP password">
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-secondary" onclick="testEmailConnection()">
+                                        <i class="fas fa-envelope"></i>
+                                        Test Email
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-section">
+                            <h3>Notification Preferences</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="notify-new-orders" name="notify-new-orders" checked>
+                                        <span>New order notifications</span>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="notify-low-stock" name="notify-low-stock" checked>
+                                        <span>Low stock alerts</span>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="notify-system-errors" name="notify-system-errors" checked>
+                                        <span>System error notifications</span>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="notify-security-events" name="notify-security-events" checked>
+                                        <span>Security event alerts</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Backup & Restore Settings -->
+                    <div class="settings-tab" id="backup">
+                        <div class="settings-section">
+                            <h3>Backup Configuration</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="auto-backup" name="auto-backup" checked>
+                                        <span>Enable automatic backups</span>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label for="backup-frequency">Backup Frequency</label>
+                                    <select id="backup-frequency" name="backup-frequency" class="form-input">
+                                        <option value="daily" selected>Daily</option>
+                                        <option value="weekly">Weekly</option>
+                                        <option value="monthly">Monthly</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="backup-retention">Retention Period (days)</label>
+                                    <input type="number" id="backup-retention" name="backup-retention" class="form-input" value="30" min="7" max="365">
+                                </div>
+                                <div class="form-group">
+                                    <label for="backup-time">Backup Time</label>
+                                    <input type="time" id="backup-time" name="backup-time" class="form-input" value="02:00">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-section">
+                            <h3>Manual Backup & Restore</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <button class="btn btn-primary" onclick="createBackup()">
+                                        <i class="fas fa-download"></i>
+                                        Create Backup Now
+                                    </button>
+                                </div>
+                                <div class="form-group">
+                                    <label for="backup-file">Restore from Backup</label>
+                                    <input type="file" id="backup-file" name="backup-file" class="form-input" accept=".zip,.tar.gz">
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-warning" onclick="restoreBackup()">
+                                        <i class="fas fa-upload"></i>
+                                        Restore Backup
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-section">
+                            <h3>Backup History</h3>
+                            <div class="backup-history">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Size</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="backup-history-tbody">
+                                        <!-- Backup history will be loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Advanced Settings -->
+                    <div class="settings-tab" id="advanced">
+                        <div class="settings-section">
+                            <h3>System Performance</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="max-concurrent-users">Max Concurrent Users</label>
+                                    <input type="number" id="max-concurrent-users" name="max-concurrent-users" class="form-input" value="100" min="10" max="1000">
+                                </div>
+                                <div class="form-group">
+                                    <label for="api-rate-limit">API Rate Limit</label>
+                                    <input type="number" id="api-rate-limit" name="api-rate-limit" class="form-input" value="1000" min="100" max="10000">
+                                </div>
+                                <div class="form-group">
+                                    <label for="session-timeout">Request Timeout (ms)</label>
+                                    <input type="number" id="request-timeout" name="request-timeout" class="form-input" value="30000" min="5000" max="120000">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-section">
+                            <h3>Debug & Logging</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="log-level">Log Level</label>
+                                    <select id="log-level" name="log-level" class="form-input">
+                                        <option value="error">Error</option>
+                                        <option value="warn">Warning</option>
+                                        <option value="info" selected>Info</option>
+                                        <option value="debug">Debug</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="enable-audit-log" name="enable-audit-log" checked>
+                                        <span>Enable audit logging</span>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="enable-security-log" name="enable-security-log" checked>
+                                        <span>Enable security logging</span>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-secondary" onclick="downloadLogs()">
+                                        <i class="fas fa-download"></i>
+                                        Download Logs
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-section">
+                            <h3>Danger Zone</h3>
+                            <div class="danger-zone">
+                                <div class="danger-item">
+                                    <div class="danger-info">
+                                        <h4>Reset All Settings</h4>
+                                        <p>This will reset all settings to their default values. This action cannot be undone.</p>
+                                    </div>
+                                    <button class="btn btn-danger" onclick="resetAllSettings()">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                        Reset Settings
+                                    </button>
+                                </div>
+                                
+                                <div class="danger-item">
+                                    <div class="danger-info">
+                                        <h4>Clear All Data</h4>
+                                        <p>This will permanently delete all data including agents, orders, and products. This action cannot be undone.</p>
+                                    </div>
+                                    <button class="btn btn-danger" onclick="clearAllData()">
+                                        <i class="fas fa-trash"></i>
+                                        Clear All Data
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="../assets/js/enterprise-ui.js"></script>
+    <script>
+        class EnterpriseSettings {
+            constructor() {
+                this.currentTab = 'general';
+                this.settings = {};
+                this.hasChanges = false;
+                
+                this.initializeSettings();
+                this.setupEventListeners();
+                this.loadSettings();
+            }
+            
+            initializeSettings() {
+                // Setup tab navigation
+                const tabButtons = document.querySelectorAll('.settings-nav-item');
+                const tabContents = document.querySelectorAll('.settings-tab');
+                
+                tabButtons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        const tabName = button.dataset.tab;
+                        this.switchTab(tabName);
+                    });
+                });
+                
+                // Setup form change detection
+                const formInputs = document.querySelectorAll('input, select, textarea');
+                formInputs.forEach(input => {
+                    input.addEventListener('change', () => {
+                        this.hasChanges = true;
+                        this.updateSaveButton();
+                    });
+                });
+            }
+            
+            switchTab(tabName) {
+                // Update active tab button
+                document.querySelectorAll('.settings-nav-item').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+                
+                // Update active tab content
+                document.querySelectorAll('.settings-tab').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                document.getElementById(tabName).classList.add('active');
+                
+                this.currentTab = tabName;
+            }
+            
+            setupEventListeners() {
+                // Save button
+                const saveBtn = document.querySelector('.btn-primary');
+                if (saveBtn) {
+                    saveBtn.addEventListener('click', () => this.saveAllSettings());
+                }
+            }
+            
+            async loadSettings() {
+                try {
+                    const response = await fetch('/api/settings', {
+                        headers: {
+                            'Authorization': `Bearer ${this.getAuthToken()}`
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        this.settings = await response.json();
+                        this.populateSettings();
+                    } else {
+                        console.error('Failed to load settings');
+                    }
+                } catch (error) {
+                    console.error('Error loading settings:', error);
+                }
+            }
+            
+            populateSettings() {
+                // Populate form fields with loaded settings
+                Object.keys(this.settings).forEach(key => {
+                    const element = document.getElementById(key);
+                    if (element) {
+                        if (element.type === 'checkbox') {
+                            element.checked = this.settings[key];
+                        } else {
+                            element.value = this.settings[key];
+                        }
+                    }
+                });
+                
+                this.hasChanges = false;
+                this.updateSaveButton();
+            }
+            
+            async saveAllSettings() {
+                if (!this.hasChanges) {
+                    this.showNotification('No changes to save', 'info');
+                    return;
+                }
+                
+                try {
+                    const formData = this.collectFormData();
+                    
+                    const response = await fetch('/api/settings', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${this.getAuthToken()}`
+                        },
+                        body: JSON.stringify(formData)
+                    });
+                    
+                    if (response.ok) {
+                        this.showNotification('Settings saved successfully', 'success');
+                        this.hasChanges = false;
+                        this.updateSaveButton();
+                    } else {
+                        this.showNotification('Failed to save settings', 'error');
+                    }
+                } catch (error) {
+                    console.error('Error saving settings:', error);
+                    this.showNotification('Error saving settings', 'error');
+                }
+            }
+            
+            collectFormData() {
+                const formData = {};
+                const formInputs = document.querySelectorAll('input, select, textarea');
+                
+                formInputs.forEach(input => {
+                    if (input.type === 'checkbox') {
+                        formData[input.name] = input.checked;
+                    } else if (input.type === 'file') {
+                        // Handle file uploads separately
+                        if (input.files.length > 0) {
+                            formData[input.name] = input.files[0];
+                        }
+                    } else {
+                        formData[input.name] = input.value;
+                    }
+                });
+                
+                return formData;
+            }
+            
+            updateSaveButton() {
+                const saveBtn = document.querySelector('.btn-primary');
+                if (saveBtn) {
+                    saveBtn.disabled = !this.hasChanges;
+                    saveBtn.innerHTML = this.hasChanges ? 
+                        '<i class="fas fa-save"></i> Save Changes' : 
+                        '<i class="fas fa-save"></i> All Changes Saved';
+                }
+            }
+            
+            getAuthToken() {
+                return localStorage.getItem('enterprise-auth-token');
+            }
+            
+            showNotification(message, type = 'info') {
+                // Create notification element
+                const notification = document.createElement('div');
+                notification.className = `notification notification-${type}`;
+                notification.innerHTML = `
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+                    <span>${message}</span>
+                    <button onclick="this.parentElement.remove()" class="notification-close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                
+                document.body.appendChild(notification);
+                
+                // Auto-remove after 5 seconds
+                setTimeout(() => {
+                    if (notification.parentElement) {
+                        notification.remove();
+                    }
+                }, 5000);
+            }
+        }
+        
+        // Global functions
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('collapsed');
+        }
+        
+        function saveAllSettings() {
+            if (window.enterpriseSettings) {
+                window.enterpriseSettings.saveAllSettings();
+            }
+        }
+        
+        function testShopifyConnection() {
+            alert('Shopify connection test will be implemented.');
+        }
+        
+        function testEmailConnection() {
+            alert('Email connection test will be implemented.');
+        }
+        
+        function createBackup() {
+            alert('Backup creation will be implemented.');
+        }
+        
+        function restoreBackup() {
+            alert('Backup restoration will be implemented.');
+        }
+        
+        function downloadLogs() {
+            alert('Log download will be implemented.');
+        }
+        
+        function resetAllSettings() {
+            if (confirm('Are you sure you want to reset all settings to default? This action cannot be undone.')) {
+                alert('Settings reset will be implemented.');
+            }
+        }
+        
+        function clearAllData() {
+            if (confirm('WARNING: This will permanently delete ALL data including agents, orders, and products. Are you absolutely sure?')) {
+                if (confirm('This is your final warning. This action CANNOT be undone. Continue?')) {
+                    alert('Data clearing will be implemented.');
+                }
+            }
+        }
+        
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            window.enterpriseSettings = new EnterpriseSettings();
+        });
+    </script>
+</body>
+</html>

@@ -3,849 +3,153 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agents Management - AgentOS</title>
+    <title>Agents - AgentOS</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-            background: #f8f9fa;
-            color: #212529;
-            line-height: 1.6;
-        }
-
-        /* Header */
-        .header {
-            background: #212529;
-            color: white;
-            padding: 1rem 2rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        .nav-buttons {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
-
-        .nav-btn {
-            background: #495057;
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.9rem;
-        }
-
-        .nav-btn:hover {
-            background: #6c757d;
-            transform: translateY(-1px);
-        }
-
-        .nav-btn.primary {
-            background: #28a745;
-        }
-
-        .nav-btn.primary:hover {
-            background: #218838;
-        }
-
-        /* Main Container */
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
-
-        .page-title {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #212529;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        /* Search and Filter */
-        .controls {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            border: 1px solid #e9ecef;
-            margin-bottom: 2rem;
-        }
-
-        .controls-row {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .search-box {
-            flex: 1;
-            min-width: 300px;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #e9ecef;
-            border-radius: 8px;
-            font-size: 1rem;
-        }
-
-        .search-input:focus {
-            outline: none;
-            border-color: #007bff;
-            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
-        }
-
-        .filter-select {
-            padding: 0.75rem;
-            border: 1px solid #e9ecef;
-            border-radius: 8px;
-            background: white;
-            cursor: pointer;
-        }
-
-        /* Stats Cards */
-        .stats-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .stat-card {
-            background: white;
-            border-radius: 8px;
-            padding: 1.5rem;
-            text-align: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            border: 1px solid #e9ecef;
-        }
-
-        .stat-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #007bff;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-label {
-            color: #6c757d;
-            font-size: 0.9rem;
-        }
-
-        /* Agents Grid */
-        .agents-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .agent-card {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            border: 1px solid #e9ecef;
-            transition: all 0.3s ease;
-        }
-
-        .agent-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-        }
-
-        .agent-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .agent-avatar {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        .agent-info h3 {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-        }
-
-        .agent-role {
-            color: #6c757d;
-            font-size: 0.9rem;
-        }
-
-        .agent-stats {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .stat-item {
-            text-align: center;
-        }
-
-        .stat-item .value {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #212529;
-        }
-
-        .stat-item .label {
-            font-size: 0.8rem;
-            color: #6c757d;
-            margin-top: 0.25rem;
-        }
-
-        .agent-status {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 1rem;
-        }
-
-        .status-badge {
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 500;
-        }
-
-        .status-active {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .status-inactive {
-            background: #f8d7da;
-            color: #721c24;
-        }
-
-        .status-review {
-            background: #fff3cd;
-            color: #856404;
-        }
-
-        .agent-actions {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .action-btn {
-            flex: 1;
-            padding: 0.5rem;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.25rem;
-        }
-
-        .btn-view {
-            background: #007bff;
-            color: white;
-        }
-
-        .btn-edit {
-            background: #28a745;
-            color: white;
-        }
-
-        .btn-disable {
-            background: #6c757d;
-            color: white;
-        }
-
-        .action-btn:hover {
-            transform: translateY(-1px);
-            opacity: 0.9;
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-        }
-
-        .modal-content {
-            background: white;
-            margin: 5% auto;
-            padding: 2rem;
-            border-radius: 12px;
-            max-width: 500px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid #e9ecef;
-        }
-
-        .modal-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-        }
-
-        .close {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #6c757d;
-        }
-
-        .form-group {
-            margin-bottom: 1rem;
-        }
-
-        .form-label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: #212529;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #e9ecef;
-            border-radius: 6px;
-            font-size: 1rem;
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: #007bff;
-            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
-            }
-            
-            .page-header {
-                flex-direction: column;
-                gap: 1rem;
-                align-items: stretch;
-            }
-            
-            .controls-row {
-                flex-direction: column;
-            }
-            
-            .search-box {
-                min-width: auto;
-            }
-            
-            .agents-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Icon fallbacks */
-        .no-css .fas::before {
-            font-family: inherit;
-        }
-        .no-css .fa-users::before { content: '👥'; }
-        .no-css .fa-plus::before { content: '➕'; }
-        .no-css .fa-home::before { content: '🏠'; }
-        .no-css .fa-sign-out-alt::before { content: '🚪'; }
-        .no-css .fa-search::before { content: '🔍'; }
-        .no-css .fa-eye::before { content: '👁️'; }
-        .no-css .fa-edit::before { content: '✏️'; }
-        .no-css .fa-ban::before { content: '🚫'; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; background: #f8f9fa; }
+        .header { background: #212529; color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .nav-btn { background: #495057; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; cursor: pointer; }
+        .nav-btn:hover { background: #6c757d; }
+        .nav-btn.primary { background: #28a745; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
+        .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .stat-card { background: white; padding: 1.5rem; border-radius: 8px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .stat-value { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .stat-label { color: #6c757d; font-size: 0.9rem; }
+        .search-box { background: white; padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .search-input { width: 100%; padding: 0.75rem; border: 1px solid #e9ecef; border-radius: 8px; font-size: 1rem; }
+        .agents-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; }
+        .agent-card { background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .agent-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+        .agent-avatar { width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; font-weight: 700; }
+        .agent-info h3 { font-size: 1.2rem; font-weight: 600; margin-bottom: 0.25rem; }
+        .agent-role { color: #6c757d; font-size: 0.9rem; }
+        .agent-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1rem; }
+        .stat-item { text-align: center; }
+        .stat-item .value { font-size: 1.2rem; font-weight: 600; }
+        .stat-item .label { font-size: 0.8rem; color: #6c757d; margin-top: 0.25rem; }
+        .status-badge { padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: 500; }
+        .status-active { background: #d4edda; color: #155724; }
+        .status-inactive { background: #f8d7da; color: #721c24; }
+        .agent-actions { display: flex; gap: 0.5rem; margin-top: 1rem; }
+        .action-btn { flex: 1; padding: 0.5rem; border: none; border-radius: 6px; cursor: pointer; font-size: 0.8rem; color: white; }
+        .btn-view { background: #007bff; }
+        .btn-edit { background: #28a745; }
+        .btn-delete { background: #dc3545; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; }
+        .modal-content { background: white; margin: 5% auto; padding: 2rem; border-radius: 12px; max-width: 500px; width: 90%; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+        .close { background: none; border: none; font-size: 1.5rem; cursor: pointer; }
+        .form-group { margin-bottom: 1rem; }
+        .form-label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
+        .form-control { width: 100%; padding: 0.75rem; border: 1px solid #e9ecef; border-radius: 6px; }
     </style>
 </head>
 <body>
-    <!-- Header -->
     <div class="header">
-        <div class="header-content">
-            <div class="logo">
-                <i class="fas fa-users"></i> Agents Management
-            </div>
-            <div class="nav-buttons">
-                <button class="nav-btn primary" onclick="openAddAgentModal()">
-                    <i class="fas fa-plus"></i> Add Agent
-                </button>
-                <a href="enterprise-admin-dashboard.html" class="nav-btn">
-                    <i class="fas fa-home"></i> Dashboard
-                </a>
-                <a href="logout.html" class="nav-btn">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </a>
-            </div>
+        <h1><i class="fas fa-users"></i> Agents Management</h1>
+        <div>
+            <button class="nav-btn primary" onclick="openModal()"><i class="fas fa-plus"></i> Add Agent</button>
+            <a href="enterprise-admin-dashboard.html" class="nav-btn"><i class="fas fa-home"></i> Dashboard</a>
+            <a href="logout.html" class="nav-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </div>
     </div>
-
     <div class="container">
-        <div class="page-header">
-            <h1 class="page-title">
-                <i class="fas fa-users"></i>
-                Manage Sales Agents
-            </h1>
-        </div>
-
-        <!-- Search and Filter -->
-        <div class="controls">
-            <div class="controls-row">
-                <div class="search-box">
-                    <input type="text" class="search-input" placeholder="🔍 Search agents by name, email, or phone..." id="searchInput">
-                </div>
-                <select class="filter-select" id="statusFilter">
-                    <option value="">All Status</option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
-                    <option value="review">Under Review</option>
-                </select>
-                <select class="filter-select" id="performanceFilter">
-                    <option value="">All Performance</option>
-                    <option value="high">High Performers</option>
-                    <option value="medium">Medium Performers</option>
-                    <option value="low">Need Improvement</option>
-                </select>
-            </div>
-        </div>
-
-        <!-- Stats -->
         <div class="stats-row">
-            <div class="stat-card">
-                <div class="stat-value" id="totalAgents">42</div>
-                <div class="stat-label">Total Agents</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value" style="color: #28a745;" id="activeAgents">38</div>
-                <div class="stat-label">Active Agents</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value" style="color: #dc3545;" id="inactiveAgents">2</div>
-                <div class="stat-label">Inactive</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value" style="color: #ffc107;" id="reviewAgents">2</div>
-                <div class="stat-label">Under Review</div>
-            </div>
+            <div class="stat-card"><div class="stat-value">42</div><div class="stat-label">Total Agents</div></div>
+            <div class="stat-card"><div class="stat-value" style="color: #28a745;">38</div><div class="stat-label">Active</div></div>
+            <div class="stat-card"><div class="stat-value" style="color: #dc3545;">2</div><div class="stat-label">Inactive</div></div>
+            <div class="stat-card"><div class="stat-value" style="color: #ffc107;">2</div><div class="stat-label">Under Review</div></div>
         </div>
-
-        <!-- Agents Grid -->
+        <div class="search-box">
+            <input type="text" class="search-input" placeholder="🔍 Search agents..." onkeyup="filterAgents(this.value)">
+        </div>
         <div class="agents-grid" id="agentsGrid">
-            <!-- Agents will be dynamically loaded here -->
+            <div class="agent-card">
+                <div class="agent-header">
+                    <div class="agent-avatar">AR</div>
+                    <div class="agent-info">
+                        <h3>Ahmad Rahman</h3>
+                        <div class="agent-role">Sales Agent</div>
+                    </div>
+                </div>
+                <div class="agent-stats">
+                    <div class="stat-item"><div class="value">156</div><div class="label">Orders</div></div>
+                    <div class="stat-item"><div class="value">RM 12,450</div><div class="label">Revenue</div></div>
+                    <div class="stat-item"><div class="value">12.5%</div><div class="label">Commission</div></div>
+                    <div class="stat-item"><div class="value">Jan 2023</div><div class="label">Joined</div></div>
+                </div>
+                <div style="margin: 1rem 0;"><span class="status-badge status-active">Active</span></div>
+                <div class="agent-actions">
+                    <button class="action-btn btn-view" onclick="showNotification('Viewing agent details')"><i class="fas fa-eye"></i></button>
+                    <button class="action-btn btn-edit" onclick="showNotification('Editing agent')"><i class="fas fa-edit"></i></button>
+                    <button class="action-btn btn-delete" onclick="showNotification('Agent status updated')"><i class="fas fa-ban"></i></button>
+                </div>
+            </div>
+            <div class="agent-card">
+                <div class="agent-header">
+                    <div class="agent-avatar">SA</div>
+                    <div class="agent-info">
+                        <h3>Siti Aminah</h3>
+                        <div class="agent-role">Sales Agent</div>
+                    </div>
+                </div>
+                <div class="agent-stats">
+                    <div class="stat-item"><div class="value">134</div><div class="label">Orders</div></div>
+                    <div class="stat-item"><div class="value">RM 10,280</div><div class="label">Revenue</div></div>
+                    <div class="stat-item"><div class="value">12.5%</div><div class="label">Commission</div></div>
+                    <div class="stat-item"><div class="value">Feb 2023</div><div class="label">Joined</div></div>
+                </div>
+                <div style="margin: 1rem 0;"><span class="status-badge status-active">Active</span></div>
+                <div class="agent-actions">
+                    <button class="action-btn btn-view" onclick="showNotification('Viewing agent details')"><i class="fas fa-eye"></i></button>
+                    <button class="action-btn btn-edit" onclick="showNotification('Editing agent')"><i class="fas fa-edit"></i></button>
+                    <button class="action-btn btn-delete" onclick="showNotification('Agent status updated')"><i class="fas fa-ban"></i></button>
+                </div>
+            </div>
         </div>
     </div>
-
-    <!-- Add/Edit Agent Modal -->
     <div id="agentModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title" id="modalTitle">Add New Agent</h2>
+                <h2>Add New Agent</h2>
                 <button class="close" onclick="closeModal()">&times;</button>
             </div>
-            <form id="agentForm">
+            <form onsubmit="saveAgent(event)">
                 <div class="form-group">
                     <label class="form-label">Full Name</label>
-                    <input type="text" class="form-control" id="agentName" required>
+                    <input type="text" class="form-control" required>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Email Address</label>
-                    <input type="email" class="form-control" id="agentEmail" required>
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" required>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Phone Number</label>
-                    <input type="tel" class="form-control" id="agentPhone" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Commission Rate (%)</label>
-                    <input type="number" class="form-control" id="agentCommission" min="0" max="50" step="0.5" value="12.5">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Status</label>
-                    <select class="form-control" id="agentStatus">
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
-                        <option value="review">Under Review</option>
-                    </select>
+                    <label class="form-label">Phone</label>
+                    <input type="tel" class="form-control" required>
                 </div>
                 <div style="display: flex; gap: 1rem; margin-top: 2rem;">
                     <button type="button" class="nav-btn" onclick="closeModal()" style="flex: 1;">Cancel</button>
-                    <button type="submit" class="nav-btn primary" style="flex: 1;">Save Agent</button>
+                    <button type="submit" class="nav-btn primary" style="flex: 1;">Save</button>
                 </div>
             </form>
         </div>
     </div>
-
     <script>
-        // Sample agents data
-        let agents = [
-            {
-                id: 1,
-                name: "Ahmad Rahman",
-                email: "ahmad.rahman@example.com",
-                phone: "+60123456789",
-                status: "active",
-                commission: 12.5,
-                sales: 156,
-                revenue: 12450,
-                joined: "2023-01-15"
-            },
-            {
-                id: 2,
-                name: "Siti Aminah",
-                email: "siti.aminah@example.com",
-                phone: "+60123456790",
-                status: "active",
-                commission: 12.5,
-                sales: 134,
-                revenue: 10280,
-                joined: "2023-02-20"
-            },
-            {
-                id: 3,
-                name: "Muhammad Ali",
-                email: "muhammad.ali@example.com",
-                phone: "+60123456791",
-                status: "active",
-                commission: 12.5,
-                sales: 128,
-                revenue: 9840,
-                joined: "2023-03-10"
-            },
-            {
-                id: 4,
-                name: "Fatimah Zahra",
-                email: "fatimah.zahra@example.com",
-                phone: "+60123456792",
-                status: "active",
-                commission: 12.5,
-                sales: 112,
-                revenue: 8960,
-                joined: "2023-04-05"
-            },
-            {
-                id: 5,
-                name: "Omar Hassan",
-                email: "omar.hassan@example.com",
-                phone: "+60123456793",
-                status: "review",
-                commission: 10.0,
-                sales: 98,
-                revenue: 7650,
-                joined: "2023-05-12"
-            },
-            {
-                id: 6,
-                name: "Aisha Ibrahim",
-                email: "aisha.ibrahim@example.com",
-                phone: "+60123456794",
-                status: "inactive",
-                commission: 12.5,
-                sales: 45,
-                revenue: 3240,
-                joined: "2023-06-18"
-            }
-        ];
-
-        // Render agents grid
-        function renderAgents(agentsToRender = agents) {
-            const grid = document.getElementById('agentsGrid');
-            
-            if (agentsToRender.length === 0) {
-                grid.innerHTML = `
-                    <div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: #6c757d;">
-                        <i class="fas fa-users" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
-                        <h3>No agents found</h3>
-                        <p>Try adjusting your search or filter criteria</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            grid.innerHTML = agentsToRender.map(agent => `
-                <div class="agent-card">
-                    <div class="agent-header">
-                        <div class="agent-avatar">
-                            ${agent.name.split(' ').map(n => n[0]).join('').substring(0, 2)}
-                        </div>
-                        <div class="agent-info">
-                            <h3>${agent.name}</h3>
-                            <div class="agent-role">Sales Agent</div>
-                        </div>
-                    </div>
-                    
-                    <div class="agent-stats">
-                        <div class="stat-item">
-                            <div class="value">${agent.sales}</div>
-                            <div class="label">Orders</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="value">RM ${agent.revenue.toLocaleString()}</div>
-                            <div class="label">Revenue</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="value">${agent.commission}%</div>
-                            <div class="label">Commission</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="value">${new Date(agent.joined).toLocaleDateString()}</div>
-                            <div class="label">Joined</div>
-                        </div>
-                    </div>
-                    
-                    <div class="agent-status">
-                        <span class="status-badge status-${agent.status}">
-                            ${agent.status.charAt(0).toUpperCase() + agent.status.slice(1)}
-                        </span>
-                        <div style="font-size: 0.8rem; color: #6c757d;">
-                            ${agent.email}
-                        </div>
-                    </div>
-                    
-                    <div class="agent-actions">
-                        <button class="action-btn btn-view" onclick="viewAgent(${agent.id})">
-                            <i class="fas fa-eye"></i> View
-                        </button>
-                        <button class="action-btn btn-edit" onclick="editAgent(${agent.id})">
-                            <i class="fas fa-edit"></i> Edit
-                        </button>
-                        <button class="action-btn btn-disable" onclick="toggleAgent(${agent.id})">
-                            <i class="fas fa-ban"></i> ${agent.status === 'active' ? 'Disable' : 'Enable'}
-                        </button>
-                    </div>
-                </div>
-            `).join('');
+        function openModal() { document.getElementById('agentModal').style.display = 'block'; }
+        function closeModal() { document.getElementById('agentModal').style.display = 'none'; }
+        function saveAgent(e) { e.preventDefault(); showNotification('Agent saved successfully!'); closeModal(); }
+        function filterAgents(term) { showNotification('Filtering agents: ' + term); }
+        function showNotification(msg) {
+            const n = document.createElement('div');
+            n.style.cssText = 'position:fixed;top:20px;right:20px;background:#d4edda;color:#155724;padding:1rem;border-radius:8px;z-index:1001;';
+            n.innerHTML = `<div style="display: flex; align-items: center; gap: 8px;"><span>✓</span><span>${msg}</span></div>`;
+            document.body.appendChild(n);
+            setTimeout(() => n.remove(), 3000);
         }
-
-        // Search functionality
-        document.getElementById('searchInput').addEventListener('input', function() {
-            const searchTerm = this.value.toLowerCase();
-            const filtered = agents.filter(agent => 
-                agent.name.toLowerCase().includes(searchTerm) ||
-                agent.email.toLowerCase().includes(searchTerm) ||
-                agent.phone.includes(searchTerm)
-            );
-            renderAgents(filtered);
-        });
-
-        // Filter functionality
-        document.getElementById('statusFilter').addEventListener('change', function() {
-            const status = this.value;
-            const filtered = status ? agents.filter(agent => agent.status === status) : agents;
-            renderAgents(filtered);
-        });
-
-        // Modal functions
-        function openAddAgentModal() {
-            document.getElementById('modalTitle').textContent = 'Add New Agent';
-            document.getElementById('agentForm').reset();
-            document.getElementById('agentModal').style.display = 'block';
-        }
-
-        function closeModal() {
-            document.getElementById('agentModal').style.display = 'none';
-        }
-
-        function editAgent(id) {
-            const agent = agents.find(a => a.id === id);
-            if (agent) {
-                document.getElementById('modalTitle').textContent = 'Edit Agent';
-                document.getElementById('agentName').value = agent.name;
-                document.getElementById('agentEmail').value = agent.email;
-                document.getElementById('agentPhone').value = agent.phone;
-                document.getElementById('agentCommission').value = agent.commission;
-                document.getElementById('agentStatus').value = agent.status;
-                document.getElementById('agentModal').style.display = 'block';
-            }
-        }
-
-        function viewAgent(id) {
-            const agent = agents.find(a => a.id === id);
-            if (agent) {
-                showNotification(`Viewing details for ${agent.name}`, 'success');
-            }
-        }
-
-        function toggleAgent(id) {
-            const agent = agents.find(a => a.id === id);
-            if (agent) {
-                agent.status = agent.status === 'active' ? 'inactive' : 'active';
-                renderAgents();
-                updateStats();
-                showNotification(`Agent ${agent.status === 'active' ? 'enabled' : 'disabled'} successfully`, 'success');
-            }
-        }
-
-        // Form submission
-        document.getElementById('agentForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const name = document.getElementById('agentName').value;
-            const email = document.getElementById('agentEmail').value;
-            const phone = document.getElementById('agentPhone').value;
-            const commission = parseFloat(document.getElementById('agentCommission').value);
-            const status = document.getElementById('agentStatus').value;
-            
-            // Add new agent (simplified - in real app would save to backend)
-            const newAgent = {
-                id: agents.length + 1,
-                name,
-                email,
-                phone,
-                status,
-                commission,
-                sales: 0,
-                revenue: 0,
-                joined: new Date().toISOString().split('T')[0]
-            };
-            
-            agents.push(newAgent);
-            renderAgents();
-            updateStats();
-            closeModal();
-            showNotification('Agent added successfully!', 'success');
-        });
-
-        // Update stats
-        function updateStats() {
-            const total = agents.length;
-            const active = agents.filter(a => a.status === 'active').length;
-            const inactive = agents.filter(a => a.status === 'inactive').length;
-            const review = agents.filter(a => a.status === 'review').length;
-            
-            document.getElementById('totalAgents').textContent = total;
-            document.getElementById('activeAgents').textContent = active;
-            document.getElementById('inactiveAgents').textContent = inactive;
-            document.getElementById('reviewAgents').textContent = review;
-        }
-
-        // Show notification function
-        function showNotification(message, type = 'success') {
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                padding: 16px 24px;
-                border-radius: 8px;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-                z-index: 1001;
-                font-weight: 500;
-                font-size: 14px;
-                max-width: 350px;
-                opacity: 0;
-                transform: translateX(100%);
-                transition: all 0.3s ease;
-                background: ${type === 'success' ? '#d4edda' : '#f8d7da'};
-                color: ${type === 'success' ? '#155724' : '#721c24'};
-                border: 1px solid ${type === 'success' ? '#c3e6cb' : '#f5c6cb'};
-            `;
-            
-            notification.innerHTML = `
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <span style="font-weight: bold; font-size: 16px;">${type === 'success' ? '✓' : '✗'}</span>
-                    <span>${message}</span>
-                </div>
-            `;
-            
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.style.opacity = '1';
-                notification.style.transform = 'translateX(0)';
-            }, 100);
-            
-            setTimeout(() => {
-                notification.style.opacity = '0';
-                notification.style.transform = 'translateX(100%)';
-                setTimeout(() => {
-                    if (notification.parentNode) {
-                        notification.remove();
-                    }
-                }, 300);
-            }, 4000);
-        }
-
-        // Close modal on outside click
-        window.onclick = function(event) {
-            const modal = document.getElementById('agentModal');
-            if (event.target == modal) {
-                closeModal();
-            }
-        }
-
-        // Initialize page
-        document.addEventListener('DOMContentLoaded', function() {
-            renderAgents();
-            updateStats();
-            showNotification('Agents management loaded successfully!', 'success');
-        });
+        window.onclick = (e) => { if (e.target == document.getElementById('agentModal')) closeModal(); }
+        document.addEventListener('DOMContentLoaded', () => showNotification('Agents management loaded!'));
     </script>
 </body>
 </html>

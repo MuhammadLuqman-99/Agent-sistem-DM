@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - AgentOS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; background: #f8f9fa; }
+        .header { background: #212529; color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .nav-btn { background: #495057; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; cursor: pointer; }
+        .nav-btn:hover { background: #6c757d; }
+        .nav-btn.primary { background: #28a745; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 2rem; }
+        .profile-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; }
+        .profile-card { background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .profile-avatar { width: 120px; height: 120px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem; font-weight: 700; margin: 0 auto 1.5rem; }
+        .profile-name { text-align: center; font-size: 1.5rem; font-weight: 600; margin-bottom: 0.5rem; }
+        .profile-role { text-align: center; color: #6c757d; margin-bottom: 1.5rem; }
+        .profile-stat { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; border-bottom: 1px solid #e9ecef; }
+        .profile-stat:last-child { border-bottom: none; }
+        .stat-label { font-weight: 500; }
+        .stat-value { font-weight: 600; color: #007bff; }
+        .profile-details { background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .section-title { font-size: 1.3rem; font-weight: 600; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem; }
+        .form-section { margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid #e9ecef; }
+        .form-section:last-child { border-bottom: none; margin-bottom: 0; }
+        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+        .form-group { display: flex; flex-direction: column; }
+        .form-label { margin-bottom: 0.5rem; font-weight: 500; }
+        .form-input { padding: 0.75rem; border: 1px solid #e9ecef; border-radius: 6px; font-size: 1rem; }
+        .form-input:focus { outline: none; border-color: #007bff; box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1); }
+        .btn { background: #007bff; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 500; }
+        .btn:hover { background: #0056b3; }
+        .btn-secondary { background: #6c757d; }
+        .btn-secondary:hover { background: #545b62; }
+        .activity-item { display: flex; align-items: center; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid #e9ecef; }
+        .activity-item:last-child { border-bottom: none; }
+        .activity-icon { width: 40px; height: 40px; border-radius: 50%; background: #f8f9fa; display: flex; align-items: center; justify-content: center; color: #007bff; }
+        .activity-content h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.25rem; }
+        .activity-content p { font-size: 0.85rem; color: #6c757d; }
+        @media (max-width: 768px) {
+            .profile-grid { grid-template-columns: 1fr; }
+            .form-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><i class="fas fa-user"></i> My Profile</h1>
+        <div>
+            <button class="nav-btn primary" onclick="saveProfile()"><i class="fas fa-save"></i> Save Changes</button>
+            <a href="enterprise-admin-dashboard.html" class="nav-btn"><i class="fas fa-home"></i> Dashboard</a>
+            <a href="logout.html" class="nav-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+    </div>
+    <div class="container">
+        <div class="profile-grid">
+            <div class="profile-card">
+                <div class="profile-avatar">AD</div>
+                <h2 class="profile-name">Admin User</h2>
+                <p class="profile-role">System Administrator</p>
+                <div class="profile-stat">
+                    <span class="stat-label">Member Since</span>
+                    <span class="stat-value">Jan 2023</span>
+                </div>
+                <div class="profile-stat">
+                    <span class="stat-label">Last Login</span>
+                    <span class="stat-value">Today 9:30 AM</span>
+                </div>
+                <div class="profile-stat">
+                    <span class="stat-label">Total Logins</span>
+                    <span class="stat-value">1,247</span>
+                </div>
+                <div class="profile-stat">
+                    <span class="stat-label">Account Status</span>
+                    <span class="stat-value" style="color: #28a745;">Active</span>
+                </div>
+            </div>
+            <div class="profile-details">
+                <div class="form-section">
+                    <h3 class="section-title"><i class="fas fa-user-edit"></i> Personal Information</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">First Name</label>
+                            <input type="text" class="form-input" value="Admin">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Last Name</label>
+                            <input type="text" class="form-input" value="User">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" class="form-input" value="admin@kilangdesamurni.com">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Phone Number</label>
+                            <input type="tel" class="form-input" value="+60123456789">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Job Title</label>
+                            <input type="text" class="form-input" value="System Administrator">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Department</label>
+                            <input type="text" class="form-input" value="IT Management">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-section">
+                    <h3 class="section-title"><i class="fas fa-lock"></i> Security Settings</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Current Password</label>
+                            <input type="password" class="form-input" placeholder="Enter current password">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">New Password</label>
+                            <input type="password" class="form-input" placeholder="Enter new password">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Confirm New Password</label>
+                            <input type="password" class="form-input" placeholder="Confirm new password">
+                        </div>
+                        <div class="form-group" style="display: flex; align-items: end;">
+                            <button class="btn btn-secondary" onclick="changePassword()">Change Password</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-section">
+                    <h3 class="section-title"><i class="fas fa-history"></i> Recent Activity</h3>
+                    <div class="activity-item">
+                        <div class="activity-icon"><i class="fas fa-sign-in-alt"></i></div>
+                        <div class="activity-content">
+                            <h4>Logged in to system</h4>
+                            <p>Today at 9:30 AM from IP 192.168.1.100</p>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon"><i class="fas fa-user-plus"></i></div>
+                        <div class="activity-content">
+                            <h4>Added new agent: Fatimah Zahra</h4>
+                            <p>Yesterday at 3:45 PM</p>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon"><i class="fas fa-chart-line"></i></div>
+                        <div class="activity-content">
+                            <h4>Generated monthly sales report</h4>
+                            <p>2 days ago at 2:15 PM</p>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon"><i class="fas fa-cogs"></i></div>
+                        <div class="activity-content">
+                            <h4>Updated system settings</h4>
+                            <p>3 days ago at 11:20 AM</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function saveProfile() { showNotification('Profile updated successfully!'); }
+        function changePassword() { 
+            showNotification('Password changed successfully!');
+            // Clear password fields
+            document.querySelectorAll('input[type="password"]').forEach(input => input.value = '');
+        }
+        function showNotification(msg) {
+            const n = document.createElement('div');
+            n.style.cssText = 'position:fixed;top:20px;right:20px;background:#d4edda;color:#155724;padding:1rem;border-radius:8px;z-index:1000;';
+            n.innerHTML = `<div style="display: flex; align-items: center; gap: 8px;"><span>✓</span><span>${msg}</span></div>`;
+            document.body.appendChild(n);
+            setTimeout(() => n.remove(), 3000);
+        }
+        document.addEventListener('DOMContentLoaded', () => showNotification('Profile loaded successfully!'));
+    </script>
+</body>
+</html>

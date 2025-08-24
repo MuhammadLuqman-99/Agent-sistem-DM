@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Enterprise Orders Management - Kilang Desa Murni Batik">
+    <title>Enterprise Orders - Kilang Desa Murni Batik</title>
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" as="style">
+    <link rel="preload" href="../assets/css/enterprise-core.css" as="style">
+    
+    <!-- External Stylesheets -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Internal Stylesheets -->
+    <link rel="stylesheet" href="../assets/css/enterprise-core.css">
+    <link rel="stylesheet" href="../assets/css/accessibility.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="../assets/images/favicon.ico">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Enterprise Sidebar -->
+        <aside class="app-sidebar" role="navigation" aria-label="Main navigation">
+            <div class="sidebar-header">
+                <a href="enterprise-admin-dashboard.html" class="sidebar-logo">
+                    <div class="sidebar-logo-icon">
+                        <i class="fas fa-store"></i>
+                    </div>
+                    <span>Kilang Desa Murni</span>
+                </a>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="sidebar-nav-section">
+                    <h3 class="sidebar-nav-section-title">Dashboard</h3>
+                    <div class="sidebar-nav-item">
+                        <a href="enterprise-admin-dashboard.html" class="sidebar-nav-link">
+                            <div class="sidebar-nav-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <span class="sidebar-nav-text">Overview</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="sidebar-nav-section">
+                    <h3 class="sidebar-nav-section-title">Management</h3>
+                    <div class="sidebar-nav-item">
+                        <a href="enterprise-agents.html" class="sidebar-nav-link">
+                            <div class="sidebar-nav-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <span class="sidebar-nav-text">Agents</span>
+                        </a>
+                    </div>
+                    <div class="sidebar-nav-item">
+                        <a href="enterprise-orders.html" class="sidebar-nav-link active">
+                            <div class="sidebar-nav-icon">
+                                <i class="fas fa-shopping-bag"></i>
+                            </div>
+                            <span class="sidebar-nav-text">Orders</span>
+                        </a>
+                    </div>
+                    <div class="sidebar-nav-item">
+                        <a href="enterprise-products.html" class="sidebar-nav-link">
+                            <div class="sidebar-nav-icon">
+                                <i class="fas fa-tshirt"></i>
+                            </div>
+                            <span class="sidebar-nav-text">Products</span>
+                        </a>
+                    </div>
+                    <div class="sidebar-nav-item">
+                        <a href="enterprise-reports.html" class="sidebar-nav-link">
+                            <div class="sidebar-nav-icon">
+                                <i class="fas fa-chart-bar"></i>
+                            </div>
+                            <span class="sidebar-nav-text">Reports</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="sidebar-nav-section">
+                    <h3 class="sidebar-nav-section-title">Account</h3>
+                    <div class="sidebar-nav-item">
+                        <a href="logout.html?role=admin" class="sidebar-nav-link">
+                            <div class="sidebar-nav-icon">
+                                <i class="fas fa-sign-out-alt"></i>
+                            </div>
+                            <span class="sidebar-nav-text">Sign Out</span>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+        </aside>
+        
+        <!-- Main Content Area -->
+        <main class="app-main">
+            <!-- Enterprise Header -->
+            <header class="app-header">
+                <div class="app-header-left">
+                    <h1 class="app-header-title">Order Management</h1>
+                    <span class="app-header-subtitle">Track and manage customer orders from Shopify</span>
+                </div>
+                <div class="app-header-right">
+                    <button class="btn btn-secondary" onclick="syncShopifyOrders()">
+                        <i class="fas fa-sync"></i>
+                        Sync Shopify
+                    </button>
+                    <button class="btn btn-primary" onclick="openAddOrderModal()">
+                        <i class="fas fa-plus"></i>
+                        New Order
+                    </button>
+                </div>
+            </header>
+            
+            <!-- Orders Content -->
+            <div style="padding: var(--space-3xl);">
+                <!-- Order Stats -->
+                <section class="stats-grid" aria-labelledby="order-stats-heading">
+                    <h2 id="order-stats-heading" class="sr-only">Order Statistics</h2>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: var(--success-50); color: var(--success-600);">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value">1,249</div>
+                            <div class="stat-label">Total Orders</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: var(--primary-50); color: var(--primary-600);">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value">156</div>
+                            <div class="stat-label">Pending</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: var(--warning-50); color: var(--warning-600);">
+                            <i class="fas fa-truck"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value">89</div>
+                            <div class="stat-label">Processing</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: var(--error-50); color: var(--error-600);">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value">1,004</div>
+                            <div class="stat-label">Completed</div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Orders Table -->
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <h2 class="card-title">All Orders</h2>
+                            <p class="card-subtitle">Manage customer orders and track their status</p>
+                        </div>
+                        <div style="display: flex; gap: var(--space-sm);">
+                            <div class="search-box">
+                                <input type="text" id="order-search" placeholder="Search orders..." class="search-input">
+                                <i class="fas fa-search search-icon"></i>
+                            </div>
+                            <select id="status-filter" class="select-input">
+                                <option value="">All Status</option>
+                                <option value="pending">Pending</option>
+                                <option value="processing">Processing</option>
+                                <option value="shipped">Shipped</option>
+                                <option value="completed">Completed</option>
+                                <option value="cancelled">Cancelled</option>
+                            </select>
+                            <button class="btn btn-sm btn-secondary">
+                                <i class="fas fa-download"></i>
+                                Export
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table class="table" id="orders-table">
+                            <thead>
+                                <tr>
+                                    <th data-sortable data-type="text">Order ID</th>
+                                    <th data-sortable data-type="text">Customer</th>
+                                    <th data-sortable data-type="text">Products</th>
+                                    <th data-sortable data-type="number">Total</th>
+                                    <th data-sortable data-type="text">Agent</th>
+                                    <th data-sortable data-type="text">Status</th>
+                                    <th data-sortable data-type="text">Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="orders-tbody">
+                                <!-- Order rows will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="card-footer">
+                        <div class="pagination-info">
+                            <span>Showing <span id="showing-start">1</span> to <span id="showing-end">10</span> of <span id="total-orders">1,249</span> orders</span>
+                        </div>
+                        <div class="pagination-controls">
+                            <button class="btn btn-sm btn-secondary" id="prev-page" disabled>Previous</button>
+                            <span class="pagination-page">Page <span id="current-page">1</span></span>
+                            <button class="btn btn-sm btn-secondary" id="next-page">Next</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Add Order Modal -->
+    <div id="add-order-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Create New Order</h2>
+                <button class="modal-close" onclick="closeAddOrderModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="add-order-form" class="modal-form">
+                <div class="form-group">
+                    <label for="customer-name">Customer Name</label>
+                    <input type="text" id="customer-name" name="customerName" required>
+                </div>
+                <div class="form-group">
+                    <label for="customer-email">Customer Email</label>
+                    <input type="email" id="customer-email" name="customerEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="order-products">Products</label>
+                    <select id="order-products" name="products" multiple required>
+                        <option value="1">Batik Traditional Set - RM 289</option>
+                        <option value="2">Batik Modern Design - RM 156</option>
+                        <option value="3">Batik Premium Collection - RM 425</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="assigned-agent">Assign Agent</label>
+                    <select id="assigned-agent" name="assignedAgent" required>
+                        <option value="">Select Agent</option>
+                        <option value="1">John Doe</option>
+                        <option value="2">Jane Smith</option>
+                        <option value="3">Mike Wilson</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeAddOrderModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create Order</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="../assets/js/enterprise-ui.js"></script>
+    <script src="../assets/js/enterprise-orders.js"></script>
+    
+    <!-- Screen Reader Support -->
+    <div id="sr-status" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+</body>
+</html>

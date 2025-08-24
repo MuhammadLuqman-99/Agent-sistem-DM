@@ -1,226 +1,204 @@
 # AgentOS API Server
 
-Express.js API server with Shopify integration for AgentOS.
+A comprehensive API server for AgentOS with Shopify integration, Firebase backend, and commission management.
 
-## Quick Start
+## 🚀 Quick Start
 
-### 1. Install Dependencies
+### Prerequisites
+- Node.js 18+ 
+- npm or yarn
+- Firebase project
+- Shopify store with API access
+
+### Installation
+
+1. **Clone and install dependencies:**
 ```bash
 cd api
 npm install
 ```
 
-### 2. Configure Environment Variables
-
-Copy `.env.example` to `.env` and update with your values:
-
+2. **Environment Configuration:**
 ```bash
-cp .env.example .env
+# Copy the example environment file
+cp env.example .env
+
+# Edit .env with your actual values
+nano .env
 ```
 
-Update `.env` with your Shopify store details:
-- `SHOPIFY_SHOP_NAME`: Your development store name (without .myshopify.com)
-- `SHOPIFY_ACCESS_TOKEN`: Private app access token from Shopify
-- `SHOPIFY_WEBHOOK_SECRET`: Webhook secret for verification
+3. **Required Environment Variables:**
+```env
+# Server Configuration
+PORT=3001
+NODE_ENV=development
+FRONTEND_URL=http://localhost:3000
 
-### 3. Setup Firebase Service Account
+# Firebase Configuration
+FIREBASE_SERVICE_ACCOUNT_PATH=./config/firebase-service-account.json
+# OR
+FIREBASE_SERVICE_ACCOUNT={"type":"service_account",...}
 
-1. Go to Firebase Console → Project Settings → Service Accounts
-2. Click "Generate new private key"
-3. Save the JSON file as `../config/firebase-service-account.json`
-4. Update `FIREBASE_SERVICE_ACCOUNT_PATH` in `.env`
+# Shopify Configuration
+SHOPIFY_SHOP_NAME=your-shop-name
+SHOPIFY_ACCESS_TOKEN=your-access-token
+SHOPIFY_WEBHOOK_SECRET=your-webhook-secret
 
-### 4. Run the Server
+# API Rate Limiting
+API_RATE_LIMIT=100
+```
 
+4. **Firebase Setup:**
 ```bash
-# Development mode (with auto-reload)
+# Download your Firebase service account key
+# Place it in config/firebase-service-account.json
+# OR set FIREBASE_SERVICE_ACCOUNT environment variable
+```
+
+5. **Start the server:**
+```bash
+# Development mode
 npm run dev
 
 # Production mode
 npm start
 ```
 
-Server will run on: http://localhost:3001
+## 🔧 Available Scripts
 
-## API Endpoints
+- `npm run dev` - Start with nodemon (development)
+- `npm start` - Start production server
+- `npm run setup-webhooks` - Configure Shopify webhooks
+- `npm run setup-firebase` - Verify Firebase configuration
+- `npm run feature-check` - Test all integrations
 
-### Health Check
-- `GET /health` - Server health status
+## 📡 API Endpoints
+
+### Health & Status
+- `GET /health` - Server health check
 - `GET /api` - API documentation
 
 ### Shopify Integration
-- `GET /api/shopify/orders` - Fetch orders from Shopify
-- `GET /api/shopify/orders/:id` - Get specific order
-- `POST /api/shopify/orders/:id/assign` - Assign order to agent
+- `GET /api/shopify/orders` - Fetch orders
 - `GET /api/shopify/products` - Fetch products
 - `GET /api/shopify/customers` - Fetch customers
-- `POST /api/shopify/sync/orders` - Manual sync orders
+- `POST /api/shopify/sync/orders` - Sync orders
 
 ### Agent Management
 - `GET /api/agents` - List all agents
 - `GET /api/agents/:id` - Get agent details
-- `GET /api/agents/:id/orders` - Get agent's orders
-- `GET /api/agents/:id/commissions` - Get agent's commissions
-- `GET /api/agents/:id/stats` - Get agent statistics
+- `GET /api/agents/:id/orders` - Get agent orders
+- `GET /api/agents/:id/commissions` - Get agent commissions
 
 ### Order Management
 - `GET /api/orders` - List all orders
 - `GET /api/orders/:id` - Get order details
 - `POST /api/orders/:id/assign` - Assign order to agent
 
+### Commission System
+- `GET /api/commission/calculate/:orderId/:agentId` - Calculate commission
+- `POST /api/commission/calculate` - Calculate with order data
+- `GET /api/commission/agent/:agentId` - Agent commission history
+
 ### Webhooks
 - `POST /webhooks/shopify/orders/create` - New order webhook
-- `POST /webhooks/shopify/orders/updated` - Order updated webhook
-- `POST /webhooks/shopify/orders/paid` - Order paid webhook
-- `POST /webhooks/shopify/orders/fulfilled` - Order fulfilled webhook
+- `POST /webhooks/shopify/orders/updated` - Order update webhook
+- `POST /webhooks/shopify/customers/create` - New customer webhook
 
-## Testing the Integration
+## 🛡️ Security Features
 
-### 1. Test API Connection
+- **Rate Limiting**: Configurable API rate limiting
+- **CORS Protection**: Configurable cross-origin policies
+- **Helmet Security**: Security headers and protections
+- **Input Validation**: Comprehensive request validation
+- **Error Handling**: Secure error responses (no stack traces in production)
+
+## 🔍 Troubleshooting
+
+### Common Issues
+
+1. **Firebase Connection Failed:**
+   - Check service account credentials
+   - Verify Firebase project configuration
+   - Check network connectivity
+
+2. **Shopify API Errors:**
+   - Verify shop name and access token
+   - Check API permissions
+   - Verify webhook secret
+
+3. **Port Already in Use:**
+   - Change PORT in .env file
+   - Kill existing process: `lsof -ti:3001 | xargs kill`
+
+4. **Missing Dependencies:**
+   - Run `npm install` again
+   - Clear node_modules: `rm -rf node_modules && npm install`
+
+### Debug Mode
+
+Enable detailed logging:
+```bash
+NODE_ENV=development npm run dev
+```
+
+### Health Check
+
+Test server status:
 ```bash
 curl http://localhost:3001/health
 ```
 
-### 2. Test Shopify Connection
+## 🚀 Deployment
+
+### Railway (Recommended)
 ```bash
-curl http://localhost:3001/api/shopify/orders
+# Install Railway CLI
+npm i -g @railway/cli
+
+# Deploy
+railway login
+railway up
 ```
 
-### 3. Create Test Order in Shopify
-1. Go to your Shopify development store admin
-2. Create a test order
-3. Check if it appears in the API response
-
-### 4. Test Order Assignment
+### Docker
 ```bash
-curl -X POST http://localhost:3001/api/shopify/orders/ORDER_ID/assign \
-  -H "Content-Type: application/json" \
-  -d '{"agentId": "AGENT_USER_ID"}'
+# Build image
+docker build -t agentos-api .
+
+# Run container
+docker run -p 3001:3001 --env-file .env agentos-api
 ```
 
-## Setting Up Shopify Private App
+### Environment Variables for Production
+- Set `NODE_ENV=production`
+- Use strong webhook secrets
+- Configure proper CORS origins
+- Set appropriate rate limits
 
-### 1. Create Private App
-1. Go to your Shopify store admin
-2. Navigate to "Apps" → "Apps and sales channel settings"
-3. Click "Develop apps for your store"
-4. Click "Create app"
-5. Name it "AgentOS Integration"
+## 📊 Monitoring
 
-### 2. Configure App Permissions
-In the app configuration, add these scopes:
-- `read_orders` - Read orders
-- `write_orders` - Modify orders
-- `read_products` - Read products
-- `read_customers` - Read customers
-- `read_inventory` - Read inventory levels
+- Health endpoint: `/health`
+- API documentation: `/api`
+- Request logging with Morgan
+- Error tracking and logging
 
-### 3. Generate Access Token
-1. Click "Install app"
-2. Copy the "Admin API access token"
-3. Use this token as `SHOPIFY_ACCESS_TOKEN` in your `.env` file
+## 🤝 Contributing
 
-### 4. Setup Webhooks (Optional for Development)
-```bash
-# Setup webhooks automatically
-npm run setup-webhooks
-```
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests if applicable
+5. Submit a pull request
 
-## Development Workflow
+## 📄 License
 
-### 1. Start Both Servers
-```bash
-# Terminal 1: Start API server
-cd api
-npm run dev
+MIT License - see LICENSE file for details
 
-# Terminal 2: Start frontend (Live Server or similar)
-# Open pages/agent-dashboard.html in browser
-```
+## 🆘 Support
 
-### 2. Test Flow
-1. Open agent dashboard
-2. Click "Sync from Shopify" button
-3. See orders appear in the table
-4. Assign orders to agents
-5. Check Firebase for saved data
-
-## Production Deployment
-
-### 1. Environment Variables
-Update production `.env` with:
-- Real Shopify store credentials
-- Production Firebase project
-- Production webhook URLs
-- Strong JWT secrets
-
-### 2. Deploy Options
-- **Google Cloud Run**: Containerized deployment
-- **Firebase Functions**: Serverless deployment
-- **Heroku**: Quick deployment
-- **VPS/Dedicated**: Full control
-
-### 3. Webhook Setup
-Update webhooks to point to production URLs:
-```
-https://your-domain.com/webhooks/shopify/orders/create
-https://your-domain.com/webhooks/shopify/orders/updated
-etc.
-```
-
-## Monitoring
-
-### Logs
-All operations are logged with timestamps and details.
-
-### Health Monitoring
-- `GET /health` endpoint for uptime monitoring
-- Firebase connection status
-- Shopify API connection status
-
-### Error Handling
-- Comprehensive error logging
-- Graceful API fallbacks
-- Webhook retry mechanisms
-
-## Security
-
-### API Security
-- Rate limiting (100 requests per 15 minutes)
-- CORS configuration
-- Input validation
-- Webhook signature verification
-
-### Data Security
-- Firebase Admin SDK for secure database access
-- Environment variables for secrets
-- No sensitive data in logs
-
-## Troubleshooting
-
-### Common Issues
-
-**Connection Refused**
-- Check if server is running on correct port
-- Verify firewall settings
-
-**Shopify API Errors**
-- Verify shop name and access token
-- Check API permissions/scopes
-- Monitor rate limits
-
-**Firebase Errors**
-- Verify service account file path
-- Check Firebase project permissions
-- Ensure Firestore is enabled
-
-**CORS Issues**
-- Update `FRONTEND_URL` in `.env`
-- Check browser developer tools
-- Verify API server is running
-
-### Debug Mode
-Set `NODE_ENV=development` for detailed error messages.
-
-### Logs Location
-Check console output for real-time logs and error details.
+For issues and questions:
+1. Check the troubleshooting section
+2. Review error logs
+3. Test with the feature-check script
+4. Create an issue with detailed error information

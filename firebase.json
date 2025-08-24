@@ -121,5 +121,9 @@
     ],
     "cleanUrls": true,
     "trailingSlash": false
+  },
+  "functions": {
+    "source": "api",
+    "runtime": "nodejs20"
   }
 }

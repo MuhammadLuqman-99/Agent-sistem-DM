@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgentOS - User Profile</title>
+    <meta name="description" content="User profile management for AgentOS">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/enterprise-core.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
+</head>
+<body>
+    <div class="enterprise-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>AgentOS</span>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="enterprise-admin-dashboard.html" class="sidebar-nav-link">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="enterprise-profile.html" class="sidebar-nav-link active">
+                    <i class="fas fa-user"></i>
+                    <span>Profile</span>
+                </a>
+                <a href="logout.html" class="sidebar-nav-link">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </nav>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header">
+                <h1 class="page-title">User Profile</h1>
+                <p class="page-subtitle">Manage your account settings</p>
+            </header>
+            
+            <div class="profile-container">
+                <!-- Profile Header -->
+                <div class="profile-header">
+                    <div class="profile-avatar">
+                        <img src="https://ui-avatars.com/api/?name=Admin+User&size=120&background=667eea&color=fff" alt="Profile Avatar">
+                        <button class="avatar-edit-btn" onclick="changeAvatar()">
+                            <i class="fas fa-camera"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="profile-info">
+                        <h2 id="user-name">Admin User</h2>
+                        <p id="user-role">Administrator</p>
+                        <p id="user-email">admin@agentos.com</p>
+                        <p id="last-login">Last login: Today at 10:30 AM</p>
+                    </div>
+                </div>
+                
+                <!-- Profile Tabs -->
+                <div class="profile-tabs">
+                    <button class="tab-btn active" data-tab="personal">Personal Info</button>
+                    <button class="tab-btn" data-tab="security">Security</button>
+                    <button class="tab-btn" data-tab="preferences">Preferences</button>
+                    <button class="tab-btn" data-tab="activity">Activity</button>
+                </div>
+                
+                <!-- Tab Content -->
+                <div class="tab-content">
+                    <!-- Personal Info Tab -->
+                    <div class="tab-pane active" id="personal">
+                        <form id="personal-form" class="profile-form">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="first-name">First Name</label>
+                                    <input type="text" id="first-name" name="first-name" class="form-input" value="Admin">
+                                </div>
+                                <div class="form-group">
+                                    <label for="last-name">Last Name</label>
+                                    <input type="text" id="last-name" name="last-name" class="form-input" value="User">
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email Address</label>
+                                    <input type="email" id="email" name="email" class="form-input" value="admin@agentos.com">
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">Phone Number</label>
+                                    <input type="tel" id="phone" name="phone" class="form-input" value="+60 12-345 6789">
+                                </div>
+                                <div class="form-group">
+                                    <label for="position">Position</label>
+                                    <input type="text" id="position" name="position" class="form-input" value="System Administrator">
+                                </div>
+                                <div class="form-group">
+                                    <label for="department">Department</label>
+                                    <input type="text" id="department" name="department" class="form-input" value="IT">
+                                </div>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                                <button type="button" class="btn btn-secondary" onclick="resetForm()">Reset</button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <!-- Security Tab -->
+                    <div class="tab-pane" id="security">
+                        <div class="security-sections">
+                            <div class="security-section">
+                                <h3>Change Password</h3>
+                                <form id="password-form" class="profile-form">
+                                    <div class="form-group">
+                                        <label for="current-password">Current Password</label>
+                                        <input type="password" id="current-password" name="current-password" class="form-input" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="new-password">New Password</label>
+                                        <input type="password" id="new-password" name="new-password" class="form-input" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="confirm-password">Confirm New Password</label>
+                                        <input type="password" id="confirm-password" name="confirm-password" class="form-input" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Change Password</button>
+                                </form>
+                            </div>
+                            
+                            <div class="security-section">
+                                <h3>Two-Factor Authentication</h3>
+                                <div class="2fa-status">
+                                    <p>Status: <span class="status-badge status-active">Enabled</span></p>
+                                    <button class="btn btn-secondary" onclick="setup2FA()">Setup 2FA</button>
+                                </div>
+                            </div>
+                            
+                            <div class="security-section">
+                                <h3>Active Sessions</h3>
+                                <div class="sessions-list">
+                                    <div class="session-item">
+                                        <div class="session-info">
+                                            <strong>Current Session</strong>
+                                            <p>Chrome on Windows • Kuala Lumpur, MY</p>
+                                            <small>Started: Today at 10:30 AM</small>
+                                        </div>
+                                        <span class="status-badge status-active">Active</span>
+                                    </div>
+                                </div>
+                                <button class="btn btn-warning" onclick="terminateOtherSessions()">Terminate Other Sessions</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Preferences Tab -->
+                    <div class="tab-pane" id="preferences">
+                        <div class="preferences-sections">
+                            <div class="preferences-section">
+                                <h3>Interface Preferences</h3>
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="dark-mode" name="dark-mode">
+                                        <span>Enable Dark Mode</span>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label for="language">Language</label>
+                                    <select id="language" name="language" class="form-input">
+                                        <option value="en" selected>English</option>
+                                        <option value="ms">Bahasa Melayu</option>
+                                        <option value="zh">中文</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="timezone">Timezone</label>
+                                    <select id="timezone" name="timezone" class="form-input">
+                                        <option value="Asia/Kuala_Lumpur" selected>Asia/Kuala_Lumpur (GMT+8)</option>
+                                        <option value="UTC">UTC (GMT+0)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="preferences-section">
+                                <h3>Notification Preferences</h3>
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="email-notifications" name="email-notifications" checked>
+                                        <span>Email Notifications</span>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="browser-notifications" name="browser-notifications" checked>
+                                        <span>Browser Notifications</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-primary" onclick="savePreferences()">Save Preferences</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Activity Tab -->
+                    <div class="tab-pane" id="activity">
+                        <div class="activity-sections">
+                            <div class="activity-section">
+                                <h3>Recent Activity</h3>
+                                <div class="activity-list">
+                                    <div class="activity-item">
+                                        <div class="activity-icon">
+                                            <i class="fas fa-sign-in-alt"></i>
+                                        </div>
+                                        <div class="activity-details">
+                                            <strong>Login</strong>
+                                            <p>Successfully logged in</p>
+                                            <small>Today at 10:30 AM</small>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="activity-item">
+                                        <div class="activity-icon">
+                                            <i class="fas fa-user-edit"></i>
+                                        </div>
+                                        <div class="activity-details">
+                                            <strong>Profile Updated</strong>
+                                            <p>Updated personal information</p>
+                                            <small>Yesterday at 3:45 PM</small>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="activity-item">
+                                        <div class="activity-icon">
+                                            <i class="fas fa-key"></i>
+                                        </div>
+                                        <div class="activity-details">
+                                            <strong>Password Changed</strong>
+                                            <p>Password was updated</p>
+                                            <small>2 days ago</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="activity-section">
+                                <h3>Login History</h3>
+                                <div class="login-history">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Date & Time</th>
+                                                <th>Location</th>
+                                                <th>Device</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Today, 10:30 AM</td>
+                                                <td>Kuala Lumpur, MY</td>
+                                                <td>Chrome on Windows</td>
+                                                <td><span class="status-badge status-success">Success</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Yesterday, 9:15 AM</td>
+                                                <td>Kuala Lumpur, MY</td>
+                                                <td>Chrome on Windows</td>
+                                                <td><span class="status-badge status-success">Success</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="../assets/js/enterprise-ui.js"></script>
+    <script>
+        class EnterpriseProfile {
+            constructor() {
+                this.currentTab = 'personal';
+                this.setupEventListeners();
+                this.loadUserProfile();
+            }
+            
+            setupEventListeners() {
+                // Tab switching
+                const tabButtons = document.querySelectorAll('.tab-btn');
+                tabButtons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        const tabName = button.dataset.tab;
+                        this.switchTab(tabName);
+                    });
+                });
+                
+                // Form submissions
+                const personalForm = document.getElementById('personal-form');
+                if (personalForm) {
+                    personalForm.addEventListener('submit', (e) => this.handlePersonalUpdate(e));
+                }
+                
+                const passwordForm = document.getElementById('password-form');
+                if (passwordForm) {
+                    passwordForm.addEventListener('submit', (e) => this.handlePasswordChange(e));
+                }
+            }
+            
+            switchTab(tabName) {
+                // Update active tab button
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+                
+                // Update active tab content
+                document.querySelectorAll('.tab-pane').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                document.getElementById(tabName).classList.add('active');
+                
+                this.currentTab = tabName;
+            }
+            
+            async loadUserProfile() {
+                try {
+                    const response = await fetch('/api/user/profile', {
+                        headers: {
+                            'Authorization': `Bearer ${this.getAuthToken()}`
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        const userData = await response.json();
+                        this.populateProfile(userData);
+                    } else {
+                        console.error('Failed to load user profile');
+                    }
+                } catch (error) {
+                    console.error('Error loading user profile:', error);
+                }
+            }
+            
+            populateProfile(userData) {
+                // Update profile header
+                document.getElementById('user-name').textContent = `${userData.firstName} ${userData.lastName}`;
+                document.getElementById('user-role').textContent = userData.role;
+                document.getElementById('user-email').textContent = userData.email;
+                
+                // Update form fields
+                document.getElementById('first-name').value = userData.firstName || '';
+                document.getElementById('last-name').value = userData.lastName || '';
+                document.getElementById('email').value = userData.email || '';
+                document.getElementById('phone').value = userData.phone || '';
+                document.getElementById('position').value = userData.position || '';
+                document.getElementById('department').value = userData.department || '';
+            }
+            
+            async handlePersonalUpdate(e) {
+                e.preventDefault();
+                
+                try {
+                    const formData = new FormData(e.target);
+                    const updateData = {
+                        firstName: formData.get('first-name'),
+                        lastName: formData.get('last-name'),
+                        email: formData.get('email'),
+                        phone: formData.get('phone'),
+                        position: formData.get('position'),
+                        department: formData.get('department')
+                    };
+                    
+                    const response = await fetch('/api/user/profile', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${this.getAuthToken()}`
+                        },
+                        body: JSON.stringify(updateData)
+                    });
+                    
+                    if (response.ok) {
+                        this.showNotification('Profile updated successfully', 'success');
+                        this.loadUserProfile(); // Reload profile data
+                    } else {
+                        this.showNotification('Failed to update profile', 'error');
+                    }
+                } catch (error) {
+                    console.error('Error updating profile:', error);
+                    this.showNotification('Error updating profile', 'error');
+                }
+            }
+            
+            async handlePasswordChange(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(e.target);
+                const currentPassword = formData.get('current-password');
+                const newPassword = formData.get('new-password');
+                const confirmPassword = formData.get('confirm-password');
+                
+                if (newPassword !== confirmPassword) {
+                    this.showNotification('New passwords do not match', 'error');
+                    return;
+                }
+                
+                if (newPassword.length < 8) {
+                    this.showNotification('Password must be at least 8 characters long', 'error');
+                    return;
+                }
+                
+                try {
+                    const response = await fetch('/api/user/change-password', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${this.getAuthToken()}`
+                        },
+                        body: JSON.stringify({
+                            currentPassword,
+                            newPassword
+                        })
+                    });
+                    
+                    if (response.ok) {
+                        this.showNotification('Password changed successfully', 'success');
+                        e.target.reset();
+                    } else {
+                        const data = await response.json();
+                        this.showNotification(data.error || 'Failed to change password', 'error');
+                    }
+                } catch (error) {
+                    console.error('Error changing password:', error);
+                    this.showNotification('Error changing password', 'error');
+                }
+            }
+            
+            getAuthToken() {
+                return localStorage.getItem('enterprise-auth-token');
+            }
+            
+            showNotification(message, type = 'info') {
+                // Create notification element
+                const notification = document.createElement('div');
+                notification.className = `notification notification-${type}`;
+                notification.innerHTML = `
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+                    <span>${message}</span>
+                    <button onclick="this.parentElement.remove()" class="notification-close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                
+                document.body.appendChild(notification);
+                
+                // Auto-remove after 5 seconds
+                setTimeout(() => {
+                    if (notification.parentElement) {
+                        notification.remove();
+                    }
+                }, 5000);
+            }
+        }
+        
+        // Global functions
+        function changeAvatar() {
+            alert('Avatar change functionality will be implemented.');
+        }
+        
+        function setup2FA() {
+            alert('2FA setup functionality will be implemented.');
+        }
+        
+        function terminateOtherSessions() {
+            if (confirm('Are you sure you want to terminate all other sessions?')) {
+                alert('Session termination will be implemented.');
+            }
+        }
+        
+        function savePreferences() {
+            alert('Preferences saved successfully!');
+        }
+        
+        function resetForm() {
+            if (confirm('Are you sure you want to reset the form? All changes will be lost.')) {
+                document.getElementById('personal-form').reset();
+            }
+        }
+        
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new EnterpriseProfile();
+        });
+    </script>
+</body>
+</html>

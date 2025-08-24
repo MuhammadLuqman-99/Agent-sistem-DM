@@ -146,7 +146,7 @@
                 statusEl.innerHTML = '<span style="color: green;">✅ JavaScript working perfectly!</span>';
                 statusEl.className = 'status-indicator status-success';
             } catch (error) {
-                statusEl.innerHTML = '<span style="color: red;">❌ JavaScript error: ' + error.message + '</span>';
+                statusEl.innerHTML = '<span style="color: red;">❌ JavaScript error: ' + error.message.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</span>';
                 statusEl.className = 'status-indicator status-error';
             }
         }
@@ -162,7 +162,7 @@
                     throw new Error('Navigation not available');
                 }
             } catch (error) {
-                statusEl.innerHTML = '<span style="color: red;">❌ Navigation error: ' + error.message + '</span>';
+                statusEl.innerHTML = '<span style="color: red;">❌ Navigation error: ' + error.message.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</span>';
                 statusEl.className = 'status-indicator status-error';
             }
         }

@@ -33,7 +33,8 @@
       "Bash(firebase use:*)",
       "Bash(firebase deploy:*)",
       "Bash(firebase hosting:channel:list:*)",
-      "Bash(firebase hosting:files:*)"
+      "Bash(firebase hosting:files:*)",
+      "WebFetch(domain:admin-agent-teamsale.web.app)"
     ],
     "deny": [],
     "ask": [],

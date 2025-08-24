@@ -27,6 +27,7 @@ const checkShopifyService = (req, res, next) => {
 // GET /api/shopify/orders - Fetch orders from Shopify
 router.get('/orders', checkShopifyService, async (req, res) => {
   try {
+    // Validate request parameters
     const {
       limit = 50,
       status = 'any',
@@ -37,6 +38,25 @@ router.get('/orders', checkShopifyService, async (req, res) => {
       updated_at_min,
       updated_at_max
     } = req.query;
+
+    // Validate limit parameter
+    const parsedLimit = Math.min(parseInt(limit), 250);
+    if (isNaN(parsedLimit) || parsedLimit < 1) {
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid limit parameter'
+      });
+    }
+
+    // Validate status against allowed values
+    const allowedStatuses = ['open', 'closed', 'cancelled', 'any'];
+    if (!allowedStatuses.includes(status)) {
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid status parameter',
+        allowed_values: allowedStatuses
+      });
+    }
 
     const params = {
       limit: Math.min(parseInt(limit), 250), // Shopify max limit is 250

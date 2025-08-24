@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - AgentOS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; background: #f8f9fa; }
+        .header { background: #212529; color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .nav-btn { background: #495057; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; cursor: pointer; }
+        .nav-btn:hover { background: #6c757d; }
+        .nav-btn.primary { background: #28a745; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 2rem; }
+        .settings-grid { display: grid; grid-template-columns: 250px 1fr; gap: 2rem; }
+        .settings-nav { background: white; border-radius: 12px; padding: 1.5rem; height: fit-content; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .settings-nav h3 { margin-bottom: 1rem; color: #212529; }
+        .nav-item { padding: 0.75rem 1rem; border-radius: 8px; cursor: pointer; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.75rem; transition: all 0.2s ease; }
+        .nav-item:hover { background: #f8f9fa; }
+        .nav-item.active { background: #007bff; color: white; }
+        .settings-content { background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .setting-section { margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid #e9ecef; }
+        .setting-section:last-child { border-bottom: none; margin-bottom: 0; }
+        .setting-title { font-size: 1.3rem; font-weight: 600; margin-bottom: 0.5rem; }
+        .setting-description { color: #6c757d; margin-bottom: 1.5rem; }
+        .setting-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+        .setting-item:last-child { margin-bottom: 0; }
+        .setting-label { font-weight: 500; }
+        .setting-control { display: flex; align-items: center; gap: 1rem; }
+        .toggle-switch { position: relative; width: 50px; height: 24px; background: #ccc; border-radius: 24px; cursor: pointer; transition: background 0.3s ease; }
+        .toggle-switch.active { background: #007bff; }
+        .toggle-switch::after { content: ''; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: white; border-radius: 50%; transition: transform 0.3s ease; }
+        .toggle-switch.active::after { transform: translateX(26px); }
+        .form-select { padding: 0.5rem; border: 1px solid #e9ecef; border-radius: 6px; background: white; cursor: pointer; }
+        .form-input { padding: 0.5rem; border: 1px solid #e9ecef; border-radius: 6px; }
+        .btn { background: #007bff; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 500; }
+        .btn:hover { background: #0056b3; }
+        .btn-danger { background: #dc3545; }
+        .btn-danger:hover { background: #c82333; }
+        @media (max-width: 768px) {
+            .settings-grid { grid-template-columns: 1fr; }
+            .settings-nav { margin-bottom: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><i class="fas fa-cogs"></i> System Settings</h1>
+        <div>
+            <button class="nav-btn primary" onclick="saveSettings()"><i class="fas fa-save"></i> Save Changes</button>
+            <a href="enterprise-admin-dashboard.html" class="nav-btn"><i class="fas fa-home"></i> Dashboard</a>
+            <a href="logout.html" class="nav-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+    </div>
+    <div class="container">
+        <div class="settings-grid">
+            <div class="settings-nav">
+                <h3>Settings</h3>
+                <div class="nav-item active" onclick="showSection('general')"><i class="fas fa-cog"></i> General</div>
+                <div class="nav-item" onclick="showSection('notifications')"><i class="fas fa-bell"></i> Notifications</div>
+                <div class="nav-item" onclick="showSection('security')"><i class="fas fa-shield-alt"></i> Security</div>
+                <div class="nav-item" onclick="showSection('commission')"><i class="fas fa-percentage"></i> Commission</div>
+                <div class="nav-item" onclick="showSection('integrations')"><i class="fas fa-plug"></i> Integrations</div>
+                <div class="nav-item" onclick="showSection('backup')"><i class="fas fa-database"></i> Backup</div>
+            </div>
+            <div class="settings-content" id="settingsContent">
+                <div class="setting-section">
+                    <h2 class="setting-title">General Settings</h2>
+                    <p class="setting-description">Configure basic system preferences and behaviors</p>
+                    <div class="setting-item">
+                        <span class="setting-label">System Name</span>
+                        <div class="setting-control">
+                            <input type="text" class="form-input" value="Kilang Desa Murni Batik" style="width: 200px;">
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <span class="setting-label">Default Language</span>
+                        <div class="setting-control">
+                            <select class="form-select">
+                                <option>English</option>
+                                <option>Bahasa Malaysia</option>
+                                <option>中文</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <span class="setting-label">Time Zone</span>
+                        <div class="setting-control">
+                            <select class="form-select">
+                                <option>Asia/Kuala_Lumpur (GMT+8)</option>
+                                <option>Asia/Singapore (GMT+8)</option>
+                                <option>UTC (GMT+0)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <span class="setting-label">Auto-save Data</span>
+                        <div class="setting-control">
+                            <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="setting-section">
+                    <h2 class="setting-title">Commission Settings</h2>
+                    <p class="setting-description">Configure commission rates and payment schedules</p>
+                    <div class="setting-item">
+                        <span class="setting-label">Default Commission Rate</span>
+                        <div class="setting-control">
+                            <input type="number" class="form-input" value="12.5" style="width: 100px;">
+                            <span>%</span>
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <span class="setting-label">Payment Schedule</span>
+                        <div class="setting-control">
+                            <select class="form-select">
+                                <option>Monthly</option>
+                                <option>Bi-weekly</option>
+                                <option>Weekly</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <span class="setting-label">Auto-calculate Commission</span>
+                        <div class="setting-control">
+                            <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="setting-section">
+                    <h2 class="setting-title">Notification Preferences</h2>
+                    <p class="setting-description">Control how and when you receive system notifications</p>
+                    <div class="setting-item">
+                        <span class="setting-label">Email Notifications</span>
+                        <div class="setting-control">
+                            <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <span class="setting-label">SMS Notifications</span>
+                        <div class="setting-control">
+                            <div class="toggle-switch" onclick="toggleSwitch(this)"></div>
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <span class="setting-label">Low Stock Alerts</span>
+                        <div class="setting-control">
+                            <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="setting-section">
+                    <h2 class="setting-title">Danger Zone</h2>
+                    <p class="setting-description">Irreversible and destructive actions</p>
+                    <div class="setting-item">
+                        <span class="setting-label">Reset All Settings</span>
+                        <div class="setting-control">
+                            <button class="btn btn-danger" onclick="resetSettings()">Reset to Default</button>
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <span class="setting-label">Clear All Data</span>
+                        <div class="setting-control">
+                            <button class="btn btn-danger" onclick="clearData()">Clear Database</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function showSection(section) {
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            event.target.classList.add('active');
+            showNotification(`Switched to ${section} settings`);
+        }
+        function toggleSwitch(element) {
+            element.classList.toggle('active');
+            showNotification('Setting updated');
+        }
+        function saveSettings() { showNotification('Settings saved successfully!'); }
+        function resetSettings() { 
+            if (confirm('Are you sure you want to reset all settings?')) {
+                showNotification('Settings reset to default values');
+            }
+        }
+        function clearData() {
+            if (confirm('This will permanently delete all data. Are you sure?')) {
+                showNotification('Data clearing initiated...');
+            }
+        }
+        function showNotification(msg) {
+            const n = document.createElement('div');
+            n.style.cssText = 'position:fixed;top:20px;right:20px;background:#d4edda;color:#155724;padding:1rem;border-radius:8px;z-index:1000;';
+            n.innerHTML = `<div style="display: flex; align-items: center; gap: 8px;"><span>✓</span><span>${msg}</span></div>`;
+            document.body.appendChild(n);
+            setTimeout(() => n.remove(), 3000);
+        }
+        document.addEventListener('DOMContentLoaded', () => showNotification('Settings loaded successfully!'));
+    </script>
+</body>
+</html>

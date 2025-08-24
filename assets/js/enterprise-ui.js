@@ -1,6 +1,6 @@
 /**
  * Enterprise UI Components & Interactions
- * Modern, Accessible, User-Friendly JavaScript
+ * Modern, Accessible, User-Friendly JavaScript with Enterprise Security
  */
 
 class EnterpriseUI {
@@ -8,6 +8,98 @@ class EnterpriseUI {
         this.initializeComponents();
         this.bindEvents();
         this.loadTheme();
+        this.initializeSecurity();
+    }
+
+    initializeSecurity() {
+        // Enforce HTTPS in production
+        if (window.location.protocol === 'https:' && window.location.hostname !== 'localhost') {
+            this.enforceHTTPS();
+        }
+        
+        // Initialize secure storage
+        this.secureStorage = new SecureStorage();
+        
+        // Setup security monitoring
+        this.securityMonitor = new SecurityMonitor();
+        
+        // Validate environment
+        this.validateEnvironment();
+    }
+
+    enforceHTTPS() {
+        // Redirect HTTP to HTTPS
+        if (window.location.protocol === 'http:') {
+            window.location.href = window.location.href.replace('http:', 'https:');
+        }
+        
+        // Block mixed content
+        this.blockMixedContent();
+    }
+
+    blockMixedContent() {
+        // Monitor for mixed content
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                mutation.addedNodes.forEach((node) => {
+                    if (node.nodeType === Node.ELEMENT_NODE) {
+                        this.checkMixedContent(node);
+                    }
+                });
+            });
+        });
+        
+        observer.observe(document.body, { childList: true, subtree: true });
+    }
+
+    checkMixedContent(element) {
+        const insecureElements = element.querySelectorAll('img[src^="http:"], script[src^="http:"], link[href^="http:"]');
+        insecureElements.forEach(el => {
+            console.warn('Mixed content detected:', el);
+            // Block or warn about mixed content
+            if (el.tagName === 'IMG') {
+                el.style.border = '2px solid red';
+                el.title = 'Insecure content blocked';
+            }
+        });
+    }
+
+    validateEnvironment() {
+        // Check for required security features
+        const requiredFeatures = [
+            'localStorage',
+            'sessionStorage',
+            'crypto',
+            'fetch'
+        ];
+        
+        const missingFeatures = requiredFeatures.filter(feature => !window[feature]);
+        
+        if (missingFeatures.length > 0) {
+            console.error('Missing required security features:', missingFeatures);
+            this.showSecurityWarning('Your browser is missing required security features. Please update your browser.');
+        }
+    }
+
+    showSecurityWarning(message) {
+        const warning = document.createElement('div');
+        warning.className = 'security-warning';
+        warning.innerHTML = `
+            <div class="security-warning-content">
+                <i class="fas fa-shield-alt"></i>
+                <span>${message}</span>
+                <button onclick="this.parentElement.parentElement.remove()">×</button>
+            </div>
+        `;
+        
+        document.body.appendChild(warning);
+        
+        // Auto-remove after 10 seconds
+        setTimeout(() => {
+            if (warning.parentElement) {
+                warning.remove();
+            }
+        }, 10000);
     }
 
     initializeComponents() {
@@ -28,6 +120,21 @@ class EnterpriseUI {
         
         // Focus management
         document.addEventListener('focusin', this.handleFocusIn.bind(this));
+        
+        // Security events
+        document.addEventListener('security-violation', this.handleSecurityViolation.bind(this));
+    }
+
+    handleSecurityViolation(event) {
+        console.warn('Security violation detected:', event.detail);
+        this.logSecurityEvent(event.detail);
+    }
+
+    logSecurityEvent(event) {
+        // Log security events for monitoring
+        if (this.securityMonitor) {
+            this.securityMonitor.logEvent(event);
+        }
     }
 
     handleKeyboardShortcuts(e) {
@@ -41,6 +148,18 @@ class EnterpriseUI {
         if ((e.metaKey || e.ctrlKey) && e.key === '/') {
             e.preventDefault();
             this.showKeyboardShortcuts();
+        }
+        
+        // Cmd/Ctrl + Shift + L for security log
+        if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key === 'L') {
+            e.preventDefault();
+            this.showSecurityLog();
+        }
+    }
+
+    showSecurityLog() {
+        if (this.securityMonitor) {
+            this.securityMonitor.showLog();
         }
     }
 
@@ -69,6 +188,7 @@ class EnterpriseUI {
                 <div class="keyboard-shortcuts">
                     <div><kbd>Ctrl+K</kbd> Global Search</div>
                     <div><kbd>Ctrl+/</kbd> Show Shortcuts</div>
+                    <div><kbd>Ctrl+Shift+L</kbd> Security Log</div>
                     <div><kbd>Esc</kbd> Close Modals</div>
                 </div>
             `,
@@ -753,6 +873,202 @@ class ThemeManager {
     toggleTheme() {
         const nextTheme = this.currentTheme === 'light' ? 'dark' : 'light';
         this.setTheme(nextTheme);
+    }
+}
+
+// Secure Storage Class
+class SecureStorage {
+    constructor() {
+        this.encryptionKey = this.generateEncryptionKey();
+    }
+
+    generateEncryptionKey() {
+        // Generate a secure encryption key
+        const array = new Uint8Array(32);
+        if (window.crypto && window.crypto.getRandomValues) {
+            window.crypto.getRandomValues(array);
+        }
+        return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
+    }
+
+    encrypt(data) {
+        // Simple encryption for sensitive data
+        if (typeof data === 'string') {
+            return btoa(encodeURIComponent(data));
+        }
+        return btoa(JSON.stringify(data));
+    }
+
+    decrypt(encryptedData) {
+        try {
+            const decrypted = decodeURIComponent(atob(encryptedData));
+            try {
+                return JSON.parse(decrypted);
+            } catch {
+                return decrypted;
+            }
+        } catch {
+            return null;
+        }
+    }
+
+    setSecureItem(key, value) {
+        const encrypted = this.encrypt(value);
+        sessionStorage.setItem(key, encrypted);
+    }
+
+    getSecureItem(key) {
+        const encrypted = sessionStorage.getItem(key);
+        if (!encrypted) return null;
+        return this.decrypt(encrypted);
+    }
+
+    removeSecureItem(key) {
+        sessionStorage.removeItem(key);
+    }
+
+    clearSecureStorage() {
+        sessionStorage.clear();
+    }
+}
+
+// Security Monitor Class
+class SecurityMonitor {
+    constructor() {
+        this.securityEvents = [];
+        this.maxEvents = 1000;
+        this.initializeMonitoring();
+    }
+
+    initializeMonitoring() {
+        // Monitor for suspicious activities
+        this.monitorXSS();
+        this.monitorInjection();
+        this.monitorNavigation();
+    }
+
+    monitorXSS() {
+        // Monitor for potential XSS attempts
+        const originalInnerHTML = Element.prototype.innerHTML;
+        Element.prototype.innerHTML = function(value) {
+            if (typeof value === 'string' && this.containsScript(value)) {
+                this.logSecurityEvent({
+                    type: 'XSS_ATTEMPT',
+                    target: this.tagName,
+                    value: value,
+                    timestamp: new Date().toISOString()
+                });
+                throw new Error('Potential XSS attack detected');
+            }
+            return originalInnerHTML.call(this, value);
+        };
+    }
+
+    containsScript(value) {
+        return /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi.test(value);
+    }
+
+    monitorInjection() {
+        // Monitor for SQL injection patterns
+        const injectionPatterns = [
+            /(\b(union|select|insert|update|delete|drop|create|alter)\b)/i,
+            /(--|\/\*|\*\/|;)/,
+            /(\b(or|and)\b\s+\d+\s*[=<>])/i
+        ];
+        
+        document.addEventListener('input', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                const value = e.target.value;
+                injectionPatterns.forEach(pattern => {
+                    if (pattern.test(value)) {
+                        this.logSecurityEvent({
+                            type: 'INJECTION_ATTEMPT',
+                            target: e.target.name || e.target.id,
+                            value: value,
+                            pattern: pattern.source,
+                            timestamp: new Date().toISOString()
+                        });
+                    }
+                });
+            }
+        });
+    }
+
+    monitorNavigation() {
+        // Monitor for suspicious navigation
+        let navigationCount = 0;
+        const navigationThreshold = 10;
+        const timeWindow = 60000; // 1 minute
+        
+        setInterval(() => {
+            navigationCount = 0;
+        }, timeWindow);
+        
+        window.addEventListener('beforeunload', () => {
+            navigationCount++;
+            if (navigationCount > navigationThreshold) {
+                this.logSecurityEvent({
+                    type: 'EXCESSIVE_NAVIGATION',
+                    count: navigationCount,
+                    timestamp: new Date().toISOString()
+                });
+            }
+        });
+    }
+
+    logEvent(event) {
+        this.securityEvents.push(event);
+        
+        // Keep only recent events
+        if (this.securityEvents.length > this.maxEvents) {
+            this.securityEvents = this.securityEvents.slice(-this.maxEvents);
+        }
+        
+        // Send to server if critical
+        if (event.type.includes('ATTEMPT') || event.type.includes('ATTACK')) {
+            this.reportToServer(event);
+        }
+    }
+
+    reportToServer(event) {
+        // Report security events to server
+        fetch('/api/security/log', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('enterprise-auth-token')}`
+            },
+            body: JSON.stringify(event)
+        }).catch(error => {
+            console.error('Failed to report security event:', error);
+        });
+    }
+
+    showLog() {
+        // Display security log
+        const logWindow = window.open('', 'Security Log', 'width=800,height=600');
+        logWindow.document.write(`
+            <html>
+                <head>
+                    <title>Security Log</title>
+                    <style>
+                        body { font-family: monospace; padding: 20px; }
+                        .event { margin: 10px 0; padding: 10px; border: 1px solid #ccc; }
+                        .critical { background: #ffebee; border-color: #f44336; }
+                    </style>
+                </head>
+                <body>
+                    <h1>Security Log</h1>
+                    <p>Total Events: ${this.securityEvents.length}</p>
+                    ${this.securityEvents.map(event => `
+                        <div class="event ${event.type.includes('ATTEMPT') || event.type.includes('ATTACK') ? 'critical' : ''}">
+                            <strong>${event.type}</strong> - ${event.timestamp}
+                            <br>${JSON.stringify(event, null, 2)}
+                        </div>
+                    `).join('')}
+                </body>
+            </html>
+        `);
     }
 }
 

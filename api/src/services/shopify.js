@@ -1,6 +1,8 @@
 // Shopify API Service
 import axios from 'axios';
 import dotenv from 'dotenv';
+import axiosRetry from 'axios-retry';
+import crypto from 'crypto';
 
 dotenv.config();
 
@@ -14,6 +16,7 @@ class ShopifyService {
       throw new Error('Shopify configuration missing. Please check SHOPIFY_SHOP_NAME and SHOPIFY_ACCESS_TOKEN in .env file');
     }
     
+    // Configure axios client with retry logic
     this.client = axios.create({
       baseURL: `https://${this.shopName}.myshopify.com/admin/api/${this.apiVersion}`,
       headers: {
@@ -21,6 +24,17 @@ class ShopifyService {
         'Content-Type': 'application/json'
       },
       timeout: 30000 // 30 second timeout
+    });
+
+    // Add retry configuration for transient errors
+    axiosRetry(this.client, {
+      retries: 3,
+      retryDelay: axiosRetry.exponentialDelay,
+      retryCondition: (error) => {
+        // Retry on network errors or 5xx server errors
+        return axiosRetry.isNetworkError(error) || 
+          (error.response && error.response.status >= 500);
+      }
     });
 
     // Add request/response interceptors for logging
@@ -361,7 +375,6 @@ class ShopifyService {
       return false;
     }
 
-    const crypto = require('crypto');
     const calculated_hmac = crypto
       .createHmac('sha256', process.env.SHOPIFY_WEBHOOK_SECRET)
       .update(data, 'utf8')
