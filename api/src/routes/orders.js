@@ -299,4 +299,13 @@ router.post('/', async (req, res) => {
   }
 });
 
+// TEST endpoint to verify deployment
+router.get('/test-deployment', async (req, res) => {
+  res.json({
+    success: true,
+    message: 'New deployment working',
+    timestamp: new Date().toISOString()
+  });
+});
+
 export default router;
