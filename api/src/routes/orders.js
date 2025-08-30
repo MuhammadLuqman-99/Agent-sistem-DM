@@ -219,8 +219,26 @@ router.get('/stats/summary', async (req, res) => {
   }
 });
 
-// POST /api/orders - Create new order in Shopify
-router.post('/', authenticateToken, validateOrderCreation, async (req, res) => {
+// POST /api/orders - Create new order in Shopify (simplified for debugging)
+router.post('/', async (req, res) => {
+  try {
+    console.log('POST /api/orders route hit!');
+    res.json({
+      success: true,
+      message: 'POST route working',
+      receivedData: req.body
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// ORIGINAL POST route with full validation (commented out for debugging)
+/* 
+router.post('/create-full', authenticateToken, validateOrderCreation, async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -299,6 +317,7 @@ router.post('/', authenticateToken, validateOrderCreation, async (req, res) => {
     });
   }
 });
+*/
 
 // TEST endpoint to verify deployment
 router.get('/test-deployment', async (req, res) => {
