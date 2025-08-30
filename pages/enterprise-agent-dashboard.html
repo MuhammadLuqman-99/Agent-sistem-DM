@@ -729,20 +729,94 @@
             document.querySelector('#commission-result .text-2xl').textContent = `RM ${commission.toFixed(2)}`;
         }
         
-        // Form submission
-        document.getElementById('quick-sale-form').addEventListener('submit', function(e) {
+        // Form submission - Actually submit to API
+        document.getElementById('quick-sale-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            // Show success notification
-            if (window.enterpriseUI && window.enterpriseUI.notifications) {
-                window.enterpriseUI.notifications.success(
-                    'Sale Recorded Successfully!', 
-                    'The sale has been saved and commission calculated.'
-                );
+            // Get form data
+            const formData = new FormData(this);
+            const customerName = formData.get('customer-name');
+            const customerPhone = formData.get('customer-phone');
+            const customerEmail = formData.get('customer-email');
+            const product = formData.get('product');
+            const quantity = parseInt(formData.get('quantity'));
+            const notes = formData.get('notes');
+            
+            // Validate required fields
+            if (!customerName || !customerPhone || !product || !quantity) {
+                if (window.enterpriseUI && window.enterpriseUI.notifications) {
+                    window.enterpriseUI.notifications.error(
+                        'Missing Required Fields', 
+                        'Please fill in customer name, phone, product, and quantity.'
+                    );
+                }
+                return;
             }
             
-            // Reset form
-            this.reset();
+            // Prepare order data for API
+            const orderData = {
+                customer: {
+                    email: customerEmail || `${customerPhone}@temp.com`,
+                    first_name: customerName.split(' ')[0] || customerName,
+                    last_name: customerName.split(' ').slice(1).join(' ') || 'Customer',
+                    phone: customerPhone
+                },
+                line_items: [{
+                    variant_id: product,
+                    quantity: quantity,
+                    price: "29.90" // Default price - you can make this dynamic
+                }],
+                agent_id: 'agent-' + Date.now(),
+                notes: notes || 'Sale created from agent dashboard'
+            };
+            
+            try {
+                // Show loading state
+                const submitButton = this.querySelector('button[type="submit"]');
+                const originalText = submitButton.innerHTML;
+                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+                submitButton.disabled = true;
+                
+                // Submit to API
+                const response = await fetch('https://agent-desa-murni-batik-production.up.railway.app/api/orders', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(orderData)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok && result.success) {
+                    // Show success notification
+                    if (window.enterpriseUI && window.enterpriseUI.notifications) {
+                        window.enterpriseUI.notifications.success(
+                            'Sale Recorded Successfully!', 
+                            'The order has been created and saved to the system.'
+                        );
+                    }
+                    
+                    // Reset form
+                    this.reset();
+                } else {
+                    throw new Error(result.message || 'Failed to save order');
+                }
+                
+            } catch (error) {
+                console.error('Order submission error:', error);
+                if (window.enterpriseUI && window.enterpriseUI.notifications) {
+                    window.enterpriseUI.notifications.error(
+                        'Order Submission Failed', 
+                        error.message || 'Please try again later.'
+                    );
+                }
+            } finally {
+                // Restore button state
+                const submitButton = this.querySelector('button[type="submit"]');
+                submitButton.innerHTML = originalText;
+                submitButton.disabled = false;
+            }
         });
         
         // Calculate commission for form
