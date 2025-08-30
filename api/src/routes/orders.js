@@ -1,7 +1,21 @@
 // Order Management Routes - Updated for Railway deployment
 import express from 'express';
+import { body, validationResult } from 'express-validator';
+import { authenticateToken } from '../middleware/auth.js';
 
 const router = express.Router();
+
+// Validation middleware for order creation
+const validateOrderCreation = [
+  body('customer.email').isEmail().withMessage('Customer email is required and must be valid'),
+  body('customer.first_name').notEmpty().withMessage('Customer first name is required'),
+  body('customer.last_name').notEmpty().withMessage('Customer last name is required'),
+  body('line_items').isArray({ min: 1 }).withMessage('At least one line item is required'),
+  body('line_items.*.variant_id').notEmpty().withMessage('Variant ID is required for each item'),
+  body('line_items.*.quantity').isInt({ min: 1 }).withMessage('Quantity must be at least 1'),
+  body('line_items.*.price').isFloat({ min: 0 }).withMessage('Price must be a valid number'),
+  body('agent_id').notEmpty().withMessage('Agent ID is required')
+];
 
 // GET /api/orders - Get all orders (admin view)
 router.get('/', async (req, res) => {
@@ -206,31 +220,18 @@ router.get('/stats/summary', async (req, res) => {
 });
 
 // POST /api/orders - Create new order in Shopify
-router.post('/', async (req, res) => {
+router.post('/', authenticateToken, validateOrderCreation, async (req, res) => {
   try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        success: false,
+        error: 'Validation failed',
+        details: errors.array()
+      });
+    }
+
     const orderData = req.body;
-    
-    // Basic validation
-    if (!orderData.customer || !orderData.customer.email) {
-      return res.status(400).json({
-        success: false,
-        error: 'Customer email is required'
-      });
-    }
-    
-    if (!orderData.line_items || orderData.line_items.length === 0) {
-      return res.status(400).json({
-        success: false,
-        error: 'At least one line item is required'
-      });
-    }
-    
-    if (!orderData.agent_id) {
-      return res.status(400).json({
-        success: false,
-        error: 'Agent ID is required'
-      });
-    }
     
     // Verify agent exists
     const agentResult = await req.firebaseService.getAgent(orderData.agent_id);
