@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon server.js",
-    "start": "node server.js",
+    "start": "node server-minimal.js",
+    "start:full": "node server.js",
     "build": "echo 'No build step required for production'",
     "test": "echo \"Tests coming soon...\"",
     "validate": "node scripts/validate-api.js",
