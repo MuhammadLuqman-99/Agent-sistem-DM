@@ -2,8 +2,12 @@
 import express from 'express';
 import cors from 'cors';
 
-// Only import orders route for now
+// Import essential routes
 import orderRoutes from './src/routes/orders.js';
+import shopifyRoutes from './src/routes/shopify.js';
+
+// Import services
+import FirebaseService from './src/services/firebase.js';
 
 const app = express();
 const PORT = process.env.PORT || 3003;
@@ -11,6 +15,27 @@ const PORT = process.env.PORT || 3003;
 // Basic middleware
 app.use(cors());
 app.use(express.json());
+
+// Initialize services
+const firebaseService = new FirebaseService();
+
+// Initialize Shopify service
+let shopifyService;
+try {
+  const ShopifyService = (await import('./src/services/shopify.js')).default;
+  shopifyService = new ShopifyService();
+  console.log('✅ Shopify service initialized');
+} catch (error) {
+  console.warn('⚠️ Shopify service initialization failed:', error.message);
+  shopifyService = null;
+}
+
+// Make services available to routes
+app.use((req, res, next) => {
+  req.firebaseService = firebaseService;
+  req.shopifyService = shopifyService;
+  next();
+});
 
 // Health check
 app.get('/health', (req, res) => {
@@ -21,8 +46,9 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Orders routes
+// Essential routes
 app.use('/api/orders', orderRoutes);
+app.use('/api/shopify', shopifyRoutes);
 
 // Basic 404 handler
 app.use('*', (req, res) => {
