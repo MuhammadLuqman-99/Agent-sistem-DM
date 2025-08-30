@@ -1,4 +1,4 @@
-// Order Management Routes
+// Order Management Routes - Updated for Railway deployment
 import express from 'express';
 
 const router = express.Router();
