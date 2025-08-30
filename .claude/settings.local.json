@@ -34,7 +34,12 @@
       "Bash(firebase deploy:*)",
       "Bash(firebase hosting:channel:list:*)",
       "Bash(firebase hosting:files:*)",
-      "WebFetch(domain:admin-agent-teamsale.web.app)"
+      "WebFetch(domain:admin-agent-teamsale.web.app)",
+      "Bash(git push:*)",
+      "Bash(railway logs:*)",
+      "Bash(railway redeploy:*)",
+      "Bash(railway link:*)",
+      "Bash(railway logout:*)"
     ],
     "deny": [],
     "ask": [],

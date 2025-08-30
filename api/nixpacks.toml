@@ -1,0 +1,8 @@
+[providers.node]
+  version = "18"
+
+[start]
+  cmd = "npm start"
+
+[variables]
+  NODE_ENV = "production"

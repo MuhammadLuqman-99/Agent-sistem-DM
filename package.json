@@ -4,10 +4,12 @@
   "description": "Admin Agent Team Sale Management System with Firebase Integration",
   "main": "index.html",
   "scripts": {
-    "start": "firebase serve",
-    "build": "echo 'No build step required for static site'",
-    "deploy": "firebase deploy",
-    "deploy:hosting": "firebase deploy --only hosting"
+    "start": "cd api && npm ci && npm start",
+    "dev": "cd api && npm install && npm run dev",
+    "build": "cd api && npm install",
+    "firebase:start": "firebase serve",
+    "firebase:deploy": "firebase deploy",
+    "firebase:deploy:hosting": "firebase deploy --only hosting"
   },
   "keywords": [
     "agent-management",
