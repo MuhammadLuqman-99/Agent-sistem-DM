@@ -205,4 +205,98 @@ router.get('/stats/summary', async (req, res) => {
   }
 });
 
+// POST /api/orders - Create new order in Shopify
+router.post('/', async (req, res) => {
+  try {
+    const orderData = req.body;
+    
+    // Basic validation
+    if (!orderData.customer || !orderData.customer.email) {
+      return res.status(400).json({
+        success: false,
+        error: 'Customer email is required'
+      });
+    }
+    
+    if (!orderData.line_items || orderData.line_items.length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'At least one line item is required'
+      });
+    }
+    
+    if (!orderData.agent_id) {
+      return res.status(400).json({
+        success: false,
+        error: 'Agent ID is required'
+      });
+    }
+    
+    // Verify agent exists
+    const agentResult = await req.firebaseService.getAgent(orderData.agent_id);
+    if (!agentResult.success) {
+      return res.status(404).json({
+        success: false,
+        error: 'Agent not found'
+      });
+    }
+
+    if (!req.shopifyService) {
+      return res.status(503).json({
+        success: false,
+        error: 'Shopify service not available'
+      });
+    }
+
+    console.log('Creating order in Shopify:', {
+      agentId: orderData.agent_id,
+      customerEmail: orderData.customer.email,
+      itemCount: orderData.line_items.length
+    });
+
+    // Create order in Shopify
+    const shopifyResult = await req.shopifyService.createOrder(orderData);
+    
+    if (!shopifyResult.success) {
+      return res.status(500).json({
+        success: false,
+        error: 'Failed to create order in Shopify',
+        details: shopifyResult.error
+      });
+    }
+
+    // Save order to Firebase with agent assignment
+    const firebaseResult = await req.firebaseService.saveShopifyOrder({
+      ...shopifyResult.data,
+      agentId: orderData.agent_id,
+      assignedAt: new Date().toISOString(),
+      assignedBy: 'system'
+    });
+
+    if (firebaseResult.success) {
+      console.log('Order created successfully:', {
+        shopifyOrderId: shopifyResult.data.id,
+        orderNumber: shopifyResult.data.orderNumber,
+        agentId: orderData.agent_id
+      });
+    }
+
+    res.status(201).json({
+      success: true,
+      data: {
+        shopifyOrder: shopifyResult.data,
+        firebaseResult: firebaseResult
+      },
+      message: 'Order created successfully in Shopify and assigned to agent'
+    });
+  } catch (error) {
+    console.error('Create order error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to create order',
+      details: error.message
+    });
+  }
+});
+
 export default router;
