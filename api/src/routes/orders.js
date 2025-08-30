@@ -328,4 +328,13 @@ router.get('/test-deployment', async (req, res) => {
   });
 });
 
+// TEST POST endpoint
+router.post('/test-post', async (req, res) => {
+  res.json({
+    success: true,
+    message: 'POST route test successful',
+    body: req.body
+  });
+});
+
 export default router;
