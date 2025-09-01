@@ -1,6 +1,6 @@
 {
   "name": "agentos-api",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "AgentOS API Server with Shopify Integration",
   "main": "index.js",
   "type": "module",
