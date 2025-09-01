@@ -8,17 +8,20 @@ dotenv.config();
 
 class ShopifyService {
   constructor() {
-    this.shopName = process.env.SHOPIFY_SHOP_NAME;
+    this.shopDomain = process.env.SHOPIFY_SHOP_DOMAIN;
     this.accessToken = process.env.SHOPIFY_ACCESS_TOKEN;
     this.apiVersion = '2023-10';
     
-    if (!this.shopName || !this.accessToken) {
-      throw new Error('Shopify configuration missing. Please check SHOPIFY_SHOP_NAME and SHOPIFY_ACCESS_TOKEN in .env file');
+    if (!this.shopDomain || !this.accessToken) {
+      throw new Error('Shopify configuration missing. Please check SHOPIFY_SHOP_DOMAIN and SHOPIFY_ACCESS_TOKEN in .env file');
     }
+    
+    // Extract shop name from domain
+    this.shopName = this.shopDomain.replace('.myshopify.com', '');
     
     // Configure axios client with retry logic
     this.client = axios.create({
-      baseURL: `https://${this.shopName}.myshopify.com/admin/api/${this.apiVersion}`,
+      baseURL: `https://${this.shopDomain}/admin/api/${this.apiVersion}`,
       headers: {
         'X-Shopify-Access-Token': this.accessToken,
         'Content-Type': 'application/json'
@@ -365,6 +368,52 @@ class ShopifyService {
     } else {
       // Something else happened
       return error.message || 'Unknown error occurred';
+    }
+  }
+
+  // Create order in Shopify
+  async createOrder(orderData) {
+    try {
+      const shopifyOrder = {
+        order: {
+          line_items: orderData.line_items.map(item => ({
+            variant_id: parseInt(item.variant_id),
+            quantity: parseInt(item.quantity),
+            price: parseFloat(item.price)
+          })),
+          customer: {
+            first_name: orderData.customer.first_name,
+            last_name: orderData.customer.last_name,
+            email: orderData.customer.email,
+            phone: orderData.customer.phone
+          },
+          financial_status: 'pending',
+          send_receipt: false,
+          send_fulfillment_receipt: false,
+          note: orderData.note || 'Created via AgentOS'
+        }
+      };
+
+      const response = await this.client.post('/orders.json', shopifyOrder);
+      
+      if (response.data && response.data.order) {
+        return {
+          success: true,
+          data: response.data.order,
+          message: 'Order created successfully in Shopify'
+        };
+      } else {
+        return {
+          success: false,
+          error: 'Invalid response from Shopify'
+        };
+      }
+    } catch (error) {
+      console.error('Create order error:', error);
+      return {
+        success: false,
+        error: error.message || 'Failed to create order in Shopify'
+      };
     }
   }
 

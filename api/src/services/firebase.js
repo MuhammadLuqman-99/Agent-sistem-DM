@@ -21,8 +21,23 @@ class FirebaseService {
       if (!admin.apps.length) {
         let serviceAccount;
         
-        // Try to load service account from file or environment
-        if (process.env.FIREBASE_SERVICE_ACCOUNT_PATH) {
+        // Try to load service account from individual environment variables
+        if (process.env.FIREBASE_PROJECT_ID && process.env.FIREBASE_PRIVATE_KEY && process.env.FIREBASE_CLIENT_EMAIL) {
+          serviceAccount = {
+            type: "service_account",
+            project_id: process.env.FIREBASE_PROJECT_ID,
+            private_key_id: process.env.FIREBASE_PRIVATE_KEY_ID,
+            private_key: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+            client_email: process.env.FIREBASE_CLIENT_EMAIL,
+            client_id: process.env.FIREBASE_CLIENT_ID,
+            auth_uri: "https://accounts.google.com/o/oauth2/auth",
+            token_uri: "https://oauth2.googleapis.com/token",
+            auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
+            client_x509_cert_url: process.env.FIREBASE_CLIENT_X509_CERT_URL
+          };
+        } else if (process.env.FIREBASE_SERVICE_ACCOUNT) {
+          serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+        } else if (process.env.FIREBASE_SERVICE_ACCOUNT_PATH) {
           try {
             const serviceAccountFile = await readFile(process.env.FIREBASE_SERVICE_ACCOUNT_PATH, 'utf8');
             serviceAccount = JSON.parse(serviceAccountFile);
@@ -30,8 +45,6 @@ class FirebaseService {
             console.warn('Service account file not found, using minimal config');
             serviceAccount = null;
           }
-        } else if (process.env.FIREBASE_SERVICE_ACCOUNT) {
-          serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
         }
 
         // For development, use minimal config if service account not available
@@ -408,6 +421,152 @@ class FirebaseService {
       return { success: false, error: error.message };
     }
   }
+
+  // User management functions
+  async getUser(userId) {
+    try {
+      const userDoc = await this.db.collection('users').doc(userId).get();
+      
+      if (!userDoc.exists) {
+        return { success: false, error: 'User not found' };
+      }
+      
+      return { success: true, data: userDoc.data() };
+    } catch (error) {
+      console.error('Get user error:', error);
+      return { success: false, error: error.message };
+    }
+  }
+
+  async createUser(userId, userData) {
+    try {
+      await this.db.collection('users').doc(userId).set({
+        ...userData,
+        createdAt: admin.firestore.FieldValue.serverTimestamp(),
+        updatedAt: admin.firestore.FieldValue.serverTimestamp()
+      });
+      
+      return { success: true, message: 'User created successfully' };
+    } catch (error) {
+      console.error('Create user error:', error);
+      return { success: false, error: error.message };
+    }
+  }
+
+  async updateUser(userId, updateData) {
+    try {
+      await this.db.collection('users').doc(userId).update({
+        ...updateData,
+        updatedAt: admin.firestore.FieldValue.serverTimestamp()
+      });
+      
+      return { success: true, message: 'User updated successfully' };
+    } catch (error) {
+      console.error('Update user error:', error);
+      return { success: false, error: error.message };
+    }
+  }
 }
 
 export default FirebaseService;
+
+// Named exports for backward compatibility
+export const getUser = async (userId) => {
+  const service = new FirebaseService();
+  return await service.getUser(userId);
+};
+
+export const createUser = async (userId, userData) => {
+  const service = new FirebaseService();
+  return await service.createUser(userId, userData);
+};
+
+export const updateUser = async (userId, updateData) => {
+  const service = new FirebaseService();
+  return await service.updateUser(userId, updateData);
+};
+
+// Settings functions
+export const getSettings = async (settingsId) => {
+  const service = new FirebaseService();
+  return await service.getUser(settingsId); // Reuse user methods for settings
+};
+
+export const createSettings = async (settingsId, settingsData) => {
+  const service = new FirebaseService();
+  return await service.createUser(settingsId, settingsData);
+};
+
+export const updateSettings = async (settingsId, updateData) => {
+  const service = new FirebaseService();
+  return await service.updateUser(settingsId, updateData);
+};
+
+// Admin monitoring functions
+export const logAgentActivity = async (agentId, activity) => {
+  const service = new FirebaseService();
+  try {
+    await service.db.collection('agent-activities').add({
+      agentId,
+      activity: activity.type,
+      details: activity.details,
+      timestamp: admin.firestore.FieldValue.serverTimestamp(),
+      status: activity.status || 'completed'
+    });
+    return { success: true };
+  } catch (error) {
+    console.error('Log agent activity error:', error);
+    return { success: false, error: error.message };
+  }
+};
+
+export const getAgentActivities = async (filters = {}) => {
+  const service = new FirebaseService();
+  try {
+    let query = service.db.collection('agent-activities').orderBy('timestamp', 'desc');
+    
+    if (filters.agentId) {
+      query = query.where('agentId', '==', filters.agentId);
+    }
+    
+    if (filters.limit) {
+      query = query.limit(parseInt(filters.limit));
+    }
+    
+    const snapshot = await query.get();
+    const activities = [];
+    
+    snapshot.forEach(doc => {
+      activities.push({
+        id: doc.id,
+        ...doc.data(),
+        timestamp: doc.data().timestamp?.toDate()
+      });
+    });
+    
+    return { success: true, data: activities };
+  } catch (error) {
+    console.error('Get agent activities error:', error);
+    return { success: false, error: error.message };
+  }
+};
+
+export const getAllAgents = async () => {
+  const service = new FirebaseService();
+  try {
+    const snapshot = await service.db.collection('agents').get();
+    const agents = [];
+    
+    snapshot.forEach(doc => {
+      agents.push({
+        id: doc.id,
+        ...doc.data()
+      });
+    });
+    
+    return { success: true, data: agents };
+  } catch (error) {
+    console.error('Get all agents error:', error);
+    return { success: false, error: error.message };
+  }
+};

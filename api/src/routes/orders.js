@@ -2,6 +2,7 @@
 import express from 'express';
 import { body, validationResult } from 'express-validator';
 import { authenticateToken } from '../middleware/auth.js';
+import { logAgentActivity } from '../services/firebase.js';
 
 const router = express.Router();
 
@@ -219,19 +220,144 @@ router.get('/stats/summary', async (req, res) => {
   }
 });
 
-// POST /api/orders - Create new order in Shopify (simplified for debugging)
+// POST /api/orders - Create new order in Shopify
 router.post('/', async (req, res) => {
   try {
-    console.log('POST /api/orders route hit!');
-    res.json({
-      success: true,
-      message: 'POST route working',
-      receivedData: req.body
+    console.log('Creating new order:', JSON.stringify(req.body, null, 2));
+    
+    const orderData = req.body;
+    
+    // Basic validation
+    if (!orderData.customer || !orderData.customer.first_name || !orderData.customer.phone) {
+      return res.status(400).json({
+        success: false,
+        error: 'Customer information (name and phone) is required'
+      });
+    }
+    
+    if (!orderData.line_items || orderData.line_items.length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'At least one product is required'
+      });
+    }
+    
+    // Ensure customer has email (required by Shopify)
+    if (!orderData.customer.email) {
+      // Generate temporary email if not provided
+      const phoneDigits = orderData.customer.phone.replace(/\D/g, '');
+      orderData.customer.email = `${phoneDigits}@agent-temp.com`;
+    }
+    
+    // Check if Shopify service is available
+    if (!req.shopifyService) {
+      console.log('Shopify service not available, saving order locally');
+      
+      // Save to Firebase only (for testing/fallback)
+      const localOrder = {
+        id: `local_${Date.now()}`,
+        order_number: `#${Date.now()}`,
+        name: `#${Date.now()}`,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        total_price: orderData.line_items.reduce((sum, item) => 
+          sum + (parseFloat(item.price) * parseInt(item.quantity)), 0
+        ).toFixed(2),
+        financial_status: 'pending',
+        fulfillment_status: null,
+        customer: orderData.customer,
+        line_items: orderData.line_items.map(item => ({
+          ...item,
+          id: `item_${Date.now()}_${Math.random()}`,
+          total_price: (parseFloat(item.price) * parseInt(item.quantity)).toFixed(2)
+        })),
+        note: orderData.note || 'Created via Agent Dashboard',
+        tags: orderData.tags || 'agent-sale'
+      };
+      
+      // Save to Firebase
+      const firebaseResult = await req.firebaseService.saveShopifyOrder(localOrder);
+      
+      return res.status(201).json({
+        success: true,
+        data: {
+          order_number: localOrder.order_number,
+          id: localOrder.id,
+          total_price: localOrder.total_price,
+          created_at: localOrder.created_at
+        },
+        message: 'Order created successfully (local storage)'
+      });
+    }
+    
+    // Create order in Shopify
+    console.log('Creating order in Shopify...');
+    const shopifyResult = await req.shopifyService.createOrder(orderData);
+    
+    if (!shopifyResult.success) {
+      console.error('Shopify order creation failed:', shopifyResult.error);
+      return res.status(500).json({
+        success: false,
+        error: 'Failed to create order in Shopify',
+        details: shopifyResult.error
+      });
+    }
+    
+    // Save to Firebase
+    try {
+      await req.firebaseService.saveShopifyOrder(shopifyResult.data);
+      console.log('Order saved to Firebase successfully');
+    } catch (firebaseError) {
+      console.warn('Firebase save failed (order still created in Shopify):', firebaseError.message);
+    }
+    
+    // Log agent activity for admin monitoring
+    const agentId = req.body.agent_id || 'system';
+    await logAgentActivity(agentId, {
+      type: 'order_created',
+      details: {
+        orderId: shopifyResult.data.id,
+        orderNumber: shopifyResult.data.order_number || shopifyResult.data.name,
+        customerName: orderData.customer.first_name + ' ' + orderData.customer.last_name,
+        totalAmount: shopifyResult.data.total_price,
+        itemCount: orderData.line_items.length,
+        source: 'shopify_api'
+      },
+      status: 'completed'
     });
+
+    res.status(201).json({
+      success: true,
+      data: {
+        order_number: shopifyResult.data.order_number || shopifyResult.data.name,
+        id: shopifyResult.data.id,
+        total_price: shopifyResult.data.total_price,
+        created_at: shopifyResult.data.created_at
+      },
+      message: 'Order created successfully in Shopify'
+    });
+    
   } catch (error) {
+    console.error('Order creation error:', error);
+    
+    // Log failed order attempt for admin monitoring
+    const agentId = req.body.agent_id || 'system';
+    await logAgentActivity(agentId, {
+      type: 'order_failed',
+      details: {
+        customerName: req.body.customer ? 
+          `${req.body.customer.first_name} ${req.body.customer.last_name}` : 'Unknown',
+        error: error.message,
+        itemCount: req.body.line_items ? req.body.line_items.length : 0,
+        source: 'shopify_api'
+      },
+      status: 'failed'
+    });
+    
     res.status(500).json({
       success: false,
-      error: error.message
+      error: 'Failed to create order',
+      details: error.message
     });
   }
 });
